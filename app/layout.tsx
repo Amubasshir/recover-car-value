@@ -15,6 +15,9 @@ export const metadata = {
   description:
     "Get the money back for your car's lost value after an accident with Recover Car Value.",
   generator: 'v0.dev',
+  icons: {
+    icon: '/car.ico',
+  },
 };
 
 export default function RootLayout({ children }) {
