@@ -6,17 +6,21 @@ import { SiteFooter } from "@/components/site-footer"
 
 // Optimize font loading by limiting character subsets
 const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
+  subsets: ['latin'],
+  display: 'swap',
   // Limit the weight to only what's needed
-  weight: ["400", "500", "600", "700"],
-})
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata = {
-  title: "Recover Car Value - Diminished Value Claims",
-  description: "Get the money back for your car's lost value after an accident with Recover Car Value.",
-    generator: 'v0.dev'
-}
+  title: 'Recover Car Value',
+  description:
+    "Get the money back for your car's lost value after an accident with Recover Car Value.",
+  generator: 'v0.dev',
+  icons: {
+    icon: '/car.ico',
+  },
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -24,7 +28,11 @@ export default function RootLayout({ children }) {
       <head>
         {/* Preconnect to speed up initial page load */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${inter.className} flex flex-col min-h-screen`}>
         <SiteHeader />
@@ -34,5 +42,5 @@ export default function RootLayout({ children }) {
         <SiteFooter />
       </body>
     </html>
-  )
+  );
 }
