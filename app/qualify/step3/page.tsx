@@ -274,14 +274,14 @@ export default function QualifyStep3() {
               Receive Instant Diminished Cash Value!
             </Button>
 
-            <div className="space-y-2 bg-primary-50 p-6 rounded-xl border border-primary-100 shadow-sm">
+            <div className="space-y-2 bg-primary-50 p-3 md:p-6 rounded-xl border border-primary-100 shadow-sm">
               <div className="flex items-start space-x-3">
                 <div className="grid gap-1.5 leading-none">
                   <label className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     I acknowledge that by clicking the "Receive Instant
                     Diminished Cash Value!" button as my official signature
                   </label>
-                  <p className="text-sm text-gray-600 mt-2">
+                  <p className="text-sm text-gray-600 mt-2" style={{lineHeight: '20px'}}>
                     I consent to representatives of Prime Counsel Law Group to
                     contact me about the auto accident via email, text, or phone
                     including my mobile number provided above using an automatic

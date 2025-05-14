@@ -10,13 +10,13 @@ const HeroSection = () => (
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center relative animate-fade-in">
         <QuoteCard />
         <div className="flex flex-col justify-center space-y-5">
-          <div className="space-y-4 flex flex-col items-end">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-balance text-right">
+          <div className="space-y-4 flex flex-col items-center md:items-end">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-balance text-center md:text-right">
               Your Car Loses Value After an Auto Accident - <br />
               {/* <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-800"> */}
               We'll Help You Get That Money Back
             </h1>
-            <p className="text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed max-w-[600px] ms-auto text-right">
+            <p className="text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed max-w-[600px] ms-auto text-center md:text-right">
               "Even after repairs, your car is worth less. New laws allow you to
               recover the money lost - even if it happened years ago."
             </p>
