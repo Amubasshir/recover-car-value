@@ -21,7 +21,7 @@ const HeroSection = () => (
               recover the money lost - even if it happened years ago."
             </p>
           </div>
-          <div className="flex flex-col justify-end gap-3 min-[400px]:flex-row pt-2">
+          <div className="flex flex-col justify-center md:justify-end gap-3 min-[400px]:flex-row pt-2">
             <Link href="/qualify/step1">
               <Button size="lg" className="gap-2">
                 Click to see if you qualify <ArrowRight className="h-5 w-5" />
