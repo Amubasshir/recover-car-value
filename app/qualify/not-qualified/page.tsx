@@ -8,7 +8,6 @@ import { SimpleFooter } from "@/components/simple-footer"
 export default function NotQualified() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
-      <SimpleHeader />
 
       <main className="flex-1 container max-w-3xl mx-auto px-4 py-16 flex items-center justify-center">
         <Card className="w-full max-w-md text-center border-0 shadow-card rounded-2xl overflow-hidden animate-fade-in">
@@ -46,7 +45,6 @@ export default function NotQualified() {
         </Card>
       </main>
 
-      <SimpleFooter />
     </div>
   )
 }

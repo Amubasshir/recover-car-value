@@ -7,7 +7,6 @@ import { SimpleHeader } from "@/components/simple-header"
 export default function Confirmation() {
   return (
     <div className="container mx-auto px-4 py-16 flex flex-col items-center min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <SimpleHeader />
 
       <Card className="w-full max-w-md text-center border-0 shadow-card rounded-2xl overflow-hidden animate-fade-in mt-8">
         <CardHeader className="pb-4 pt-8 px-8">

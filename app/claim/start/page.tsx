@@ -451,8 +451,6 @@ export default function ClaimForm() {
 
   return (
     <div className="container mx-auto px-4 py-16 bg-gradient-to-b from-slate-50 to-white min-h-screen">
-      <SimpleHeader />
-
       <div className="mb-8 mt-8">
         <Link
           href="/"
