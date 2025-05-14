@@ -1,13 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Shield } from "lucide-react"
-import { SimpleHeader } from "@/components/simple-header"
-import { SimpleFooter } from "@/components/simple-footer"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 export default function Results() {
   const router = useRouter()
