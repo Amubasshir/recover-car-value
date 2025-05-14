@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,46 +8,46 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function QualifyStep2() {
   const router = useRouter();
   const [vehicleData, setVehicleData] = useState({
-    licensePlate: "",
-    state: "",
-    make: "",
-    model: "",
-    year: "",
-    trim: "",
+    licensePlate: '',
+    state: '',
+    make: '',
+    model: '',
+    year: '',
+    trim: '',
   });
 
-  const [activeTab, setActiveTab] = useState("license");
+  const [activeTab, setActiveTab] = useState('license');
 
   useEffect(() => {
     // Check if user qualified in step 1
-    const qualifyAnswers = localStorage.getItem("qualifyAnswers");
+    const qualifyAnswers = localStorage.getItem('qualifyAnswers');
     if (qualifyAnswers) {
       const answers = JSON.parse(qualifyAnswers);
       if (
         !(answers.recentAccident && answers.notAtFault && answers.ownVehicle)
       ) {
-        router.push("/qualify/not-qualified");
+        router.push('/qualify/not-qualified');
       }
     } else {
       // If no answers found, redirect to step 1
-      router.push("/qualify/step1");
+      router.push('/qualify/step1');
     }
   }, [router]);
 
@@ -62,20 +62,20 @@ export default function QualifyStep2() {
 
   const handleContinue = () => {
     // Store vehicle data in localStorage
-    localStorage.setItem("vehicleData", JSON.stringify(vehicleData));
-    router.push("/qualify/step3");
+    localStorage.setItem('vehicleData', JSON.stringify(vehicleData));
+    router.push('/qualify/step3');
   };
 
   const isLicensePlateValid =
-    activeTab === "license" && vehicleData.licensePlate && vehicleData.state;
+    activeTab === 'license' && vehicleData.licensePlate && vehicleData.state;
   const isVehicleSelectValid =
-    activeTab === "select" &&
+    activeTab === 'select' &&
     vehicleData.make &&
     vehicleData.model &&
     vehicleData.year;
 
   const isFormValid =
-    activeTab === "license" ? isLicensePlateValid : isVehicleSelectValid;
+    activeTab === 'license' ? isLicensePlateValid : isVehicleSelectValid;
 
   // Generate years for dropdown (current year down to 2000)
   const currentYear = new Date().getFullYear();
@@ -123,8 +123,8 @@ export default function QualifyStep2() {
               Step 2: Find Vehicle
             </CardTitle>
             <CardDescription className="text-base mt-2">
-              Provide your vehicle information. Enter license plate information
-              or Click Select Vehicle to choose car.
+              Provide your vehicle information: Enter license plate or click
+              Select Vehicle to choose vehicle.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 px-8">
@@ -173,7 +173,7 @@ export default function QualifyStep2() {
                     <Select
                       value={vehicleData.state}
                       onValueChange={(value) =>
-                        handleSelectChange("state", value)
+                        handleSelectChange('state', value)
                       }
                     >
                       <SelectTrigger
@@ -247,7 +247,7 @@ export default function QualifyStep2() {
                     <Select
                       value={vehicleData.year}
                       onValueChange={(value) =>
-                        handleSelectChange("year", value)
+                        handleSelectChange('year', value)
                       }
                     >
                       <SelectTrigger
@@ -272,7 +272,7 @@ export default function QualifyStep2() {
                     <Select
                       value={vehicleData.make}
                       onValueChange={(value) =>
-                        handleSelectChange("make", value)
+                        handleSelectChange('make', value)
                       }
                     >
                       <SelectTrigger
