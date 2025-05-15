@@ -47,7 +47,7 @@ export default function QualifyStep3() {
   }, [router]);
 
   // Replace the existing handleChange function
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
@@ -75,7 +75,7 @@ export default function QualifyStep3() {
     }
   };
 
-  const handleSelectChange = (name, value) => {
+  const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -284,54 +284,61 @@ export default function QualifyStep3() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="atFaultName" className="text-sm font-medium">
-                  Name of Person at Fault
-                </Label>
-                <Input
-                  id="atFaultName"
-                  name="atFaultName"
-                  value={formData.atFaultName}
-                  onChange={handleChange}
-                  placeholder="Jane Smith"
-                  className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                />
+            <div className="mt-6">
+              <p className="text-sm lg:text-base text-gray-600 font-medium mb-3">
+                Can provide later if needed:
+              </p>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="atFaultName"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Name of Person at Fault
+                  </Label>
+                  <Input
+                    id="atFaultName"
+                    name="atFaultName"
+                    value={formData.atFaultName}
+                    onChange={handleChange}
+                    placeholder="Jane Smith"
+                    className="rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary bg-gray-100"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="atFaultInsurance"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Person at Fault's Insurance
+                  </Label>
+                  <Input
+                    id="atFaultInsurance"
+                    name="atFaultInsurance"
+                    value={formData.atFaultInsurance}
+                    onChange={handleChange}
+                    placeholder="State Farm"
+                    className="rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary bg-gray-100"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label
-                  htmlFor="atFaultInsurance"
-                  className="text-sm font-medium"
-                >
-                  Person at Fault's Insurance
-                </Label>
-                <Input
-                  id="atFaultInsurance"
-                  name="atFaultInsurance"
-                  value={formData.atFaultInsurance}
-                  onChange={handleChange}
-                  placeholder="State Farm"
-                  className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                />
-              </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label
-                htmlFor="repairClaimNumber"
-                className="text-sm font-medium"
-              >
-                Claim Number for Repair
-              </Label>
-              <Input
-                id="repairClaimNumber"
-                name="repairClaimNumber"
-                type="number"
-                value={formData.repairClaimNumber}
-                onChange={handleChange}
-                placeholder="Enter claim number"
-                className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-              />
+              <div className="space-y-2 mt-5">
+                <Label
+                  htmlFor="repairClaimNumber"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Claim Number for Repair
+                </Label>
+                <Input
+                  id="repairClaimNumber"
+                  name="repairClaimNumber"
+                  value={formData.repairClaimNumber}
+                  onChange={handleChange}
+                  placeholder="Enter claim number"
+                  className="rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary bg-gray-100"
+                />
+              </div>
             </div>
           </CardContent>
           <CardFooter className="px-4 pb-4 flex-col gap-8">
