@@ -29,6 +29,12 @@ export default function QualifyStep3() {
     atFaultInsurance: "",
   });
 
+  // Add this after the formData state
+  const [errors, setErrors] = useState({
+    zipcode: "",
+    phone: "",
+  });
+
   useEffect(() => {
     // Check if user completed previous steps
     const qualifyAnswers = localStorage.getItem("qualifyAnswers");
@@ -39,9 +45,33 @@ export default function QualifyStep3() {
     }
   }, [router]);
 
+  // Replace the existing handleChange function
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validate zipcode and phone
+    if (name === "zipcode") {
+      if (value.length < 7) {
+        setErrors((prev) => ({
+          ...prev,
+          zipcode: "Zipcode must be at least 7 digits",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, zipcode: "" }));
+      }
+    }
+
+    if (name === "phone") {
+      if (value.length < 10) {
+        setErrors((prev) => ({
+          ...prev,
+          phone: "Phone number must be at least 10 digits",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, phone: "" }));
+      }
+    }
   };
 
   const handleSelectChange = (name, value) => {
@@ -57,13 +87,18 @@ export default function QualifyStep3() {
     router.push("/qualify/results");
   };
 
+  // Replace the existing isFormValid check
   const isFormValid =
     formData.accidentDate &&
     formData.zipcode &&
     formData.firstName &&
     formData.lastName &&
     formData.phone &&
-    formData.email;
+    formData.email &&
+    formData.zipcode.length >= 7 &&
+    formData.phone.length >= 10 &&
+    !errors.zipcode &&
+    !errors.phone;
 
   return (
     <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
@@ -136,7 +171,7 @@ export default function QualifyStep3() {
                   onChange={handleChange}
                   placeholder="$5,000"
                   className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                  />
+                />
               </div>
             </div>
 
@@ -154,8 +189,13 @@ export default function QualifyStep3() {
                   minLength={7}
                   type="number"
                   required
-                  className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+                  className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
+                    errors.zipcode ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.zipcode && (
+                  <p className="text-sm text-red-500 mt-1">{errors.zipcode}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="mileage" className="text-sm font-medium">
@@ -218,8 +258,13 @@ export default function QualifyStep3() {
                   onChange={handleChange}
                   placeholder="(555) 123-4567"
                   required
-                  className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+                  className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
+                    errors.phone ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.phone && (
+                  <p className="text-sm text-red-500 mt-1">{errors.phone}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
@@ -283,9 +328,7 @@ export default function QualifyStep3() {
             <div className="space-y-2 bg-primary-50 p-3 rounded-xl border border-primary-100 shadow-sm">
               <div className="flex items-start space-x-3">
                 <div className="grid gap-1.5 leading-none">
-                  <label
-                    className="text-sm text-gray-600"
-                  >
+                  <label className="text-sm text-gray-600">
                     I acknowledge that by clicking the "Receive Instant
                     Diminished Cash Value!" button as my official signature
                   </label>

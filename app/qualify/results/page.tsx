@@ -55,9 +55,8 @@ export default function Results() {
         <Card className="w-full border-0 shadow-card rounded-2xl overflow-hidden animate-slide-up">
           <CardHeader className="text-center pb-4 pt-4 px-4">
             
-            <CardTitle className="text-2xl font-bold">Sign Up</CardTitle>
             <CardDescription className="text-base mt-2">Great news, You Qualify For:</CardDescription>
-            <div className="text-6xl font-bold text-success-600 mt-6 animate-pulse-subtle">{estimatedValue}</div>
+            <div className="text-5xl md:text-6xl font-bold text-success-600 mt-6 animate-pulse-subtle">{estimatedValue}</div>
           </CardHeader>
           <CardContent className="space-y-4 px-4">
             <p className="text-center text-gray-600">
@@ -66,18 +65,13 @@ export default function Results() {
             </p>
 
             <div className="bg-gray-50 p-6 rounded-xl shadow-sm border border-gray-100">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="text-center md:text-left">
+              <div className="grid grid-cols-1 gap-4">
+                <div className="text-center">
                   <p className="text-sm font-medium text-gray-800">
                     {userData.firstName} {userData.lastName}
                   </p>
                   <p className="text-sm text-gray-500">{userData.phone}</p>
                   <p className="text-sm text-gray-500">{userData.email}</p>
-                </div>
-                <div className="text-center md:text-right">
-                  <p className="text-sm font-medium text-gray-800">Ron Fulmore</p>
-                  <p className="text-sm text-gray-500">321-948-1335</p>
-                  <p className="text-sm text-gray-500">ron@drronfulmore.com</p>
                 </div>
               </div>
             </div>
@@ -94,15 +88,12 @@ export default function Results() {
                   <label
                     htmlFor="representation"
                     className="text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    style={{lineHeight: '20px'}}
                   >
                     I hereby acknowledge and agree to be represented by Prime Counsel Law Group, LLC in this legal
                     matter
-                  </label>
-                  <p className="text-sm text-gray-600 mt-2">
                     and have read and understand the terms of representation of their agreement and there is no cost
                     unless we win which is 33 1/3% service fee of collected amount.
-                  </p>
+                  </label>
                 </div>
               </div>
             </div>
