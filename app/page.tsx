@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Button } from '@/components/ui/button';
+import { ArrowRight, CheckCircle } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import carImg from '../public/images/cars.jpg';
 
 // Update the HeroSection component
@@ -10,7 +10,6 @@ const HeroSection = () => (
     <div className="container px-4 md:px-6 relative">
       <div className="absolute inset-0 bg-grid-primary-100/20 bg-[size:20px_20px] opacity-20"></div>
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center relative animate-fade-in">
-      
         <div className="flex flex-col justify-center space-y-5">
           <div className="space-y-4 flex flex-col items-center md:items-start">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-balance text-center md:text-left">
@@ -24,7 +23,12 @@ const HeroSection = () => (
             </p>
           </div>
           <div className="block md:hidden">
-            <Image src={carImg.src} height={600} width={600} alt="Recover Card Value" />
+            <Image
+              src={carImg.src}
+              height={600}
+              width={600}
+              alt="Recover Card Value"
+            />
           </div>
           <div className="flex flex-col justify-center items-center md:items-right md:justify-start gap-3 min-[400px]:flex-row pt-2">
             <Link href="/qualify/step1">
@@ -36,11 +40,16 @@ const HeroSection = () => (
         </div>
 
         <div className="md:flex flex-col justify-center space-y-5 hidden">
-            <Image src={carImg.src} height={600} width={600} alt="Recover Card Value" />
+          <Image
+            src={carImg.src}
+            height={600}
+            width={600}
+            alt="Recover Card Value"
+          />
         </div>
       </div>
 
-        <QuoteCard />
+      <QuoteCard />
     </div>
   </section>
 );
@@ -103,21 +112,21 @@ const HowItWorksSection = () => (
         {[
           {
             number: 1,
-            title: "Qualify",
+            title: 'Qualify',
             description:
-              "Answer a few simple questions to see if you qualify for a diminished value claim.",
+              'Answer a few simple questions to see if you qualify for a diminished value claim.',
           },
           {
             number: 2,
-            title: "Find Vehicle",
+            title: 'Find Vehicle',
             description:
-              "Provide your vehicle information so we can calculate your diminished value.",
+              'Provide your vehicle information so we can calculate your diminished value.',
           },
           {
             number: 3,
-            title: "Confirm Details",
+            title: 'Confirm Details',
             description:
-              "Provide a few more details about the accident and receive your instant cash value.",
+              'Provide a few more details about the accident and receive your instant cash value.',
           },
         ].map((step) => (
           <div
@@ -158,17 +167,17 @@ const FAQSection = () => (
       <div className="mx-auto grid max-w-5xl gap-6 lg:gap-8 mt-12">
         {[
           {
-            title: "What is a diminished value claim?",
+            title: 'What is a diminished value claim?',
             content:
               "A diminished value claim seeks compensation for the reduction in your vehicle's market value after it has been damaged and repaired. Even with perfect repairs, a vehicle with an accident history is worth less than one without.",
           },
           {
-            title: "Who qualifies for a diminished value claim?",
+            title: 'Who qualifies for a diminished value claim?',
             content:
               "Generally, you may qualify if: your vehicle was damaged in an accident in the last 4 years that wasn't your fault, you own the vehicle (not leased), and the vehicle has been properly repaired.",
           },
           {
-            title: "How much can I expect to recover?",
+            title: 'How much can I expect to recover?',
             content:
               "The amount varies based on your vehicle's make, model, age, condition before the accident, and the extent of damage. Complete our quick 3-step process to get your instant diminished value quote.",
           },
@@ -194,8 +203,8 @@ export default function Home() {
     <>
       <main className="flex-1">
         <HeroSection />
-        <HowItWorksSection />
         <FAQSection />
+        <HowItWorksSection />
       </main>
     </>
   );
