@@ -1,9 +1,7 @@
-import Link from "next/link"
-
 export function SiteFooter() {
   return (
     <footer className="border-t bg-white">
-      <div className="container flex flex-col gap-8 py-12 md:flex-row md:gap-12 md:py-16 px-4 md:px-6">
+      {/* <div className="container flex flex-col gap-8 py-12 md:flex-row md:gap-12 md:py-16 px-4 md:px-6">
         <div className="flex flex-col gap-4 md:gap-6 md:flex-1">
           <div className="flex items-center">
             <img src="https://i.ibb.co/ccSw4bWf/shodwe-4-e1744727392385.png" alt="Recover Car Value" className="h-10 md:h-14" />
@@ -51,10 +49,13 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="border-t py-8 text-center text-sm text-gray-500">
-        <div className="container">© {new Date().getFullYear()} Prime Counsel Law Group. All rights reserved.</div>
+        <div className="container">
+          © {new Date().getFullYear()} Prime Counsel Law Group. All rights
+          reserved.
+        </div>
       </div>
     </footer>
-  )
+  );
 }
