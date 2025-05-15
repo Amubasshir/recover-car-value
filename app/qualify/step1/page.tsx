@@ -43,33 +43,33 @@ export default function QualifyStep1() {
     answers.ownVehicle !== null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
-      <main className="flex-1 container max-w-3xl mx-auto px-4 py-16 animate-fade-in">
-        <div className="mb-12">
+    <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
+      <main className="flex-1 container max-w-3xl mx-auto px-4 py-6 animate-fade-in">
+        <div className="mb-4 max-w-sm md:max-w-md mx-auto">
           <div className="flex justify-between items-start">
             <div className="flex flex-col items-center text-primary">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-primary bg-primary text-white shadow-md">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-primary bg-primary text-white shadow-md">
                 1
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
                 Qualify
               </span>
             </div>
-            <div className="flex-1 mt-[3.75%] h-1 mx-2 bg-gray-200 rounded-full" />
+            <div className="flex-1 mt-[3%] h-1 mx-2 bg-gray-200 rounded-full" />
             <div className="flex flex-col items-center text-gray-400">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-gray-200 bg-white shadow-sm">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-gray-200 bg-white shadow-sm">
                 2
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
                 Find Vehicle
               </span>
             </div>
-            <div className="flex-1 mt-[3.75%] h-1 mx-2 bg-gray-200 rounded-full" />
+            <div className="flex-1 mt-[3%] h-1 mx-2 bg-gray-200 rounded-full" />
             <div className="flex flex-col items-center text-gray-400">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-gray-200 bg-white shadow-sm">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-gray-200 bg-white shadow-sm">
                 3
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
                 Confirm Details
               </span>
             </div>
@@ -77,7 +77,7 @@ export default function QualifyStep1() {
         </div>
 
         <Card className="w-full border-0 shadow-card rounded-2xl overflow-hidden animate-slide-up">
-          <CardHeader className="text-center pb-4 pt-8 px-8">
+          <CardHeader className="text-center pb-4 pt-4 px-4">
             <CardTitle className="text-2xl md:text-3xl font-bold">
               Step 1: Qualify
             </CardTitle>
@@ -85,8 +85,8 @@ export default function QualifyStep1() {
               Answer these questions to see if you qualify
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-8 px-8">
-            <div className="space-y-5 bg-gray-50 p-6 rounded-xl">
+          <CardContent className="space-y-4 px-4">
+            <div className="space-y-3 bg-gray-50 p-3 rounded-xl">
               <h3 className="text-lg font-medium text-center">
                 Were you in a car accident in the last 4 years?
               </h3>
@@ -125,7 +125,7 @@ export default function QualifyStep1() {
               </div>
             </div>
 
-            <div className="space-y-5 bg-gray-50 p-6 rounded-xl">
+            <div className="space-y-3 bg-gray-50 p-3 rounded-xl">
               <h3 className="text-lg font-medium text-center">
                 Was it the other person's fault?
               </h3>
@@ -159,7 +159,7 @@ export default function QualifyStep1() {
               </div>
             </div>
 
-            <div className="space-y-5 bg-gray-50 p-6 rounded-xl">
+            <div className="space-y-3 bg-gray-50 p-3 rounded-xl">
               <h3 className="text-lg font-medium text-center">
                 Do you own the damaged vehicle (not lease)?
               </h3>

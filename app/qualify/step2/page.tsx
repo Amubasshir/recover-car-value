@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,46 +8,46 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function QualifyStep2() {
   const router = useRouter();
   const [vehicleData, setVehicleData] = useState({
-    licensePlate: '',
-    state: '',
-    make: '',
-    model: '',
-    year: '',
-    trim: '',
+    licensePlate: "",
+    state: "",
+    make: "",
+    model: "",
+    year: "",
+    trim: "",
   });
 
-  const [activeTab, setActiveTab] = useState('license');
+  const [activeTab, setActiveTab] = useState("license");
 
   useEffect(() => {
     // Check if user qualified in step 1
-    const qualifyAnswers = localStorage.getItem('qualifyAnswers');
+    const qualifyAnswers = localStorage.getItem("qualifyAnswers");
     if (qualifyAnswers) {
       const answers = JSON.parse(qualifyAnswers);
       if (
         !(answers.recentAccident && answers.notAtFault && answers.ownVehicle)
       ) {
-        router.push('/qualify/not-qualified');
+        router.push("/qualify/not-qualified");
       }
     } else {
       // If no answers found, redirect to step 1
-      router.push('/qualify/step1');
+      router.push("/qualify/step1");
     }
   }, [router]);
 
@@ -62,20 +62,20 @@ export default function QualifyStep2() {
 
   const handleContinue = () => {
     // Store vehicle data in localStorage
-    localStorage.setItem('vehicleData', JSON.stringify(vehicleData));
-    router.push('/qualify/step3');
+    localStorage.setItem("vehicleData", JSON.stringify(vehicleData));
+    router.push("/qualify/step3");
   };
 
   const isLicensePlateValid =
-    activeTab === 'license' && vehicleData.licensePlate && vehicleData.state;
+    activeTab === "license" && vehicleData.licensePlate && vehicleData.state;
   const isVehicleSelectValid =
-    activeTab === 'select' &&
+    activeTab === "select" &&
     vehicleData.make &&
     vehicleData.model &&
     vehicleData.year;
 
   const isFormValid =
-    activeTab === 'license' ? isLicensePlateValid : isVehicleSelectValid;
+    activeTab === "license" ? isLicensePlateValid : isVehicleSelectValid;
 
   // Generate years for dropdown (current year down to 2000)
   const currentYear = new Date().getFullYear();
@@ -84,33 +84,33 @@ export default function QualifyStep2() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
-      <main className="flex-1 container max-w-3xl mx-auto px-4 py-16 animate-fade-in">
-        <div className="mb-12">
+    <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
+      <main className="flex-1 container max-w-3xl mx-auto px-4 py-6 animate-fade-in">
+        <div className="mb-4 max-w-sm md:max-w-md mx-auto">
           <div className="flex justify-between items-start">
             <div className="flex flex-col items-center text-success-600">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-success-600 bg-success-600 text-white shadow-md">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-success-600 bg-success-600 text-white shadow-md">
                 ✓
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
                 Qualify
               </span>
             </div>
-            <div className="flex-1 mt-[3.75%] h-1 mx-2 bg-success-600 rounded-full" />
+            <div className="flex-1 mt-[3%] h-1 mx-2 bg-success-600 rounded-full" />
             <div className="flex flex-col items-center text-primary">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-primary bg-primary text-white shadow-md">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-primary bg-primary text-white shadow-md">
                 2
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
                 Find Vehicle
               </span>
             </div>
-            <div className="flex-1 mt-[3.75%] h-1 mx-2 bg-gray-200 rounded-full" />
+            <div className="flex-1 mt-[3%] h-1 mx-2 bg-gray-200 rounded-full" />
             <div className="flex flex-col items-center text-gray-400">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-gray-200 bg-white shadow-sm">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-gray-200 bg-white shadow-sm">
                 3
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
                 Confirm Details
               </span>
             </div>
@@ -118,7 +118,7 @@ export default function QualifyStep2() {
         </div>
 
         <Card className="w-full border-0 shadow-card rounded-2xl overflow-hidden animate-slide-up">
-          <CardHeader className="text-center pb-4 pt-8 px-8">
+          <CardHeader className="text-center pb-8 pt-4 px-4">
             <CardTitle className="text-2xl md:text-3xl font-bold">
               Step 2: Find Vehicle
             </CardTitle>
@@ -127,7 +127,7 @@ export default function QualifyStep2() {
               Select Vehicle to choose vehicle.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6 px-8">
+          <CardContent className="space-y-3 px-4">
             <Tabs
               defaultValue="license"
               className="w-full"
@@ -166,14 +166,14 @@ export default function QualifyStep2() {
                       className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Label htmlFor="state" className="text-sm font-medium">
                       State
                     </Label>
                     <Select
                       value={vehicleData.state}
                       onValueChange={(value) =>
-                        handleSelectChange('state', value)
+                        handleSelectChange("state", value)
                       }
                     >
                       <SelectTrigger
@@ -247,7 +247,7 @@ export default function QualifyStep2() {
                     <Select
                       value={vehicleData.year}
                       onValueChange={(value) =>
-                        handleSelectChange('year', value)
+                        handleSelectChange("year", value)
                       }
                     >
                       <SelectTrigger
@@ -272,7 +272,7 @@ export default function QualifyStep2() {
                     <Select
                       value={vehicleData.make}
                       onValueChange={(value) =>
-                        handleSelectChange('make', value)
+                        handleSelectChange("make", value)
                       }
                     >
                       <SelectTrigger
@@ -332,7 +332,7 @@ export default function QualifyStep2() {
               </TabsContent>
             </Tabs>
           </CardContent>
-          <CardFooter className="px-8 pb-8">
+          <CardFooter className="px-4 pb-8">
             <Button
               className="w-full bg-gradient-primary hover:opacity-90 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-sm px-6 py-2 md:text-base md:py-3.5 md:px-8"
               onClick={handleContinue}

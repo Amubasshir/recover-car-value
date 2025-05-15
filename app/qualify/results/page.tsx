@@ -49,17 +49,17 @@ export default function Results() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
+    <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
 
-      <main className="flex-1 container max-w-3xl mx-auto px-4 py-16 animate-fade-in">
+      <main className="flex-1 container max-w-3xl mx-auto px-4 py-4 md:py-8 animate-fade-in">
         <Card className="w-full border-0 shadow-card rounded-2xl overflow-hidden animate-slide-up">
-          <CardHeader className="text-center pb-4 pt-8 px-8">
+          <CardHeader className="text-center pb-4 pt-4 px-4">
             
             <CardTitle className="text-2xl font-bold">Sign Up</CardTitle>
             <CardDescription className="text-base mt-2">Great news, You Qualify For:</CardDescription>
             <div className="text-6xl font-bold text-success-600 mt-6 animate-pulse-subtle">{estimatedValue}</div>
           </CardHeader>
-          <CardContent className="space-y-8 px-8">
+          <CardContent className="space-y-4 px-4">
             <p className="text-center text-gray-600">
               Please check the box and click the sign up button below for us to represent you in pursuing your
               diminished value claim.
@@ -108,7 +108,7 @@ export default function Results() {
             </div>
 
           </CardContent>
-          <CardFooter className="px-8 pb-8">
+          <CardFooter className="px-4 pb-4">
             <Button
               className="w-full bg-gradient-success hover:opacity-90 text-white font-bold rounded-xl shadow-md hover:shadow-lg py-6 text-lg transition-all duration-200"
               onClick={handleSignUp}

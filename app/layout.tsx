@@ -2,7 +2,7 @@ import "@/app/globals.css"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
+// import { SiteFooter } from "@/components/site-footer"
 
 // Optimize font loading by limiting character subsets
 const inter = Inter({
@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
         <ThemeProvider attribute="class" defaultTheme="light">
           {children}
         </ThemeProvider>
-        <SiteFooter />
+        {/* <SiteFooter /> */}
       </body>
     </html>
   );

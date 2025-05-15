@@ -12,10 +12,10 @@ import Link from "next/link";
 
 export default function ThankYou() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
-      <main className="flex-1 container max-w-3xl mx-auto px-4 py-16 flex items-center justify-center">
+    <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
+      <main className="flex-1 container max-w-3xl mx-auto px-4 py-4 flex items-center justify-center">
         <Card className="w-full max-w-md text-center border-0 shadow-card rounded-2xl overflow-hidden animate-fade-in">
-          <CardHeader className="pb-4 pt-8 px-8">
+          <CardHeader className="pb-4 pt-4 px-4">
             <div className="mx-auto bg-success-100 p-4 rounded-full w-20 h-20 flex items-center justify-center mb-6 shadow-sm">
               <CheckCircle className="h-10 w-10 text-success-600" />
             </div>
@@ -24,7 +24,7 @@ export default function ThankYou() {
               Your diminished value claim has been submitted
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6 px-8">
+          <CardContent className="space-y-4 px-4">
             <p className="text-gray-600">
               A representative from Prime Counsel Law Group will contact you
               shortly to discuss your claim and the next steps.

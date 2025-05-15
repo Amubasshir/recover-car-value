@@ -1,27 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
+import carImg from '../public/images/cars.jpg';
 
 // Update the HeroSection component
 const HeroSection = () => (
-  <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-primary-50 to-white overflow-hidden">
+  <section className="w-full py-16 md:py-24 lg:py-24 bg-gradient-to-b from-primary-50 to-white overflow-hidden">
     <div className="container px-4 md:px-6 relative">
       <div className="absolute inset-0 bg-grid-primary-100/20 bg-[size:20px_20px] opacity-20"></div>
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center relative animate-fade-in">
-        <QuoteCard />
+      
         <div className="flex flex-col justify-center space-y-5">
-          <div className="space-y-4 flex flex-col items-center md:items-end">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-balance text-center md:text-right">
+          <div className="space-y-4 flex flex-col items-center md:items-start">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-balance text-center md:text-left">
               Your Car Loses Value After an Auto Accident - <br />
               {/* <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-800"> */}
               We'll Help You Get That Money Back
             </h1>
-            <p className="text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed max-w-[600px] ms-auto text-center md:text-right">
+            <p className="text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed max-w-[600px] text-center md:text-left">
               "Even after repairs, your car is worth less. New laws allow you to
               recover the money lost - even if it happened years ago."
             </p>
           </div>
-          <div className="flex flex-col justify-center items-center md:items-right md:justify-end gap-3 min-[400px]:flex-row pt-2">
+          <div className="block md:hidden">
+            <Image src={carImg.src} height={600} width={600} alt="Recover Card Value" />
+          </div>
+          <div className="flex flex-col justify-center items-center md:items-right md:justify-start gap-3 min-[400px]:flex-row pt-2">
             <Link href="/qualify/step1">
               <Button size="lg" className="gap-2">
                 Click to see if you qualify <ArrowRight className="h-5 w-5" />
@@ -29,14 +34,20 @@ const HeroSection = () => (
             </Link>
           </div>
         </div>
+
+        <div className="md:flex flex-col justify-center space-y-5 hidden">
+            <Image src={carImg.src} height={600} width={600} alt="Recover Card Value" />
+        </div>
       </div>
+
+        <QuoteCard />
     </div>
   </section>
 );
 
 // Update the QuoteCard component
 const QuoteCard = () => (
-  <div className="mx-auto lg:mx-0 relative animate-slide-up">
+  <div className="mx-auto lg:mx-0 mt-16 md:mt-36 relative animate-slide-up">
     <div className="bg-white p-8 rounded-2xl shadow-card hover:shadow-elevated transition-all duration-300 border border-gray-100">
       <div className="text-center mb-8">
         {/* <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-800"> */}

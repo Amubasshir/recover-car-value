@@ -1,7 +1,5 @@
 "use client";
 
-import { SimpleFooter } from "@/components/simple-footer";
-import { SimpleHeader } from "@/components/simple-header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -68,37 +66,41 @@ export default function QualifyStep3() {
     formData.email;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white flex flex-col">
-      
-
-      <main className="flex-1 container max-w-3xl mx-auto px-4 py-16 animate-fade-in">
-        <div className="mb-12">
+    <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
+      <main className="flex-1 container max-w-3xl mx-auto px-4 py-6 animate-fade-in">
+        <div className="mb-4 max-w-sm md:max-w-md mx-auto">
           <div className="flex justify-between items-start">
             <div className="flex flex-col items-center text-success-600">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-success-600 bg-success-600 text-white shadow-md">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-success-600 bg-success-600 text-white shadow-md">
                 ✓
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">Qualify</span>
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
+                Qualify
+              </span>
             </div>
-            <div className="flex-1 mt-[3.75%] h-1 mx-2 bg-success-600 rounded-full" />
+            <div className="flex-1 mt-[3%] h-1 mx-2 bg-success-600 rounded-full" />
             <div className="flex flex-col items-center text-success-600">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-success-600 bg-success-600 text-white shadow-md">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-success-600 bg-success-600 text-white shadow-md">
                 ✓
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">Find Vehicle</span>
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
+                Find Vehicle
+              </span>
             </div>
-            <div className="flex-1 mt-[3.75%] h-1 mx-2 bg-success-600 rounded-full" />
+            <div className="flex-1 mt-[3%] h-1 mx-2 bg-success-600 rounded-full" />
             <div className="flex flex-col items-center text-primary">
-              <div className="w-8 h-8 md:w-12 md:h-12 rounded-full flex items-center justify-center border-2 border-primary bg-primary text-white shadow-md">
+              <div className="w-7 h-7 md:h-9 md:w-9  rounded-full flex items-center justify-center border-2 border-primary bg-primary text-white shadow-md">
                 3
               </div>
-              <span className="mt-2 text-center text-sm font-medium max-w-16 md:max-w-sm">Confirm Details</span>
+              <span className="mt-1 text-center text-xs md:text-sm font-medium max-w-16 md:max-w-sm">
+                Confirm Details
+              </span>
             </div>
           </div>
         </div>
 
         <Card className="w-full border-0 shadow-card rounded-2xl overflow-hidden animate-slide-up">
-          <CardHeader className="text-center pb-4 pt-8 px-8">
+          <CardHeader className="text-center pb-4 pt-4 px-4">
             <CardTitle className="text-2xl font-bold">
               Step 3: Confirm Details
             </CardTitle>
@@ -106,7 +108,7 @@ export default function QualifyStep3() {
               We need a few more details to give you a final cash value
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-8 px-8">
+          <CardContent className="space-y-4 px-4">
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="accidentDate" className="text-sm font-medium">
@@ -130,10 +132,11 @@ export default function QualifyStep3() {
                   id="repairCost"
                   name="repairCost"
                   value={formData.repairCost}
+                  type="number"
                   onChange={handleChange}
                   placeholder="$5,000"
                   className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                />
+                  />
               </div>
             </div>
 
@@ -148,6 +151,8 @@ export default function QualifyStep3() {
                   value={formData.zipcode}
                   onChange={handleChange}
                   placeholder="12345"
+                  minLength={7}
+                  type="number"
                   required
                   className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
                 />
@@ -207,7 +212,8 @@ export default function QualifyStep3() {
                 <Input
                   id="phone"
                   name="phone"
-                  type="tel"
+                  type="number"
+                  minLength={10}
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="(555) 123-4567"
@@ -259,13 +265,13 @@ export default function QualifyStep3() {
                   value={formData.atFaultInsurance}
                   type="number"
                   onChange={handleChange}
-                  placeholder="Claim Number"
+                  placeholder="State Farm ake Claim Number"
                   className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
                 />
               </div>
             </div>
           </CardContent>
-          <CardFooter className="px-8 pb-8 flex-col gap-8">
+          <CardFooter className="px-4 pb-4 flex-col gap-8">
             <Button
               className="w-full bg-gradient-success hover:opacity-90 text-white font-bold rounded-xl shadow-md hover:shadow-lg text-sm px-6 py-2 md:text-lg md:py-3.5 md:px-8 transition-all duration-200"
               onClick={handleSubmit}
@@ -274,10 +280,12 @@ export default function QualifyStep3() {
               Receive Instant Diminished Cash Value!
             </Button>
 
-            <div className="space-y-2 bg-primary-50 p-3 md:p-6 rounded-xl border border-primary-100 shadow-sm">
+            <div className="space-y-2 bg-primary-50 p-3 rounded-xl border border-primary-100 shadow-sm">
               <div className="flex items-start space-x-3">
                 <div className="grid gap-1.5 leading-none">
-                  <label className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"  style={{lineHeight: '20px'}}>
+                  <label
+                    className="text-sm text-gray-600"
+                  >
                     I acknowledge that by clicking the "Receive Instant
                     Diminished Cash Value!" button as my official signature
                   </label>
@@ -297,8 +305,6 @@ export default function QualifyStep3() {
           </CardFooter>
         </Card>
       </main>
-
-    
     </div>
   );
 }
