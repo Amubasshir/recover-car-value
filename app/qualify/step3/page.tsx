@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,40 +8,41 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function QualifyStep3() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    accidentDate: "",
-    repairCost: "",
-    zipcode: "",
-    mileage: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    atFaultName: "",
-    atFaultInsurance: "",
+    accidentDate: '',
+    repairCost: '',
+    zipcode: '',
+    mileage: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    atFaultName: '',
+    atFaultInsurance: '',
+    repairClaimNumber: '', // Add new field
   });
 
   // Add this after the formData state
   const [errors, setErrors] = useState({
-    zipcode: "",
-    phone: "",
+    zipcode: '',
+    phone: '',
   });
 
   useEffect(() => {
     // Check if user completed previous steps
-    const qualifyAnswers = localStorage.getItem("qualifyAnswers");
-    const vehicleData = localStorage.getItem("vehicleData");
+    const qualifyAnswers = localStorage.getItem('qualifyAnswers');
+    const vehicleData = localStorage.getItem('vehicleData');
 
     if (!qualifyAnswers || !vehicleData) {
-      router.push("/qualify/step1");
+      router.push('/qualify/step1');
     }
   }, [router]);
 
@@ -51,25 +52,25 @@ export default function QualifyStep3() {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Validate zipcode and phone
-    if (name === "zipcode") {
-      if (value.length < 7) {
+    if (name === 'zipcode') {
+      if (value.length < 5) {
         setErrors((prev) => ({
           ...prev,
-          zipcode: "Zipcode must be at least 7 digits",
+          zipcode: 'Zipcode must be at least 5 digits',
         }));
       } else {
-        setErrors((prev) => ({ ...prev, zipcode: "" }));
+        setErrors((prev) => ({ ...prev, zipcode: '' }));
       }
     }
 
-    if (name === "phone") {
+    if (name === 'phone') {
       if (value.length < 10) {
         setErrors((prev) => ({
           ...prev,
-          phone: "Phone number must be at least 10 digits",
+          phone: 'Phone number must be at least 10 digits',
         }));
       } else {
-        setErrors((prev) => ({ ...prev, phone: "" }));
+        setErrors((prev) => ({ ...prev, phone: '' }));
       }
     }
   };
@@ -80,11 +81,11 @@ export default function QualifyStep3() {
 
   const handleSubmit = () => {
     // Store form data in localStorage
-    localStorage.setItem("confirmationData", JSON.stringify(formData));
+    localStorage.setItem('confirmationData', JSON.stringify(formData));
 
     // In a real application, you would send this data to your server
     // For now, we'll just navigate to the results page
-    router.push("/qualify/results");
+    router.push('/qualify/results');
   };
 
   // Replace the existing isFormValid check
@@ -95,7 +96,7 @@ export default function QualifyStep3() {
     formData.lastName &&
     formData.phone &&
     formData.email &&
-    formData.zipcode.length >= 7 &&
+    formData.zipcode.length >= 5 &&
     formData.phone.length >= 10 &&
     !errors.zipcode &&
     !errors.phone;
@@ -186,11 +187,11 @@ export default function QualifyStep3() {
                   value={formData.zipcode}
                   onChange={handleChange}
                   placeholder="12345"
-                  minLength={7}
+                  minLength={5}
                   type="number"
                   required
                   className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
-                    errors.zipcode ? "border-red-500" : ""
+                    errors.zipcode ? 'border-red-500' : ''
                   }`}
                 />
                 {errors.zipcode && (
@@ -259,7 +260,7 @@ export default function QualifyStep3() {
                   placeholder="(555) 123-4567"
                   required
                   className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
-                    errors.phone ? "border-red-500" : ""
+                    errors.phone ? 'border-red-500' : ''
                   }`}
                 />
                 {errors.phone && (
@@ -308,12 +309,29 @@ export default function QualifyStep3() {
                   id="atFaultInsurance"
                   name="atFaultInsurance"
                   value={formData.atFaultInsurance}
-                  type="number"
                   onChange={handleChange}
-                  placeholder="State Farm ake Claim Number"
+                  placeholder="State Farm"
                   className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="repairClaimNumber"
+                className="text-sm font-medium"
+              >
+                Claim Number for Repair
+              </Label>
+              <Input
+                id="repairClaimNumber"
+                name="repairClaimNumber"
+                type="number"
+                value={formData.repairClaimNumber}
+                onChange={handleChange}
+                placeholder="Enter claim number"
+                className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+              />
             </div>
           </CardContent>
           <CardFooter className="px-4 pb-4 flex-col gap-8">
