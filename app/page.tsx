@@ -203,8 +203,8 @@ export default function Home() {
     <>
       <main className="flex-1">
         <HeroSection />
-        <FAQSection />
         <HowItWorksSection />
+        <FAQSection />
       </main>
     </>
   );
