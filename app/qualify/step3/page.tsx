@@ -13,6 +13,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { json } from 'stream/consumers';
 
 export default function QualifyStep3() {
   const router = useRouter();
@@ -30,6 +32,9 @@ export default function QualifyStep3() {
     repairClaimNumber: '', // Add new field
   });
 
+  const [vehicleData, setVehicleData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
   // Add this after the formData state
   const [errors, setErrors] = useState({
     zipcode: '',
@@ -41,10 +46,14 @@ export default function QualifyStep3() {
     const qualifyAnswers = localStorage.getItem('qualifyAnswers');
     const vehicleData = localStorage.getItem('vehicleData');
 
+    setVehicleData(JSON.parse(vehicleData || "{}"));
+
     if (!qualifyAnswers || !vehicleData) {
       router.push('/qualify/step1');
     }
   }, [router]);
+
+  console.log({vehicleData});
 
   // Replace the existing handleChange function
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,13 +88,60 @@ export default function QualifyStep3() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Store form data in localStorage
-    localStorage.setItem('confirmationData', JSON.stringify(formData));
+    console.log({formData})
+
+    const query = new URLSearchParams({
+              year: vehicleData.year,
+              make: vehicleData.make, 
+              model: vehicleData.model, 
+              trim: vehicleData.trim, 
+              accidentMileage: formData.mileage, 
+              accidentZip: formData.zipcode, 
+              repairCost: formData.repairCost, 
+              accidentDate: formData.accidentDate, 
+              vin: vehicleData.vin,
+            }).toString();
+
+    // return;
+    try {
+        const response = await fetch(`/api/diminished-value/?${query}`, {
+          method: "GET",
+        });
+
+        // console.log({response})
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          toast.error(errorData.error);
+        }
+
+        // const vehicleInfo = (await response.json()) as VehicleInfo;
+        // console.log("Vehicle Info:", vehicleInfo);
+        // localStorage.setItem("vehicleData", JSON.stringify({...vehicleInfo, plate: vehicleData.licensePlate}));
+        setIsLoading(false);
+        localStorage.setItem('confirmationData', JSON.stringify(formData));
+        // router.push('/qualify/results');
+
+        // onVehicleIdentified(vehicleInfo);
+      } catch (error) {
+        console.log("License plate lookup error:", error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Failed to lookup vehicle information"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+
+
+
+    
 
     // In a real application, you would send this data to your server
     // For now, we'll just navigate to the results page
-    router.push('/qualify/results');
   };
 
   // Replace the existing isFormValid check

@@ -1,7 +1,7 @@
 // app/api/diminished-value/route.ts
 
 import { NextResponse } from 'next/server';
-import { fetchCleanListings, fetchDamagedListings } from '@/lib/api/marketCheck';
+import { fetchCleanListings, fetchDamagedListings, fetchVinHistory } from '@/lib/api/marketCheck';
 
 // Constants for radius settings
 const BASE_CLEAN_RADIUS = parseInt(process.env.BASE_CLEAN_RADIUS || '50', 10);
@@ -18,12 +18,29 @@ interface DiminishedValueRequest {
   accidentZip: string;
   repairCost: number;
   accidentDate: string;
+  vin: string;
+    order?: 'asc' | 'desc';
+    page?: number;
+
 }
 
-export async function POST(request: Request) {
+export async function GET(req: Request) {
   try {
-    const body = await request.json() as DiminishedValueRequest;
-    const { year, make, model, trim, accidentMileage, accidentZip, repairCost, accidentDate } = body;
+    //   const { year, make, model, trim, accidentMileage, accidentZip, repairCost, accidentDate, vin, order, page } = req.query;
+      const { searchParams } = new URL(req.url);
+
+    const year = searchParams.get("year");
+    const make = searchParams.get("make");
+    const model = searchParams.get("model");
+    const trim = searchParams.get("trim");
+    const accidentMileage = searchParams.get("accidentMileage");
+    const accidentZip = searchParams.get("accidentZip");
+    const repairCost = searchParams.get("repairCost");
+    const accidentDate = searchParams.get("accidentDate");
+    const vin = searchParams.get("vin");
+    const order = searchParams.get("order");
+    const page = searchParams.get("page");
+    
     
     // Input validation
     if (!year || !make || !model || !trim || !accidentMileage || !accidentZip || !repairCost || !accidentDate) {
@@ -44,14 +61,18 @@ export async function POST(request: Request) {
     
     // Fetch clean and damaged listings with dynamic radius expansion
     const { listings: cleanListings, radius: cleanRadius } = await fetchListingsWithRadiusExpansion(
-      () => fetchCleanListings(vehicleDetails),
-      BASE_CLEAN_RADIUS
+        () => fetchCleanListings(vehicleDetails),
+        BASE_CLEAN_RADIUS
     );
+    const data = await fetchVinHistory({ vin, order, page });
+    
+    console.log("i am from data 🐦‍🔥🐦‍🔥🐦‍🔥", data)
     
     const { listings: damagedListings, radius: damagedRadius } = await fetchListingsWithRadiusExpansion(
       () => fetchDamagedListings(vehicleDetails),
       BASE_DAMAGED_RADIUS
     );
+        console.log("i am from query 🐦‍🔥🐦‍🔥🐦‍🔥", damagedListings, damagedRadius)
     
     // Process listings and calculate values
     const topCleanListings = selectAndCleanListings(cleanListings, 'clean', 5);

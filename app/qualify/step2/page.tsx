@@ -19,8 +19,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { VehicleInfo } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function QualifyStep2() {
   const router = useRouter();
@@ -33,7 +35,90 @@ export default function QualifyStep2() {
     trim: "",
   });
 
+  const [years, setYears] = useState<string[]>([]);
+  const [makes, setMakes] = useState<string[]>([]);
+  const [models, setModels] = useState<string[]>([]);
+  const [trims, setTrims] = useState<string[]>([]);
+  const [loading, setLoading] = useState({
+    year: true,
+    make: false,
+    model: false,
+    trim: false,
+  });
+
   const [activeTab, setActiveTab] = useState("license");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Fetch years on component mount
+  useEffect(() => {
+    fetchOptions("year");
+  }, []);
+
+  // Fetch makes when year changes
+  useEffect(() => {
+    if (vehicleData.year) {
+      fetchOptions("make", { year: vehicleData.year });
+      // Reset dependent fields
+      setVehicleData((prev) => ({ ...prev, make: "", model: "", trim: "" }));
+      setModels([]);
+      setTrims([]);
+    }
+  }, [vehicleData.year]);
+
+  // Fetch models when make changes
+  useEffect(() => {
+    if (vehicleData.make) {
+      fetchOptions("model", { year: vehicleData.year, make: vehicleData.make });
+      // Reset dependent fields
+      setVehicleData((prev) => ({ ...prev, model: "", trim: "" }));
+      setTrims([]);
+    }
+  }, [vehicleData.make]);
+
+  // Fetch trims when model changes
+  useEffect(() => {
+    if (vehicleData.model) {
+      fetchOptions("trim", {
+        year: vehicleData.year,
+        make: vehicleData.make,
+        model: vehicleData.model,
+      });
+      // Reset dependent field
+      setVehicleData((prev) => ({ ...prev, trim: "" }));
+    }
+  }, [vehicleData.model]);
+
+  const fetchOptions = async (field: string, filters = {}) => {
+    setLoading((prev) => ({ ...prev, [field]: true }));
+    try {
+      const params = new URLSearchParams({ field, ...filters });
+      const response = await fetch(`/api/vehicles/options?${params}`);
+      const result = await response.json();
+
+
+      if (result.error) throw new Error(result.error);
+
+      console.log("result.data", result.data)
+      switch (field) {
+        case "year":
+          setYears(result.data);
+          break;
+        case "make":
+          setMakes(result.data);
+          break;
+        case "model":
+          setModels(result.data);
+          break;
+        case "trim":
+          setTrims(result.data);
+          break;
+      }
+    } catch (error) {
+      console.error(`Error fetching ${field} options:`, error);
+    } finally {
+      setLoading((prev) => ({ ...prev, [field]: false }));
+    }
+  };
 
   useEffect(() => {
     // Check if user qualified in step 1
@@ -51,6 +136,18 @@ export default function QualifyStep2() {
     }
   }, [router]);
 
+  const handleResetForm = () => {
+    setVehicleData({
+      licensePlate: "",
+      state: "",
+      make: "",
+      model: "",
+      year: "",
+      trim: "",
+    });
+    localStorage.removeItem("vehicleData");
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setVehicleData((prev) => ({ ...prev, [name]: value }));
@@ -60,10 +157,72 @@ export default function QualifyStep2() {
     setVehicleData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleContinue = () => {
-    // Store vehicle data in localStorage
-    localStorage.setItem("vehicleData", JSON.stringify(vehicleData));
-    router.push("/qualify/step3");
+  console.log(activeTab);
+  const handleContinue = async () => {
+    console.log(vehicleData);
+    // functions
+    // onError(null);
+
+    if (activeTab === "license" && !vehicleData.licensePlate) {
+      toast.error("License plate is required");
+      return;
+    }
+
+    if (activeTab === "license" && !vehicleData.state) {
+      toast.error("State is required");
+      return;
+    }
+
+    // setIsLoading(true);
+    if (activeTab === "license") {
+      try {
+        const response = await fetch("/api/vehicle/lookup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            licensePlate: vehicleData.licensePlate,
+            state: vehicleData.state,
+          }),
+        });
+
+        // console.log({response})
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          toast.error(errorData.error || "Failed to lookup license plate");
+        }
+
+        const vehicleInfo = (await response.json()) as VehicleInfo;
+        // console.log("Vehicle Info:", vehicleInfo);
+        localStorage.setItem(
+          "vehicleData",
+          JSON.stringify({ ...vehicleInfo, plate: vehicleData.licensePlate })
+        );
+        setIsLoading(false);
+        router.push("/qualify/step3");
+
+        // onVehicleIdentified(vehicleInfo);
+      } catch (error) {
+        console.log("License plate lookup error:", error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Failed to lookup vehicle information"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+      // Store vehicle data in localStorage
+    }else{
+         localStorage.setItem(
+          "vehicleData",
+          JSON.stringify({ ...vehicleData, plate: vehicleData.licensePlate })
+        );
+        setIsLoading(false);
+        router.push("/qualify/step3");
+    }
   };
 
   const isLicensePlateValid =
@@ -73,15 +232,8 @@ export default function QualifyStep2() {
     vehicleData.make &&
     vehicleData.model &&
     vehicleData.year;
-
   const isFormValid =
     activeTab === "license" ? isLicensePlateValid : isVehicleSelectValid;
-
-  // Generate years for dropdown (current year down to 2000)
-  const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 1999 }, (_, i) =>
-    (currentYear - i).toString()
-  );
 
   return (
     <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
@@ -131,7 +283,10 @@ export default function QualifyStep2() {
             <Tabs
               defaultValue="license"
               className="w-full"
-              onValueChange={setActiveTab}
+              onValueChange={(e) => {
+                setActiveTab(e);
+                handleResetForm();
+              }}
               value={activeTab}
             >
               <TabsList className="grid w-full grid-cols-2 rounded-lg p-1 shadow-sm">
@@ -249,12 +404,17 @@ export default function QualifyStep2() {
                       onValueChange={(value) =>
                         handleSelectChange("year", value)
                       }
+                      disabled={loading.year}
                     >
                       <SelectTrigger
                         id="year"
                         className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
                       >
-                        <SelectValue placeholder="Select year" />
+                        <SelectValue
+                          placeholder={
+                            loading.year ? "Loading years..." : "Select year"
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent className="rounded-lg shadow-md max-h-[240px]">
                         {years.map((year) => (
@@ -274,29 +434,24 @@ export default function QualifyStep2() {
                       onValueChange={(value) =>
                         handleSelectChange("make", value)
                       }
+                      disabled={!vehicleData.year || loading.make}
                     >
                       <SelectTrigger
                         id="make"
                         className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
                       >
-                        <SelectValue placeholder="Select make" />
+                        <SelectValue
+                          placeholder={
+                            loading.make ? "Loading makes..." : "Select make"
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent className="rounded-lg shadow-md">
-                        <SelectItem value="toyota">Toyota</SelectItem>
-                        <SelectItem value="honda">Honda</SelectItem>
-                        <SelectItem value="ford">Ford</SelectItem>
-                        <SelectItem value="chevrolet">Chevrolet</SelectItem>
-                        <SelectItem value="nissan">Nissan</SelectItem>
-                        <SelectItem value="bmw">BMW</SelectItem>
-                        <SelectItem value="mercedes">Mercedes-Benz</SelectItem>
-                        <SelectItem value="audi">Audi</SelectItem>
-                        <SelectItem value="lexus">Lexus</SelectItem>
-                        <SelectItem value="subaru">Subaru</SelectItem>
-                        <SelectItem value="kia">Kia</SelectItem>
-                        <SelectItem value="hyundai">Hyundai</SelectItem>
-                        <SelectItem value="mazda">Mazda</SelectItem>
-                        <SelectItem value="volkswagen">Volkswagen</SelectItem>
-                        <SelectItem value="jeep">Jeep</SelectItem>
+                        {makes.map((make) => (
+                          <SelectItem key={make} value={make}>
+                            {make}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
@@ -306,27 +461,63 @@ export default function QualifyStep2() {
                     <Label htmlFor="model" className="text-sm font-medium">
                       Model
                     </Label>
-                    <Input
-                      id="model"
-                      name="model"
+                    <Select
                       value={vehicleData.model}
-                      onChange={handleChange}
-                      placeholder="Camry"
-                      className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                    />
+                      onValueChange={(value) =>
+                        handleSelectChange("model", value)
+                      }
+                      disabled={!vehicleData.make || loading.model}
+                    >
+                      <SelectTrigger
+                        id="model"
+                        className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+                      >
+                        <SelectValue
+                          placeholder={
+                            loading.model
+                              ? "Loading models..."
+                              : "Select model"
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-lg shadow-md">
+                        {models.map((model) => (
+                          <SelectItem key={model} value={model}>
+                            {model}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="trim" className="text-sm font-medium">
                       Trim (Optional)
                     </Label>
-                    <Input
-                      id="trim"
-                      name="trim"
+                    <Select
                       value={vehicleData.trim}
-                      onChange={handleChange}
-                      placeholder="LE, XLE, etc."
-                      className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                    />
+                      onValueChange={(value) =>
+                        handleSelectChange("trim", value)
+                      }
+                      disabled={!vehicleData.model || loading.trim}
+                    >
+                      <SelectTrigger
+                        id="trim"
+                        className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+                      >
+                        <SelectValue
+                          placeholder={
+                            loading.trim ? "Loading trims..." : "Select trim"
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-lg shadow-md">
+                        {trims.map((trim) => (
+                          <SelectItem key={trim} value={trim}>
+                            {trim}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
               </TabsContent>

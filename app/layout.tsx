@@ -3,6 +3,7 @@ import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'sonner';
 
 // Optimize font loading by limiting character subsets
 const inter = Inter({
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
           {children}
         </ThemeProvider>
         <SiteFooter />
+        <Toaster />
       </body>
     </html>
   );

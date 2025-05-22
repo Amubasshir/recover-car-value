@@ -15,23 +15,27 @@ interface VehicleInfo {
   make: string;
   model: string;
   trim: string;
+  state: string;
 }
 
 export async function lookupLicensePlate({ licensePlate, state }: PlateToVinRequest): Promise<VehicleInfo> {
   const apiKey = process.env.PLATETOVIN_API_KEY;
   
+  console.log("hei ✅✅✅", licensePlate, state, apiKey);
+// console.log("✅✅✅", response)
+//   return;
   if (!apiKey) {
     throw new Error('PlateToVin API key not configured');
   }
 
-  const url = 'https://platetovin.com/api/v1/lookup';
+  const url = 'https://platetovin.com/api/convert';
   
   try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'Authorization': `${apiKey}`
       },
       body: JSON.stringify({
         plate: licensePlate,
@@ -39,22 +43,26 @@ export async function lookupLicensePlate({ licensePlate, state }: PlateToVinRequ
       })
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to lookup license plate');
+    
+    const data = await response.json();
+    console.log("🐍🐍🐍🐦‍🔥", data)
+    if (!data.success) {
+      throw new Error('Failed to lookup license plate');
     }
 
-    const data = await response.json();
+    // const data = await response.json();
     
+    // return {};
     return {
-      vin: data.vin,
-      year: parseInt(data.year, 10),
-      make: data.make,
-      model: data.model,
-      trim: data.trim || ''
+      vin: data.vin.vin,
+      year: parseInt(data.vin.year, 10),
+      make: data.vin.make,
+      model: data.vin.model,
+      trim: data.vin.trim || '',
+      state: state || ''
     };
   } catch (error) {
-    console.error('License plate lookup failed:', error);
+    console.log('License plate lookup failed: ❤️‍🔥❤️‍🔥❤️‍🔥', error);
     throw error;
   }
 }
