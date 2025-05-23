@@ -30,8 +30,6 @@ export async function GET(request: Request) {
     );
   }
 
-  console.log("Fetching options for:", { field, year, make, model });
-
   //   try{
   //  let query = await supabase
   //       .from("cars_year_make_model_master_advanced")

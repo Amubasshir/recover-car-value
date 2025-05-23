@@ -22,12 +22,13 @@ export default function Results() {
     repairClaimNumber: '', // Add new field
   });
   const [agreedToRepresentation, setAgreedToRepresentation] = useState(false);
-  const [estimatedValue, setEstimatedValue] = useState('$4,483.88');
+  const [estimatedValue, setEstimatedValue] = useState(0);
 
   useEffect(() => {
     // Get user data from localStorage
     const confirmationData = localStorage.getItem('confirmationData');
-    if (confirmationData) {
+    const diminishedVehicleData = localStorage.getItem('diminishedVehicleData');
+    if (confirmationData && diminishedVehicleData) {
       const data = JSON.parse(confirmationData);
       setUserData({
         firstName: data.firstName,
@@ -36,10 +37,15 @@ export default function Results() {
         email: data.email,
         repairClaimNumber: data.repairClaimNumber, // Add new field
       });
+        const vehicleData = JSON.parse(diminishedVehicleData);
+        
+        setEstimatedValue(vehicleData.estimated_diminished_value);
+      
     } else {
       // If no data found, redirect to step 1
       router.push('/qualify/step1');
     }
+
 
     // In a real application, you would calculate the diminished value based on the vehicle and accident details
     // For now, we'll just use a fixed value
@@ -47,10 +53,10 @@ export default function Results() {
 
   const handleSignUp = () => {
     // In a real application, you would send this data to your server
-    console.log('User signed up for representation:', {
-      ...userData,
-      agreedToRepresentation,
-    });
+    // console.log('User signed up for representation:', {
+    //   ...userData,
+    //   agreedToRepresentation,
+    // });
 
     // Navigate to thank you page
     router.push('/qualify/thank-you');
@@ -65,7 +71,7 @@ export default function Results() {
               Great news, You Qualify For:
             </CardDescription>
             <div className="text-5xl md:text-6xl font-bold text-success-600 mt-6 animate-pulse-subtle">
-              {estimatedValue}
+              ${estimatedValue}
             </div>
           </CardHeader>
           <CardContent className="space-y-4 px-4">

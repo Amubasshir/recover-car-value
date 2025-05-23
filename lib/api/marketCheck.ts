@@ -21,115 +21,123 @@ interface ListingParams {
   rows?: number;
 }
 
+interface ListingParamsExpanded {
+  api_key: string | null;
+  year: string | null;
+  model: string | null;
+  make: string | null;
+  zip: string | null;
+  radius: string | null;
+  history: string | null;
+  rows: string | null;
+}
 
 export async function fetchListings({
-  vehicleDetails,
-  titleStatus,
+  api_key,
+  year,
+  model,
+  make,
+  zip,
+  radius,
   history,
-  radius = 50,
-  rows = 10
-}: ListingParams) {
-  const apiKey = process.env.MARKETCHECK_API_KEY;
-  
-  if (!apiKey) {
-    throw new Error('MarketCheck API key not configured');
+  rows,
+}: ListingParamsExpanded) {
+  if (!api_key) {
+    throw new Error("MarketCheck API key not configured");
   }
 
-  const { year, make, model, trim, mileage, zip } = vehicleDetails;
-  
   // Construct API URL
-  const baseUrl = 'https://mc-api.marketcheck.com/v2/search/car/active';
-  
-//   https://api.marketcheck.com/v2/search/car/active?api_key=U6N8lDZRXuH8T7Yq5JyKwZ2l1xNnFojR&year=2019&make=Toyota&model=Tundra&trim=Limited CrewMax&miles_range=1500&zip=32771&radius=50
+  const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/active";
+
   // Create URL with parameters
   const url = new URL(baseUrl);
-  url.searchParams.append('api_key', apiKey);
-  url.searchParams.append('year', year.toString());
-  url.searchParams.append('make', make);
-  url.searchParams.append('model', model);
-  url.searchParams.append('trim', trim);
-  url.searchParams.append('miles_range', `${mileage - 10000},${mileage + 10000}`);
-  url.searchParams.append('zip', zip);
-  url.searchParams.append('radius', radius.toString());
-  url.searchParams.append('rows', rows.toString());
-  
-  // Add optional parameters
-  if (titleStatus) {
-    url.searchParams.append('title_status', titleStatus);
-  }
-  
-  if (history) {
-    url.searchParams.append('history', history);
-  }
-  
+  url.searchParams.append("api_key", api_key);
+  url.searchParams.append("year", year as string);
+  url.searchParams.append("model", model as string);
+  url.searchParams.append("make", make as string);
+//   url.searchParams.append("zip", "32771");
+  url.searchParams.append("zip", zip as string);
+  url.searchParams.append("radius", radius as string);
+  url.searchParams.append("history", history as string);
+  url.searchParams.append("rows", rows as string);
+
   try {
     const response = await fetch(url.toString());
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error_message || 'Failed to fetch vehicle listings');
-    }
-    
     const data = await response.json();
+
+    // console.log("MarketCheck API URL:", url.toString(), data);
+
+    if (!data) throw new Error("Failed to fetch vehicle listings");
+
     return data;
   } catch (error) {
-    console.error('MarketCheck API error:', error);
+    console.error("MarketCheck API error:", error);
     throw error;
   }
 }
 
 export async function fetchVinHistory({
   vin,
-  order= 'desc',
+  order = "desc",
   page = 1,
-}: {vin: string, order?: 'asc' | 'desc', page?: number}) {
+}: {
+  vin: string;
+  order?: "asc" | "desc";
+  page?: number;
+}) {
   const apiKey = process.env.MARKETCHECK_API_KEY;
-  
+
   if (!apiKey) {
-    throw new Error('MarketCheck API key not configured');
+    throw new Error("MarketCheck API key not configured");
   }
 
-  
   // Construct API URL
   const baseUrl = `https://mc-api.marketcheck.com/v2/history/car/${vin}?`;
-  
+
   // Create URL with parameters
   const url = new URL(baseUrl);
-  url.searchParams.append('api_key', apiKey);
-  url.searchParams.append('sort_order', order);
-  url.searchParams.append('page', (page||"").toString());
-  
-  
+  url.searchParams.append("api_key", apiKey);
+  url.searchParams.append("sort_order", order);
+  url.searchParams.append("page", (page || "").toString());
+
   try {
     const response = await fetch(url.toString());
-    
+
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error_message || 'Failed to fetch vehicle vin history');
+      throw new Error(
+        errorData.error_message || "Failed to fetch vehicle vin history"
+      );
     }
-    
+
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('MarketCheck API error:', error);
+    console.error("MarketCheck API error:", error);
     throw error;
   }
 }
 
-export async function fetchCleanListings(vehicleDetails: VehicleDetails, radius: number = 50) {
+export async function fetchCleanListings(
+  vehicleDetails: VehicleDetails,
+  radius: number = 50
+) {
   return fetchListings({
     vehicleDetails,
-    history: 'clean',
+    history: "clean",
     radius,
-    rows: 10
+    rows: 10,
   });
 }
 
-export async function fetchDamagedListings(vehicleDetails: VehicleDetails, radius: number = 100) {
+export async function fetchDamagedListings(
+  vehicleDetails: VehicleDetails,
+  radius: number = 100
+) {
   return fetchListings({
     vehicleDetails,
-    titleStatus: 'salvage,rebuild',
+    titleStatus: "salvage,rebuild",
     radius,
-    rows: 10
+    rows: 10,
   });
 }

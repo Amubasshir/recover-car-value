@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,28 +8,27 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { json } from 'stream/consumers';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function QualifyStep3() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    accidentDate: '',
-    repairCost: '',
-    zipcode: '',
-    mileage: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    atFaultName: '',
-    atFaultInsurance: '',
-    repairClaimNumber: '', // Add new field
+    accidentDate: "",
+    repairCost: "",
+    zipcode: "",
+    mileage: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    atFaultName: "",
+    atFaultInsurance: "",
+    repairClaimNumber: "", // Add new field
   });
 
   const [vehicleData, setVehicleData] = useState({});
@@ -37,23 +36,22 @@ export default function QualifyStep3() {
 
   // Add this after the formData state
   const [errors, setErrors] = useState({
-    zipcode: '',
-    phone: '',
+    zipcode: "",
+    phone: "",
   });
 
   useEffect(() => {
     // Check if user completed previous steps
-    const qualifyAnswers = localStorage.getItem('qualifyAnswers');
-    const vehicleData = localStorage.getItem('vehicleData');
+    const qualifyAnswers = localStorage.getItem("qualifyAnswers");
+    const vehicleData = localStorage.getItem("vehicleData");
 
     setVehicleData(JSON.parse(vehicleData || "{}"));
 
     if (!qualifyAnswers || !vehicleData) {
-      router.push('/qualify/step1');
+      router.push("/qualify/step1");
     }
   }, [router]);
 
-  console.log({vehicleData});
 
   // Replace the existing handleChange function
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,25 +59,25 @@ export default function QualifyStep3() {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Validate zipcode and phone
-    if (name === 'zipcode') {
+    if (name === "zipcode") {
       if (value.length < 5) {
         setErrors((prev) => ({
           ...prev,
-          zipcode: 'Zipcode must be at least 5 digits',
+          zipcode: "Zipcode must be at least 5 digits",
         }));
       } else {
-        setErrors((prev) => ({ ...prev, zipcode: '' }));
+        setErrors((prev) => ({ ...prev, zipcode: "" }));
       }
     }
 
-    if (name === 'phone') {
+    if (name === "phone") {
       if (value.length < 10) {
         setErrors((prev) => ({
           ...prev,
-          phone: 'Phone number must be at least 10 digits',
+          phone: "Phone number must be at least 10 digits",
         }));
       } else {
-        setErrors((prev) => ({ ...prev, phone: '' }));
+        setErrors((prev) => ({ ...prev, phone: "" }));
       }
     }
   };
@@ -90,55 +88,56 @@ export default function QualifyStep3() {
 
   const handleSubmit = async () => {
     // Store form data in localStorage
-    console.log({formData})
 
     const query = new URLSearchParams({
-              year: vehicleData.year,
-              make: vehicleData.make, 
-              model: vehicleData.model, 
-              trim: vehicleData.trim, 
-              accidentMileage: formData.mileage, 
-              accidentZip: formData.zipcode, 
-              repairCost: formData.repairCost, 
-              accidentDate: formData.accidentDate, 
-              vin: vehicleData.vin,
-            }).toString();
+      year: vehicleData.year,
+      make: vehicleData.make,
+      model: vehicleData.model,
+      trim: vehicleData.trim,
+      zip: formData.zipcode,
+      accidentMileage: formData.mileage,
+      accidentZip: formData.zipcode,
+      repairCost: formData.repairCost,
+      accidentDate: formData.accidentDate,
+      vin: vehicleData.vin,
+    }).toString();
 
     // return;
     try {
-        const response = await fetch(`/api/diminished-value/?${query}`, {
-          method: "GET",
-        });
+      const response = await fetch(`/api/diminished-value/?${query}`, {
+        method: "GET",
+      });
 
-        // console.log({response})
+      const data = await response.json();
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          toast.error(errorData.error);
-        }
+    //   if (!response.ok) {
+    //     const errorData = await response.json();
+    //     toast.error(errorData.error);
+    //   }
 
-        // const vehicleInfo = (await response.json()) as VehicleInfo;
-        // console.log("Vehicle Info:", vehicleInfo);
-        // localStorage.setItem("vehicleData", JSON.stringify({...vehicleInfo, plate: vehicleData.licensePlate}));
-        setIsLoading(false);
-        localStorage.setItem('confirmationData', JSON.stringify(formData));
-        // router.push('/qualify/results');
-
-        // onVehicleIdentified(vehicleInfo);
-      } catch (error) {
-        console.log("License plate lookup error:", error);
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Failed to lookup vehicle information"
-        );
-      } finally {
-        setIsLoading(false);
+      if(data.error) {
+        toast.error(data.error);
       }
+      
+      toast.success("Vehicle information retrieved successfully! Please check your email for the report." )
 
+      // const vehicleInfo = (await response.json()) as VehicleInfo;
+      // console.log("Vehicle Info:", vehicleInfo);
+      localStorage.setItem("diminishedVehicleData", JSON.stringify(data.data));
+      localStorage.setItem("confirmationData", JSON.stringify(formData));
+      setIsLoading(false);
+      router.push('/qualify/results');
 
-
-    
+      // onVehicleIdentified(vehicleInfo);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to lookup vehicle information"
+      );
+    } finally {
+      setIsLoading(false);
+    }
 
     // In a real application, you would send this data to your server
     // For now, we'll just navigate to the results page
@@ -247,7 +246,7 @@ export default function QualifyStep3() {
                   type="number"
                   required
                   className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
-                    errors.zipcode ? 'border-red-500' : ''
+                    errors.zipcode ? "border-red-500" : ""
                   }`}
                 />
                 {errors.zipcode && (
@@ -316,7 +315,7 @@ export default function QualifyStep3() {
                   placeholder="(555) 123-4567"
                   required
                   className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
-                    errors.phone ? 'border-red-500' : ''
+                    errors.phone ? "border-red-500" : ""
                   }`}
                 />
                 {errors.phone && (

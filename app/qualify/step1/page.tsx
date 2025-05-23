@@ -21,7 +21,6 @@ export default function QualifyStep1() {
   });
 
   const handleAnswer = (question, answer) => {
-    console.log(question, answer);
     setAnswers((prev) => ({ ...prev, [question]: answer }));
   };
 

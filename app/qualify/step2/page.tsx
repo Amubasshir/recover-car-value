@@ -98,7 +98,6 @@ export default function QualifyStep2() {
 
       if (result.error) throw new Error(result.error);
 
-      console.log("result.data", result.data)
       switch (field) {
         case "year":
           setYears(result.data);
@@ -157,9 +156,9 @@ export default function QualifyStep2() {
     setVehicleData((prev) => ({ ...prev, [name]: value }));
   };
 
-  console.log(activeTab);
+  
   const handleContinue = async () => {
-    console.log(vehicleData);
+  
     // functions
     // onError(null);
 
@@ -205,7 +204,6 @@ export default function QualifyStep2() {
 
         // onVehicleIdentified(vehicleInfo);
       } catch (error) {
-        console.log("License plate lookup error:", error);
         toast.error(
           error instanceof Error
             ? error.message

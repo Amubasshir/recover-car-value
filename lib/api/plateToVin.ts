@@ -21,9 +21,6 @@ interface VehicleInfo {
 export async function lookupLicensePlate({ licensePlate, state }: PlateToVinRequest): Promise<VehicleInfo> {
   const apiKey = process.env.PLATETOVIN_API_KEY;
   
-  console.log("hei ✅✅✅", licensePlate, state, apiKey);
-// console.log("✅✅✅", response)
-//   return;
   if (!apiKey) {
     throw new Error('PlateToVin API key not configured');
   }
@@ -45,7 +42,6 @@ export async function lookupLicensePlate({ licensePlate, state }: PlateToVinRequ
 
     
     const data = await response.json();
-    console.log("🐍🐍🐍🐦‍🔥", data)
     if (!data.success) {
       throw new Error('Failed to lookup license plate');
     }
@@ -62,7 +58,6 @@ export async function lookupLicensePlate({ licensePlate, state }: PlateToVinRequ
       state: state || ''
     };
   } catch (error) {
-    console.log('License plate lookup failed: ❤️‍🔥❤️‍🔥❤️‍🔥', error);
     throw error;
   }
 }

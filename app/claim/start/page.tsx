@@ -60,7 +60,7 @@ export default function ClaimForm() {
   const handleSubmit = (e) => {
     e.preventDefault()
     // In a real application, you would send this data to your server
-    console.log("Form submitted:", formData)
+    // console.log("Form submitted:", formData)
     // Navigate to confirmation page
     router.push("/claim/confirmation")
   }
