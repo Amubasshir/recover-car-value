@@ -34,7 +34,11 @@ export default function QualifyStep2() {
     year: "",
     trim: "",
   });
-
+  const currentYear = new Date().getFullYear();
+  const allYears = Array.from(
+    { length: currentYear + 1 - 1800 + 1 },
+    (_, i) => 1800 + i
+  ).reverse();
   const [years, setYears] = useState<string[]>([]);
   const [makes, setMakes] = useState<string[]>([]);
   const [models, setModels] = useState<string[]>([]);
@@ -50,9 +54,9 @@ export default function QualifyStep2() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch years on component mount
-  useEffect(() => {
-    fetchOptions("year");
-  }, []);
+  //   useEffect(() => {
+  //     fetchOptions("year");
+  //   }, []);
 
   // Fetch makes when year changes
   useEffect(() => {
@@ -95,7 +99,6 @@ export default function QualifyStep2() {
       const response = await fetch(`/api/vehicles/options?${params}`);
       const result = await response.json();
 
-
       if (result.error) throw new Error(result.error);
 
       switch (field) {
@@ -103,6 +106,11 @@ export default function QualifyStep2() {
           setYears(result.data);
           break;
         case "make":
+          if (result.data.length === 0) {
+            toast.error("No makes found for the selected year");
+            setMakes(result.data);
+            return;
+          }
           setMakes(result.data);
           break;
         case "model":
@@ -156,9 +164,7 @@ export default function QualifyStep2() {
     setVehicleData((prev) => ({ ...prev, [name]: value }));
   };
 
-  
   const handleContinue = async () => {
-  
     // functions
     // onError(null);
 
@@ -197,7 +203,11 @@ export default function QualifyStep2() {
         // console.log("Vehicle Info:", vehicleInfo);
         localStorage.setItem(
           "vehicleData",
-          JSON.stringify({ ...vehicleInfo, plate: vehicleData.licensePlate })
+          JSON.stringify({
+            ...vehicleInfo,
+            licensePlate: vehicleData.licensePlate,
+            plate: vehicleData.licensePlate,
+          })
         );
         setIsLoading(false);
         router.push("/qualify/step3");
@@ -213,13 +223,17 @@ export default function QualifyStep2() {
         setIsLoading(false);
       }
       // Store vehicle data in localStorage
-    }else{
-         localStorage.setItem(
-          "vehicleData",
-          JSON.stringify({ ...vehicleData, plate: vehicleData.licensePlate })
-        );
-        setIsLoading(false);
-        router.push("/qualify/step3");
+    } else {
+      localStorage.setItem(
+        "vehicleData",
+        JSON.stringify({
+          ...vehicleData,
+          licensePlate: vehicleData.licensePlate,
+          plate: vehicleData.licensePlate,
+        })
+      );
+      setIsLoading(false);
+      router.push("/qualify/step3");
     }
   };
 
@@ -393,7 +407,7 @@ export default function QualifyStep2() {
               </TabsContent>
               <TabsContent value="select" className="space-y-5 pt-6">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <div className="space-y-2">
+                  {/* <div className="space-y-2">
                     <Label htmlFor="year" className="text-sm font-medium">
                       Year
                     </Label>
@@ -417,6 +431,35 @@ export default function QualifyStep2() {
                       <SelectContent className="rounded-lg shadow-md max-h-[240px]">
                         {years.map((year) => (
                           <SelectItem key={year} value={year}>
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div> */}
+                  <div className="space-y-2">
+                    <Label htmlFor="year" className="text-sm font-medium">
+                      Year
+                    </Label>
+                    <Select
+                      value={vehicleData.year}
+                      onValueChange={(value) =>
+                        handleSelectChange("year", value)
+                      }
+                      // disabled={loading.year}
+                    >
+                      <SelectTrigger
+                        id="year"
+                        className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+                      >
+                        <SelectValue
+                          placeholder={"Select year"}
+                          // placeholder={loading.year ? "Loading years..." : "Select year"}
+                        />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-lg shadow-md max-h-[240px]">
+                        {allYears.map((year) => (
+                          <SelectItem key={year} value={year.toString()}>
                             {year}
                           </SelectItem>
                         ))}
@@ -472,9 +515,7 @@ export default function QualifyStep2() {
                       >
                         <SelectValue
                           placeholder={
-                            loading.model
-                              ? "Loading models..."
-                              : "Select model"
+                            loading.model ? "Loading models..." : "Select model"
                           }
                         />
                       </SelectTrigger>
