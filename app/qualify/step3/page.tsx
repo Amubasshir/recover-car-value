@@ -115,18 +115,21 @@ export default function QualifyStep3() {
     //     toast.error(errorData.error);
     //   }
 
-      if(data.error) {
+    console.log("Response Data:", data);
+
+      if(data?.error) {
         toast.error(data.error);
+        return;
       }
       
       toast.success("Vehicle information retrieved successfully! Please check your email for the report." )
 
       // const vehicleInfo = (await response.json()) as VehicleInfo;
       // console.log("Vehicle Info:", vehicleInfo);
-      localStorage.setItem("diminishedVehicleData", JSON.stringify(data.data));
+      localStorage.setItem("diminishedVehicleData", JSON.stringify(data?.data));
       localStorage.setItem("confirmationData", JSON.stringify(formData));
       setIsLoading(false);
-      router.push('/qualify/results');
+    //   router.push('/qualify/results');
 
       // onVehicleIdentified(vehicleInfo);
     } catch (error) {

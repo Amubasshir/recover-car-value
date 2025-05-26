@@ -28,8 +28,8 @@ export default function Results() {
     // Get user data from localStorage
     const confirmationData = localStorage.getItem('confirmationData');
     const diminishedVehicleData = localStorage.getItem('diminishedVehicleData');
-    if (confirmationData && diminishedVehicleData) {
-      const data = JSON.parse(confirmationData);
+    if (confirmationData && diminishedVehicleData && confirmationData !== 'null' && diminishedVehicleData !== 'undefined') {
+      const data = JSON.parse(confirmationData || '{}');
       setUserData({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -37,19 +37,23 @@ export default function Results() {
         email: data.email,
         repairClaimNumber: data.repairClaimNumber, // Add new field
       });
-        const vehicleData = JSON.parse(diminishedVehicleData);
+      const vehicleData = JSON.parse(diminishedVehicleData || '{}');
+      console.log('User data loaded:', diminishedVehicleData);
         
-        setEstimatedValue(vehicleData.estimated_diminished_value);
+        setEstimatedValue(vehicleData?.estimated_diminished_value || 0);
       
     } else {
       // If no data found, redirect to step 1
-      router.push('/qualify/step1');
+      router.push('/qualify/step3');
     }
+    
 
 
     // In a real application, you would calculate the diminished value based on the vehicle and accident details
     // For now, we'll just use a fixed value
   }, [router]);
+
+  console.log(estimatedValue)
 
   const handleSignUp = () => {
     // In a real application, you would send this data to your server
@@ -71,7 +75,7 @@ export default function Results() {
               Great news, You Qualify For:
             </CardDescription>
             <div className="text-5xl md:text-6xl font-bold text-success-600 mt-6 animate-pulse-subtle">
-              ${estimatedValue}
+              ${estimatedValue?.toFixed(2)}
             </div>
           </CardHeader>
           <CardContent className="space-y-4 px-4">

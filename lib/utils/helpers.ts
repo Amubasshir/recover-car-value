@@ -20,7 +20,7 @@ const CONFIG = {
   RADIUS_INCREMENT: 50,
   MAX_RADIUS: 200,
   
-  API_URL: "https://api.marketcheck.com/v2/search/car/active"
+  API_URL: "https://api.marketcheck.com/v2/search/car/recents"
 };
 
 // -------------------------------

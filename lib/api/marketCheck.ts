@@ -47,7 +47,7 @@ export async function fetchListings({
   }
 
   // Construct API URL
-  const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/active";
+  const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
 
   // Create URL with parameters
   const url = new URL(baseUrl);
