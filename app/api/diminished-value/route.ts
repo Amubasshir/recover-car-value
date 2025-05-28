@@ -47,7 +47,7 @@ export async function GET(req: Request) {
     const order = searchParams.get("order");
     const page = searchParams.get("page");
     const zip = searchParams.get("zip");
-    
+
     // const data = await fetchVinHistory({ vin, order, page });
     const listingsData = await fetchListings({
       api_key,
@@ -67,6 +67,155 @@ export async function GET(req: Request) {
     //   );
     // }
 
+    // // Fetch clean and damaged listings with dynamic radius expansion
+    // const { listings: cleanListings, radius: cleanRadius } = await fetchListingsWithRadiusExpansion(
+    //     () => fetchCleanListings(vehicleDetails),
+    //     BASE_CLEAN_RADIUS
+    // );
+
+    // const { listings: damagedListings, radius: damagedRadius } = await fetchListingsWithRadiusExpansion(
+    //   () => fetchDamagedListings(vehicleDetails),
+    //   BASE_DAMAGED_RADIUS
+    // );
+
+    // // Process listings and calculate values
+    const topCleanListings = selectAndCleanListings(
+      listingsData.listings,
+      "clean",
+      5
+    );
+    const bottomDamagedListings = selectAndCleanListings(
+      listingsData.listings,
+      "damaged",
+      5
+    );
+
+    // // Calculate averages
+    const avgCleanPrice = calculateAverage(
+      topCleanListings.map((listing) => listing.price)
+    );
+    const avgDamagedPrice = calculateAverage(
+      bottomDamagedListings.map((listing) => listing.price)
+    );
+
+    // // Calculate diminished value
+    const diminishedValue =
+      avgCleanPrice && avgDamagedPrice
+        ? Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100
+        : 0;
+
+    // // Build response
+    const result = {
+      // vehicle_info_input: {
+      year,
+      make,
+      model,
+      trim,
+      accident_mileage: accidentMileage,
+      accident_zip: accidentZip,
+      repair_cost: repairCost,
+      accident_date: accidentDate,
+      //   },
+      //   search_parameters: {
+      //     clean_radius_used_miles: cleanRadius,
+      //     damaged_radius_used_miles: damagedRadius,
+      //     mileage_range_searched: `${accidentMileage - 10000}-${accidentMileage + 10000}`,
+      //   },
+      // valuation: {
+      average_clean_price_top5: avgCleanPrice,
+      average_damaged_price_bottom5: avgDamagedPrice,
+      estimated_diminished_value: diminishedValue,
+      // repair_cost: repairCost,
+      // },
+      // comps_data: {
+      top_clean_listings: topCleanListings,
+      bottom_damaged_listings: bottomDamagedListings,
+      // },
+
+      //   comps_found_summary: {
+      //         number_of_clean_listings: cleanListings.length,
+      //         number_of_damaged_listings: damagedListings.length,
+      //       }
+    };
+
+    let queries = await supabase
+      .from("diminished_car_value")
+      .insert(result)
+      .select("*")
+      .single();
+
+    if (queries.error) {
+      console.error("Error inserting data into Supabase:", queries.error);
+      return NextResponse.json(
+        { error: "Failed to proceed!" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(queries);
+  } catch (error) {
+    console.error("Diminished value calculation error:", error);
+    return NextResponse.json(
+      { error: "Failed to calculate diminished value" },
+      { status: 500 }
+    );
+  }
+}
+export async function POST(req: Request) {
+  try {
+     const body = await req.json();
+    //   const { year, make, model, trim, accidentMileage, accidentZip, repairCost, accidentDate, vin, order, page } = req.query;
+    // const { searchParams } = new URL(req.url);
+    const {
+      year,
+      make,
+      model,
+      trim,
+      accidentMileage,
+      accidentZip,
+      repairCost,
+      accidentDate,
+      vin,
+      order,
+      page,
+      zip,
+      client_info,
+      qualify_answers,
+    } = body;
+
+    console.log("🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥", body)
+
+    // const year = searchParams.get("year");
+    // const make = searchParams.get("make");
+    // const model = searchParams.get("model");
+    // const trim = searchParams.get("trim");
+    // const accidentMileage = searchParams.get("accidentMileage");
+    // const accidentZip = searchParams.get("accidentZip");
+    // const repairCost = searchParams.get("repairCost");
+    // const accidentDate = searchParams.get("accidentDate");
+    // const vin = searchParams.get("vin");
+    // const order = searchParams.get("order");
+    // const page = searchParams.get("page");
+    // const zip = searchParams.get("zip");
+
+    // const data = await fetchVinHistory({ vin, order, page });
+    const listingsData = await fetchListings({
+      api_key,
+      year,
+      model,
+      make,
+      zip,
+      radius: String(BASE_CLEAN_RADIUS),
+      history: HISTORY,
+      rows: String(10),
+    });
+    // Input validation
+    // if (!year || !make || !model || !trim || !accidentMileage || !accidentZip || !repairCost || !accidentDate) {
+    //   return NextResponse.json(
+    //     { error: 'All vehicle and accident details are required' },
+    //     { status: 400 }
+    //   );
+    // }
 
     // // Fetch clean and damaged listings with dynamic radius expansion
     // const { listings: cleanListings, radius: cleanRadius } = await fetchListingsWithRadiusExpansion(
@@ -80,53 +229,72 @@ export async function GET(req: Request) {
     // );
 
     // // Process listings and calculate values
-    const topCleanListings = selectAndCleanListings(listingsData.listings, 'clean', 5);
-    const bottomDamagedListings = selectAndCleanListings(listingsData.listings, 'damaged', 5);
+    const topCleanListings = selectAndCleanListings(
+      listingsData.listings,
+      "clean",
+      5
+    );
+    const bottomDamagedListings = selectAndCleanListings(
+      listingsData.listings,
+      "damaged",
+      5
+    );
 
     // // Calculate averages
-    const avgCleanPrice = calculateAverage(topCleanListings.map(listing => listing.price));
-    const avgDamagedPrice = calculateAverage(bottomDamagedListings.map(listing => listing.price));
+    const avgCleanPrice = calculateAverage(
+      topCleanListings.map((listing) => listing.price)
+    );
+    const avgDamagedPrice = calculateAverage(
+      bottomDamagedListings.map((listing) => listing.price)
+    );
 
     // // Calculate diminished value
-    const diminishedValue = avgCleanPrice && avgDamagedPrice
-    ? Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100
-    : 0;
-    
+    const diminishedValue =
+      avgCleanPrice && avgDamagedPrice
+        ? Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100
+        : 0;
+
     // // Build response
     const result = {
-        // vehicle_info_input: {
-        year,
-        make,
-        model,
-        trim,
-        accident_mileage: accidentMileage,
-        accident_zip: accidentZip,
-        repair_cost: repairCost,
-        accident_date: accidentDate,
-    //   },
+      // vehicle_info_input: {
+      year,
+      make,
+      model,
+      trim,
+      accident_mileage: accidentMileage,
+      accident_zip: accidentZip,
+      repair_cost: repairCost,
+      accident_date: accidentDate,
+      //   },
       //   search_parameters: {
-        //     clean_radius_used_miles: cleanRadius,
-        //     damaged_radius_used_miles: damagedRadius,
-        //     mileage_range_searched: `${accidentMileage - 10000}-${accidentMileage + 10000}`,
-        //   },
-        // valuation: {
-        average_clean_price_top5: avgCleanPrice,
-        average_damaged_price_bottom5: avgDamagedPrice,
-        estimated_diminished_value: diminishedValue,
-        // repair_cost: repairCost,
-    // },
-    // comps_data: {
-        top_clean_listings: topCleanListings,
-        bottom_damaged_listings: bottomDamagedListings,
-    // },
+      //     clean_radius_used_miles: cleanRadius,
+      //     damaged_radius_used_miles: damagedRadius,
+      //     mileage_range_searched: `${accidentMileage - 10000}-${accidentMileage + 10000}`,
+      //   },
+      // valuation: {
+      average_clean_price_top5: avgCleanPrice,
+      average_damaged_price_bottom5: avgDamagedPrice,
+      estimated_diminished_value: diminishedValue,
+      // repair_cost: repairCost,
+      // },
+      // comps_data: {
+      top_clean_listings: topCleanListings,
+      bottom_damaged_listings: bottomDamagedListings,
+      client_info,
+      qualify_answers,
+      // },
 
-    //   comps_found_summary: {
-    //         number_of_clean_listings: cleanListings.length,
-    //         number_of_damaged_listings: damagedListings.length,
-    //       }
+      //   comps_found_summary: {
+      //         number_of_clean_listings: cleanListings.length,
+      //         number_of_damaged_listings: damagedListings.length,
+      //       }
     };
 
-    let queries = await supabase.from("diminished_car_value").insert(result).select("*").single();
+    let queries = await supabase
+      .from("diminished_car_value")
+      .insert(result)
+      .select("*")
+      .single();
 
     if (queries.error) {
       console.error("Error inserting data into Supabase:", queries.error);
@@ -135,7 +303,7 @@ export async function GET(req: Request) {
         { status: 500 }
       );
     }
-    
+
     return NextResponse.json(queries);
   } catch (error) {
     console.error("Diminished value calculation error:", error);
@@ -181,7 +349,9 @@ function selectAndCleanListings(
   count: number
 ) {
   // Filter out listings without prices
-  const validListings = listings.filter((car) => car.price);
+  console.log({listings});
+  const validListings = listings?.filter((car) => car?.price) || [];
+//   console.log(validListings);
 
   // Sort by price (descending for clean, ascending for damaged)
   const sortedListings = [...validListings].sort((a, b) => {

@@ -32,6 +32,7 @@ export default function QualifyStep3() {
   });
 
   const [vehicleData, setVehicleData] = useState({});
+  const [qualifiedAnswers, setQualifiedAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   // Add this after the formData state
@@ -46,12 +47,12 @@ export default function QualifyStep3() {
     const vehicleData = localStorage.getItem("vehicleData");
 
     setVehicleData(JSON.parse(vehicleData || "{}"));
+    setQualifiedAnswers(JSON.parse(qualifyAnswers || "{}"));
 
     if (!qualifyAnswers || !vehicleData) {
       router.push("/qualify/step1");
     }
   }, [router]);
-
 
   // Replace the existing handleChange function
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,32 +105,53 @@ export default function QualifyStep3() {
 
     // return;
     try {
-      const response = await fetch(`/api/diminished-value/?${query}`, {
-        method: "GET",
+      //   const response = await fetch(`/api/diminished-value/?${query}`, {
+      const response = await fetch(`/api/diminished-value`, {
+        method: "POST",
+        body: JSON.stringify({
+          year: vehicleData.year,
+          make: vehicleData.make,
+          model: vehicleData.model,
+          trim: vehicleData.trim,
+          zip: formData.zipcode,
+          accidentMileage: formData.mileage,
+          accidentZip: formData.zipcode,
+          repairCost: formData.repairCost,
+          accidentDate: formData.accidentDate,
+          vin: vehicleData.vin,
+          qualify_answers: qualifiedAnswers,
+          client_info: {
+            name: formData.firstName + " " + formData.lastName,
+            phone: formData.phone,
+            email: formData.email,
+          },
+        }),
       });
 
       const data = await response.json();
 
-    //   if (!response.ok) {
-    //     const errorData = await response.json();
-    //     toast.error(errorData.error);
-    //   }
+      //   if (!response.ok) {
+      //     const errorData = await response.json();
+      //     toast.error(errorData.error);
+      //   }
 
-    console.log("Response Data:", data);
+      console.log("Response Data:", data);
 
-      if(data?.error) {
+      if (data?.error) {
         toast.error(data.error);
         return;
       }
-      
-      toast.success("Vehicle information retrieved successfully! Please check your email for the report." )
+
+      toast.success(
+        "Vehicle information retrieved successfully! Please check your email for the report."
+      );
 
       // const vehicleInfo = (await response.json()) as VehicleInfo;
       // console.log("Vehicle Info:", vehicleInfo);
       localStorage.setItem("diminishedVehicleData", JSON.stringify(data?.data));
       localStorage.setItem("confirmationData", JSON.stringify(formData));
       setIsLoading(false);
-      router.push('/qualify/results');
+    //   router.push("/qualify/results");
 
       // onVehicleIdentified(vehicleInfo);
     } catch (error) {
