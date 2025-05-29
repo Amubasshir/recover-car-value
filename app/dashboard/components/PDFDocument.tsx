@@ -84,7 +84,7 @@ coverPage: {
     right: 0,
     height: "120%",
     background: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 60%, #60a5fa 100%)",
-    transform: "skewY(-8deg)",
+    transform: "skewY(-0deg)",
     transformOrigin: "top left",
   },
   // Car image overlay
@@ -95,7 +95,7 @@ coverPage: {
     right: 0,
     height: "120%",
     opacity: 1,
-    transform: "skewY(0deg)",
+    transform: "skewY(8deg)", // 0deg
     transformOrigin: "top left",
   },
 //   coverBackgroundColor: {
@@ -117,7 +117,8 @@ coverPage: {
     right: 0,
     width: "100%",
     height: 525,
-    backgroundColor: "#142445bd",
+    // backgroundColor: "#142445bd",
+    backgroundColor: "#2e56a769",
     transform: "skewY(-17deg)",
     transformOrigin: "top left",
   },
@@ -503,7 +504,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
         </View>
         {report?.top_clean_listings?.map((listing, index) => (
           <View key={listing?.vin} style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}>
-            <Text style={styles.cell}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
+            <Text style={styles.cell}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
             <Text style={styles.vinCell}>{listing?.vin}</Text>
             <Text style={styles.cell}>{listing?.year}</Text>
             <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model}</Text>
@@ -530,7 +531,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
         </View>
         {report?.bottom_damaged_listings?.map((listing, index) => (
           <View key={listing?.vin} style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}>
-             <Text style={styles.cell}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
+             <Text style={styles.cell}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
             <Text style={styles.vinCell}>{listing?.vin}</Text>
             <Text style={styles.cell}>{listing?.year}</Text>
             <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model }</Text>
@@ -564,3 +565,14 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
     </Page>
   </Document>
 )};
+
+
+
+
+
+
+
+
+
+
+
