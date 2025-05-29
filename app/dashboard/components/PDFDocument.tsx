@@ -4,68 +4,246 @@ import dayjs from 'dayjs' // ES 2015
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    padding: 20,
     fontFamily: 'Helvetica',
   },
-  coverPage: {
-    position: 'relative',
-    padding: 40,
-    height: '100%',
+
+//   page 1
+//   coverPage: {
+//     position: 'relative',
+//     padding: 40,
+//     height: '100%',
+//   },
+//   coverBackground: {
+//     position: 'absolute',
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     opacity: 0.3,
+//   },
+//   diagonalStripe: {
+//     position: 'absolute',
+//     top: 0,
+//     right: 0,
+//     width: '100%',
+//     height: '100%',
+//     backgroundColor: 'rgb(37, 150, 190)',
+//     transform: 'skewY(-45deg)',
+//     transformOrigin: 'top right',
+//     opacity: 0.8,
+//   },
+//   coverContent: {
+//     position: 'relative',
+//     height: '100%',
+//     backgroundColor: 'rgb(37, 150, 190)',
+//   },
+//   coverTitle: {
+//     fontSize: 60,
+//     fontWeight: 'bold',
+//     color: '#ffffff',
+//     marginTop: '180px',
+//     marginLeft: '80px',
+//     marginBottom: 10,
+//     width: '75%',
+//   },
+//   coverInfo: {
+//     marginTop: 'auto',
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//   },
+//   clientInfo: {
+//     color: '#000000',
+//   },
+//   vehicleInfo: {
+//     color: '#ff0000',
+//     textAlign: 'right',
+//   },
+//   infoLabel: {
+//     fontSize: 14,
+//     color: '#ff0000',
+//     marginBottom: 4,
+//   },
+//   infoValue: {
+//     fontSize: 16,
+//     marginBottom: 8,
+//   },
+
+//! v2
+coverPage: {
+    position: "relative",
+    height: "100%",
+    width: "100%",
   },
-  coverBackground: {
-    position: 'absolute',
-    top: 0,
+  // Main diagonal blue background
+  mainBackground: {
+    position: "absolute",
+    top: -50,
     left: 0,
     right: 0,
-    bottom: 0,
-    opacity: 0.3,
+    height: "120%",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 60%, #60a5fa 100%)",
+    transform: "skewY(-8deg)",
+    transformOrigin: "top left",
   },
-  diagonalStripe: {
-    position: 'absolute',
-    top: 0,
+  // Car image overlay
+  coverBackground: {
+    position: "absolute",
+    top: -50,
+    left: -0.5,
     right: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgb(37, 150, 190)',
-    transform: 'skewY(-45deg)',
-    transformOrigin: 'top right',
-    opacity: 0.8,
+    height: "120%",
+    opacity: 0.3,
+    transform: "skewY(-8deg)",
+    transformOrigin: "top left",
   },
-  coverContent: {
-    position: 'relative',
-    height: '100%',
-    backgroundColor: 'rgb(37, 150, 190)',
+  // Blue diagonal stripe at top
+  blueOverlayStripe: {
+    position: "absolute",
+    top: 100,
+    left: 0,
+    right: 0,
+    width: "100%",
+    height: 500,
+    backgroundColor: "#008000",
+    transform: "skewY(-17deg)",
+    transformOrigin: "top left",
+  },
+  // Blue diagonal stripe at top
+  blueStripe: {
+    position: "absolute",
+    top: -48,
+    left: -50,
+    width: "100%",
+    height: 180,
+    backgroundColor: "#142445",
+    transform: "skewY(-17deg)",
+    transformOrigin: "top left",
+  },
+  // Red diagonal stripe at top
+  redStripe: {
+    position: "absolute",
+    top: 100,
+    left: 50,
+    width: "100%",
+    height: 20,
+    backgroundColor: "#ef4444",
+    transform: "skewY(-17deg)",
+    transformOrigin: "top left",
+  },
+  // White bottom section
+  whiteBottomSection: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 200,
+    backgroundColor: "#ffffff",
+    transform: "skewY(-17deg)",
+    transformOrigin: "bottom left",
+  },
+  // Red diagonal element at bottom left
+  redBottomElement: {
+    position: "absolute",
+    bottom: -10,
+    left: -80,
+    width: 260,
+    height: 80,
+    backgroundColor: "#ef4444",
+    transform: "skewY(27deg)",
+    transformOrigin: "bottom left",
   },
   coverTitle: {
-    fontSize: 60,
-    fontWeight: 'bold',
-    color: '#ffffff',
-    marginTop: '180px',
-    marginLeft: '80px',
-    marginBottom: 10,
-    width: '75%',
+    position: "absolute",
+    fontSize: 64,
+    fontWeight: "bold",
+    color: "#ffffff",
+    top: 180,
+    left: 60,
+    width: 400,
+    lineHeight: 1.1,
   },
-  coverInfo: {
-    marginTop: 'auto',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  // Report Date section
+  reportDateContainer: {
+    position: "absolute",
+    top: 520,
+    right: 60,
   },
-  clientInfo: {
-    color: '#000000',
-  },
-  vehicleInfo: {
-    color: '#ff0000',
-    textAlign: 'right',
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: '#ff0000',
+  reportDateLabel: {
+    fontSize: 18,
+    color: "#ef4444",
+    fontWeight: "bold",
     marginBottom: 4,
   },
-  infoValue: {
-    fontSize: 16,
+  reportDateValue: {
+    fontSize: 18,
+    color: "#374151",
+    fontWeight: "bold",
+  },
+  // Prepared For section
+  preparedForContainer: {
+    position: "absolute",
+    bottom: 80,
+    left: 60,
+  },
+  preparedForLabel: {
+    fontSize: 18,
+    color: "#ef4444",
+    fontWeight: "bold",
     marginBottom: 8,
   },
+  clientName: {
+    fontSize: 18,
+    color: "#1f2937",
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  clientContact: {
+    fontSize: 16,
+    color: "#374151",
+    marginBottom: 2,
+  },
+  // Vehicle section
+  vehicleContainer: {
+    position: "absolute",
+    bottom: 80,
+    right: 60,
+    textAlign: 'right',
+  },
+  vehicleLabel: {
+    fontSize: 18,
+    color: "#374151",
+    fontWeight: "bold",
+    marginBottom: 8,
+    textAlign: "right",
+  },
+  vehicleValue: {
+    fontSize: 18,
+    color: "#1f2937",
+    fontWeight: "bold",
+    marginBottom: 12,
+    textAlign: "right",
+  },
+  accidentDateLabel: {
+    fontSize: 16,
+    color: "#ef4444",
+    fontWeight: "bold",
+    marginBottom: 4,
+    textAlign: "right",
+  },
+  accidentDateValue: {
+    fontSize: 16,
+    color: "#374151",
+    fontWeight: "bold",
+    textAlign: "right",
+  },
+
+//   page 1 end
+
+
+
+
+
   title: {
     fontSize: 24,
     marginBottom: 15,
@@ -115,20 +293,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8fafc',
   },
   cell: {
-    flex: 1,
-  },
-  vinCell: {
-    flex: 1.8,
+    flex: 0.9,
+    textAlign: 'center',
+},
+vinCell: {
+    flex: 2,
     flexWrap: 'nowrap',
+    textAlign: 'center',
     
-  },
-  makeModelCell: {
+},
+makeModelCell: {
     flex: 1.5,
+    textAlign: 'center',
   },
   summary: {
     marginTop: 20,
     padding: 15,
     backgroundColor: '#f1f5f9',
+    textAlign: 'center',
   },
   summaryText: {
     fontSize: 12,
@@ -152,7 +334,61 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
     console.log({report})
     return (
   <Document>
-    <Page size="A4">
+
+ <Page size="A4" style={styles.page}>
+        <View style={styles.coverPage}>
+          {/* Main diagonal blue background */}
+          <View style={styles.mainBackground} />
+
+          {/* Car image overlay */}
+          {report?.backgroundImage && (
+            <Image
+              src="https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+              style={styles.coverBackground}
+            />
+          )}
+
+          {/* Red diagonal stripe at top */}
+          <View style={styles.blueOverlayStripe} />
+          <View style={styles.blueStripe} />
+          <View style={styles.redStripe} />
+
+          {/* White bottom section */}
+          <View style={styles.whiteBottomSection} />
+
+          {/* Red diagonal element at bottom left */}
+          <View style={styles.redBottomElement} />
+
+          {/* Main title */}
+          <Text style={styles.coverTitle}>
+            Diminished{"\n"}Value{"\n"}Analysis{"\n"}Report
+          </Text>
+
+          {/* Report Date */}
+          <View style={styles.reportDateContainer}>
+            <Text style={styles.reportDateLabel}>Report Date:</Text>
+            <Text style={styles.reportDateValue}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
+          </View>
+
+          {/* Prepared For section */}
+          <View style={styles.preparedForContainer}>
+            <Text style={styles.preparedForLabel}>Prepared For:</Text>
+            <Text style={styles.clientName}>{report?.client_info?.name}</Text>
+            <Text style={styles.clientContact}>{report?.client_info?.phone}</Text>
+            <Text style={styles.clientContact}>{report?.client_info?.email}</Text>
+          </View>
+
+          {/* Vehicle section */}
+          <View style={styles.vehicleContainer}>
+            <Text style={styles.vehicleLabel}>Vehicle:</Text>
+            <Text style={styles.vehicleValue}>{report?.vehicle_info}</Text>
+            <Text style={styles.accidentDateLabel}>Date of Accident:</Text>
+            <Text style={styles.accidentDateValue}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
+          </View>
+        </View>
+      </Page>
+
+    {/* <Page size="A4">
       <View style={styles.coverPage}>
         {report?.backgroundImage && (
           <Image src={"https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} style={styles?.coverBackground} />
@@ -171,14 +407,14 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
               <Text style={styles.infoLabel}>Report Date:</Text>
               <Text style={styles.infoValue}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
               <Text style={styles.infoLabel}>Vehicle:</Text>
-              {/* <Text style={styles.infoValue}>{report.vehicleInfo}</Text> //! have to add */}
+              <Text style={styles.infoValue}>{report.vehicleInfo}</Text> //! have to add
               <Text style={styles.infoLabel}>Date of Accident:</Text>
               <Text style={styles.infoValue}>{report.accident_date}</Text>
             </View>
           </View>
         </View>
       </View>
-    </Page>
+    </Page> */}
 
     <Page size="A4" style={styles.page}>
       <Text style={styles.title}>Understanding Inherent Diminished Value</Text>
@@ -194,14 +430,14 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
       <View style={styles.methodologySection}>
         <Text style={styles.sectionTitle}>Data Collection:</Text>
         <Text style={styles.methodologyText}>
-          Data is sourced from real-time active dealership listings to ensure current market accuracy.
+           Data is sourced from real-time active dealership listings in the last 90 days to ensure current market accuracy.
         </Text>
       </View>
 
       <View style={styles.methodologySection}>
         <Text style={styles.sectionTitle}>Vehicle Matching:</Text>
         <Text style={styles.methodologyText}>
-          Comparable vehicles are selected based on year, make and model, similar mileage ranges, and geographic proximity for the most reliable market comparisons.
+ Comparable vehicles are selected based on year, make and model, similar mileage ranges, and geographic proximity (100 mile radius) for the most reliable market comparisons.
         </Text>
       </View>
 
@@ -241,7 +477,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
           <Text style={styles.cell}>Date Listed</Text>
           <Text style={styles.vinCell}>VIN</Text>
           <Text style={styles.cell}>Year</Text>
-          <Text style={styles.makeModelCell}>Make/Model/Trim</Text>
+          <Text style={styles.makeModelCell}>Make/Model</Text>
           <Text style={styles.cell}>Mileage</Text>
           <Text style={styles.cell}>Zipcode</Text>
           <Text style={styles.cell}>Price</Text>
@@ -252,7 +488,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
             <Text style={styles.cell}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
             <Text style={styles.vinCell}>{listing?.vin}</Text>
             <Text style={styles.cell}>{listing?.year}</Text>
-            <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model + ', ' + listing?.trim}</Text>
+            <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model}</Text>
             <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
             <Text style={styles.cell}>{listing?.dealer_zip}</Text>
             <Text style={styles.cell}>${listing?.price.toLocaleString()}</Text>
@@ -268,7 +504,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
           <Text style={styles.cell}>Date Listed</Text>
           <Text style={styles.vinCell}>VIN</Text>
           <Text style={styles.cell}>Year</Text>
-          <Text style={styles.makeModelCell}>Make/Model/Trim</Text>
+          <Text style={styles.makeModelCell}>Make/Model</Text>
           <Text style={styles.cell}>Mileage</Text>
           <Text style={styles.cell}>Zipcode</Text>
           <Text style={styles.cell}>Price</Text>
@@ -279,7 +515,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
              <Text style={styles.cell}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
             <Text style={styles.vinCell}>{listing?.vin}</Text>
             <Text style={styles.cell}>{listing?.year}</Text>
-            <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model + ', ' + listing?.trim}</Text>
+            <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model }</Text>
             <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
             <Text style={styles.cell}>{listing?.dealer_zip}</Text>
             <Text style={styles.cell}>${listing?.price.toLocaleString()}</Text>
@@ -296,7 +532,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
         <Text style={styles.summaryText}>
           Fair Market Value with Accident: ${report?.average_damaged_price_bottom5?.toFixed(2)?.toLocaleString()}
         </Text>
-        <Text style={[styles.summaryText, { fontWeight: 'bold' }]}>
+        <Text style={[styles.summaryText, { fontWeight: 'bold', fontSize: 14, marginTop: 10 }]}>
           Calculated Diminished Value: ${report?.estimated_diminished_value?.toFixed(2)?.toLocaleString()}
         </Text>
       </View>
