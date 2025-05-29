@@ -386,7 +386,7 @@ function selectAndCleanListings(
     dealer_city: car.dealer?.city,
     dealer_state: car.dealer?.state,
     dealer_zip: car.dealer?.zip,
-    first_seen_at_date: car?.first_seen_at_date,
+    first_seen_at_source_date: car?.first_seen_at_source_date,
   }));
 }
 
