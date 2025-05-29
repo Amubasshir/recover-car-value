@@ -495,7 +495,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) => {
               style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
             >
               <Text style={styles.cell}>
-                {dayjs(report?.first_seen_at_source_date).format("MMM DD, YYYY")}
+                {dayjs(listing?.first_seen_at_source_date).format("MMM DD, YYYY")}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
               <Text style={styles.cell}>{listing?.year}</Text>
@@ -531,7 +531,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) => {
               style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
             >
               <Text style={styles.cell}>
-                {dayjs(report?.first_seen_at_source_date).format("MMM DD, YYYY")}
+                {dayjs(listing?.first_seen_at_source_date).format("MMM DD, YYYY")}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
               <Text style={styles.cell}>{listing?.year}</Text>
