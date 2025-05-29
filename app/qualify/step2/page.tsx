@@ -99,6 +99,8 @@ export default function QualifyStep2() {
       const response = await fetch(`/api/vehicles/options?${params}`);
       const result = await response.json();
 
+      console.log({result});
+
       if (result.error) throw new Error(result.error);
 
       switch (field) {

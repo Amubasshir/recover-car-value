@@ -181,6 +181,7 @@ export async function POST(req: Request) {
       zip,
       client_info,
       qualify_answers,
+      heading,
     } = body;
 
     console.log("🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥", body)
@@ -265,6 +266,7 @@ export async function POST(req: Request) {
       accident_zip: accidentZip,
       repair_cost: repairCost,
       accident_date: accidentDate,
+      heading: heading,
       //   },
       //   search_parameters: {
       //     clean_radius_used_miles: cleanRadius,

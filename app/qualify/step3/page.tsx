@@ -113,6 +113,7 @@ export default function QualifyStep3() {
           make: vehicleData.make,
           model: vehicleData.model,
           trim: vehicleData.trim,
+          heading: vehicleData.year + ' ' + vehicleData.make + ' ' + vehicleData.model,
           zip: formData.zipcode,
           accidentMileage: formData.mileage,
           accidentZip: formData.zipcode,

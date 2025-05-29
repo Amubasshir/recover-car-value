@@ -1,4 +1,5 @@
 import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
+import image from '../../../public/recover-car-value.jpg';
 import { Report } from '../types/report';
 import dayjs from 'dayjs' // ES 2015
 
@@ -89,14 +90,25 @@ coverPage: {
   // Car image overlay
   coverBackground: {
     position: "absolute",
-    top: -50,
+    top: -220,
     left: -0.5,
     right: 0,
     height: "120%",
-    opacity: 0.3,
-    transform: "skewY(-8deg)",
+    opacity: 1,
+    transform: "skewY(0deg)",
     transformOrigin: "top left",
   },
+//   coverBackgroundColor: {
+//     position: "absolute",
+//     top: -220,
+//     left: -0.5,
+//     right: 0,
+//     height: "120%",
+//     opacity: 1,
+//     transform: "skewY(0deg)",
+//     transformOrigin: "top left",
+//     backgroundColor: "#142445bd",
+//   },
   // Blue diagonal stripe at top
   blueOverlayStripe: {
     position: "absolute",
@@ -104,8 +116,8 @@ coverPage: {
     left: 0,
     right: 0,
     width: "100%",
-    height: 500,
-    backgroundColor: "#008000",
+    height: 525,
+    backgroundColor: "#142445bd",
     transform: "skewY(-17deg)",
     transformOrigin: "top left",
   },
@@ -134,10 +146,11 @@ coverPage: {
   // White bottom section
   whiteBottomSection: {
     position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 200,
+    bottom: -220,
+    left: -3,
+    right: -3,
+    width: '105%',
+    height: 400,
     backgroundColor: "#ffffff",
     transform: "skewY(-17deg)",
     transformOrigin: "bottom left",
@@ -152,87 +165,94 @@ coverPage: {
     backgroundColor: "#ef4444",
     transform: "skewY(27deg)",
     transformOrigin: "bottom left",
-  },
-  coverTitle: {
+},
+coverTitle: {
     position: "absolute",
-    fontSize: 64,
-    fontWeight: "bold",
-    color: "#ffffff",
-    top: 180,
-    left: 60,
-    width: 400,
-    lineHeight: 1.1,
-  },
-  // Report Date section
-  reportDateContainer: {
-    position: "absolute",
-    top: 520,
-    right: 60,
-  },
-  reportDateLabel: {
-    fontSize: 18,
-    color: "#ef4444",
+      fontSize: 64,
+      fontWeight: "bold",
+      color: "#ffffff",
+      top: 180,
+      left: 60,
+      width: 400,
+      lineHeight: 1.1,
+    },
+    // Report Date section
+    reportDateContainer: {
+        position: "absolute",
+        top: 560,
+        textAlign: 'right',
+        right: 40,
+    },
+    reportDateLabel: {
+        fontSize: 18,
+        color: "#ef4444",
     fontWeight: "bold",
     marginBottom: 4,
-  },
-  reportDateValue: {
+    textAlign: 'right',
+},
+reportDateValue: {
     fontSize: 18,
     color: "#374151",
     fontWeight: "bold",
+    textAlign: 'right',
   },
   // Prepared For section
   preparedForContainer: {
     position: "absolute",
-    bottom: 80,
-    left: 60,
-  },
-  preparedForLabel: {
-    fontSize: 18,
+    bottom: 70,
+    left: 40,
+},
+preparedForLabel: {
+    fontSize: 16,
     color: "#ef4444",
     fontWeight: "bold",
     marginBottom: 8,
-  },
-  clientName: {
-    fontSize: 18,
+},
+clientName: {
+    fontSize: 14,
     color: "#1f2937",
     fontWeight: "bold",
     marginBottom: 4,
-  },
-  clientContact: {
-    fontSize: 16,
+},
+clientContact: {
+    fontSize: 14,
     color: "#374151",
     marginBottom: 2,
-  },
-  // Vehicle section
-  vehicleContainer: {
+},
+// Vehicle section
+vehicleContainer: {
     position: "absolute",
-    bottom: 80,
-    right: 60,
+    bottom: 70,
+    right: 40,
     textAlign: 'right',
-  },
-  vehicleLabel: {
-    fontSize: 18,
-    color: "#374151",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems:"flex-end",
+},
+vehicleLabel: {
+    fontSize: 16,
+    color: "#ef4444",
     fontWeight: "bold",
     marginBottom: 8,
     textAlign: "right",
-  },
-  vehicleValue: {
-    fontSize: 18,
+},
+vehicleValue: {
+    fontSize: 14,
     color: "#1f2937",
     fontWeight: "bold",
     marginBottom: 12,
     textAlign: "right",
-  },
+},
   accidentDateLabel: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#ef4444",
     fontWeight: "bold",
     marginBottom: 4,
     textAlign: "right",
   },
   accidentDateValue: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#374151",
     fontWeight: "bold",
     textAlign: "right",
@@ -341,12 +361,10 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
           <View style={styles.mainBackground} />
 
           {/* Car image overlay */}
-          {report?.backgroundImage && (
             <Image
-              src="https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+              src={image.src}
               style={styles.coverBackground}
             />
-          )}
 
           {/* Red diagonal stripe at top */}
           <View style={styles.blueOverlayStripe} />
@@ -367,11 +385,11 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
           {/* Report Date */}
           <View style={styles.reportDateContainer}>
             <Text style={styles.reportDateLabel}>Report Date:</Text>
-            <Text style={styles.reportDateValue}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
+            <Text style={styles.reportDateValue}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
           </View>
 
           {/* Prepared For section */}
-          <View style={styles.preparedForContainer}>
+          <View style={styles.preparedForContainer} >
             <Text style={styles.preparedForLabel}>Prepared For:</Text>
             <Text style={styles.clientName}>{report?.client_info?.name}</Text>
             <Text style={styles.clientContact}>{report?.client_info?.phone}</Text>
@@ -381,7 +399,7 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
           {/* Vehicle section */}
           <View style={styles.vehicleContainer}>
             <Text style={styles.vehicleLabel}>Vehicle:</Text>
-            <Text style={styles.vehicleValue}>{report?.vehicle_info}</Text>
+            <Text style={styles.vehicleValue}>{report?.heading || (report?.year + ' ' + report?.make + ' ' + report?.model + ' ' + report?.trim)}</Text>
             <Text style={styles.accidentDateLabel}>Date of Accident:</Text>
             <Text style={styles.accidentDateValue}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
           </View>
