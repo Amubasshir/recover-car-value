@@ -118,7 +118,7 @@ coverPage: {
     width: "100%",
     height: 525,
     // backgroundColor: "#142445bd",
-    backgroundColor: "#2e56a769",
+    backgroundColor: "#21597aa3",
     transform: "skewY(-17deg)",
     transformOrigin: "top left",
   },
