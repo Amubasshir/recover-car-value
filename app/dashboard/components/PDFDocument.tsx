@@ -1,77 +1,35 @@
-import { Document, Page, Text, View, StyleSheet, Image } from '@react-pdf/renderer';
-import image from '../../../public/recover-car-value.jpg';
-import { Report } from '../types/report';
-import dayjs from 'dayjs' // ES 2015
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+} from "@react-pdf/renderer";
+import image from "../../../public/recover-car-value.jpg";
+import { Report } from "../types/report";
+import dayjs from "dayjs"; // ES 2015
+// import f from '@/fonts/Grea'
+
+// Font.register({
+//   family: 'Telegraph',
+//   src: `${process.env.PUBLIC_URL}/public/fonts/PPTelegraf-Regular.otf`,
+// });
+
+// Font.register({
+//   family: 'Garet',
+//   src: `${process.env.PUBLIC_URL}/fonts/Garet-Book.ttf`
+// });
+
 
 const styles = StyleSheet.create({
   page: {
     padding: 20,
-    fontFamily: 'Helvetica',
+    // fontFamily: "Helvetica",
   },
 
-//   page 1
-//   coverPage: {
-//     position: 'relative',
-//     padding: 40,
-//     height: '100%',
-//   },
-//   coverBackground: {
-//     position: 'absolute',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     opacity: 0.3,
-//   },
-//   diagonalStripe: {
-//     position: 'absolute',
-//     top: 0,
-//     right: 0,
-//     width: '100%',
-//     height: '100%',
-//     backgroundColor: 'rgb(37, 150, 190)',
-//     transform: 'skewY(-45deg)',
-//     transformOrigin: 'top right',
-//     opacity: 0.8,
-//   },
-//   coverContent: {
-//     position: 'relative',
-//     height: '100%',
-//     backgroundColor: 'rgb(37, 150, 190)',
-//   },
-//   coverTitle: {
-//     fontSize: 60,
-//     fontWeight: 'bold',
-//     color: '#ffffff',
-//     marginTop: '180px',
-//     marginLeft: '80px',
-//     marginBottom: 10,
-//     width: '75%',
-//   },
-//   coverInfo: {
-//     marginTop: 'auto',
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//   },
-//   clientInfo: {
-//     color: '#000000',
-//   },
-//   vehicleInfo: {
-//     color: '#ff0000',
-//     textAlign: 'right',
-//   },
-//   infoLabel: {
-//     fontSize: 14,
-//     color: '#ff0000',
-//     marginBottom: 4,
-//   },
-//   infoValue: {
-//     fontSize: 16,
-//     marginBottom: 8,
-//   },
-
-//! v2
-coverPage: {
+  //! v2
+  coverPage: {
     position: "relative",
     height: "100%",
     width: "100%",
@@ -83,7 +41,8 @@ coverPage: {
     left: 0,
     right: 0,
     height: "120%",
-    background: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 60%, #60a5fa 100%)",
+    background:
+      "linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 60%, #60a5fa 100%)",
     transform: "skewY(-0deg)",
     transformOrigin: "top left",
   },
@@ -98,17 +57,17 @@ coverPage: {
     transform: "skewY(8deg)", // 0deg
     transformOrigin: "top left",
   },
-//   coverBackgroundColor: {
-//     position: "absolute",
-//     top: -220,
-//     left: -0.5,
-//     right: 0,
-//     height: "120%",
-//     opacity: 1,
-//     transform: "skewY(0deg)",
-//     transformOrigin: "top left",
-//     backgroundColor: "#142445bd",
-//   },
+  //   coverBackgroundColor: {
+  //     position: "absolute",
+  //     top: -220,
+  //     left: -0.5,
+  //     right: 0,
+  //     height: "120%",
+  //     opacity: 1,
+  //     transform: "skewY(0deg)",
+  //     transformOrigin: "top left",
+  //     backgroundColor: "#142445bd",
+  //   },
   // Blue diagonal stripe at top
   blueOverlayStripe: {
     position: "absolute",
@@ -150,7 +109,7 @@ coverPage: {
     bottom: -220,
     left: -3,
     right: -3,
-    width: '105%',
+    width: "105%",
     height: 400,
     backgroundColor: "#ffffff",
     transform: "skewY(-17deg)",
@@ -166,85 +125,85 @@ coverPage: {
     backgroundColor: "#ef4444",
     transform: "skewY(27deg)",
     transformOrigin: "bottom left",
-},
-coverTitle: {
+  },
+  coverTitle: {
     position: "absolute",
-      fontSize: 64,
-      fontWeight: "bold",
-      color: "#ffffff",
-      top: 180,
-      left: 60,
-      width: 400,
-      lineHeight: 1.1,
-    },
-    // Report Date section
-    reportDateContainer: {
-        position: "absolute",
-        top: 560,
-        textAlign: 'right',
-        right: 40,
-    },
-    reportDateLabel: {
-        fontSize: 18,
-        color: "#ef4444",
+    fontSize: 64,
+    fontWeight: "bold",
+    color: "#ffffff",
+    top: 180,
+    left: 60,
+    width: 400,
+    lineHeight: 1.1,
+  },
+  // Report Date section
+  reportDateContainer: {
+    position: "absolute",
+    top: 560,
+    textAlign: "right",
+    right: 40,
+  },
+  reportDateLabel: {
+    fontSize: 18,
+    color: "#ef4444",
     fontWeight: "bold",
     marginBottom: 4,
-    textAlign: 'right',
-},
-reportDateValue: {
+    textAlign: "right",
+  },
+  reportDateValue: {
     fontSize: 18,
     color: "#374151",
     fontWeight: "bold",
-    textAlign: 'right',
+    textAlign: "right",
   },
   // Prepared For section
   preparedForContainer: {
     position: "absolute",
     bottom: 70,
     left: 40,
-},
-preparedForLabel: {
+  },
+  preparedForLabel: {
     fontSize: 16,
     color: "#ef4444",
     fontWeight: "bold",
     marginBottom: 8,
-},
-clientName: {
+  },
+  clientName: {
     fontSize: 14,
     color: "#1f2937",
     fontWeight: "bold",
     marginBottom: 4,
-},
-clientContact: {
+  },
+  clientContact: {
     fontSize: 14,
     color: "#374151",
     marginBottom: 2,
-},
-// Vehicle section
-vehicleContainer: {
+  },
+  // Vehicle section
+  vehicleContainer: {
     position: "absolute",
     bottom: 70,
     right: 40,
-    textAlign: 'right',
+    textAlign: "right",
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
-    alignItems:"flex-end",
-},
-vehicleLabel: {
+    alignItems: "flex-end",
+  },
+  vehicleLabel: {
     fontSize: 16,
     color: "#ef4444",
     fontWeight: "bold",
     marginBottom: 8,
     textAlign: "right",
-},
-vehicleValue: {
+  },
+  vehicleValue: {
     fontSize: 14,
     color: "#1f2937",
     fontWeight: "bold",
     marginBottom: 12,
     textAlign: "right",
-},
+  },
   accidentDateLabel: {
     fontSize: 14,
     color: "#ef4444",
@@ -259,23 +218,19 @@ vehicleValue: {
     textAlign: "right",
   },
 
-//   page 1 end
-
-
-
-
+  //   page 1 end
 
   title: {
     fontSize: 24,
     marginBottom: 15,
-    fontWeight: 'bold',
-    color: '#1a365d',
+    fontWeight: "bold",
+    color: "#1a365d",
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 15,
-    fontWeight: 'bold',
-    color: '#1a365d',
+    fontWeight: "bold",
+    color: "#1a365d",
   },
   methodologyText: {
     fontSize: 12,
@@ -287,63 +242,62 @@ vehicleValue: {
   },
   sectionTitle: {
     fontSize: 14,
-    fontWeight: 'bold',
-    color: '#1a365d',
+    fontWeight: "bold",
+    color: "#1a365d",
     marginBottom: 8,
   },
   table: {
-    width: '100%',
+    width: "100%",
     marginBottom: 20,
   },
   tableHeader: {
-    flexDirection: 'row',
-    backgroundColor: '#1a365d',
-    color: 'white',
+    flexDirection: "row",
+    backgroundColor: "#1a365d",
+    color: "white",
     padding: 8,
     fontSize: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   tableRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 8,
     fontSize: 9,
     borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
+    borderBottomColor: "#e2e8f0",
   },
   alternateRow: {
-    backgroundColor: '#f8fafc',
+    backgroundColor: "#f8fafc",
   },
   cell: {
     flex: 0.9,
-    textAlign: 'center',
-},
-vinCell: {
+    textAlign: "center",
+  },
+  vinCell: {
     flex: 2,
-    flexWrap: 'nowrap',
-    textAlign: 'center',
-    
-},
-makeModelCell: {
+    flexWrap: "nowrap",
+    textAlign: "center",
+  },
+  makeModelCell: {
     flex: 1.5,
-    textAlign: 'center',
+    textAlign: "center",
   },
   summary: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: '#f1f5f9',
-    textAlign: 'center',
+    backgroundColor: "#f1f5f9",
+    textAlign: "center",
   },
   summaryText: {
     fontSize: 12,
     marginBottom: 8,
   },
   footer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 30,
     left: 30,
     right: 30,
     fontSize: 8,
-    color: '#64748b',
+    color: "#64748b",
   },
 });
 
@@ -351,21 +305,17 @@ interface PDFDocumentProps {
   report: Report;
 }
 
-export const PDFDocument = ({ report }: PDFDocumentProps) =>{ 
-    console.log({report})
-    return (
-  <Document>
-
- <Page size="A4" style={styles.page}>
+export const PDFDocument = ({ report }: PDFDocumentProps) => {
+  console.log({ report });
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
         <View style={styles.coverPage}>
           {/* Main diagonal blue background */}
           <View style={styles.mainBackground} />
 
           {/* Car image overlay */}
-            <Image
-              src={image.src}
-              style={styles.coverBackground}
-            />
+          <Image src={image.src} style={styles.coverBackground} />
 
           {/* Red diagonal stripe at top */}
           <View style={styles.blueOverlayStripe} />
@@ -386,28 +336,45 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
           {/* Report Date */}
           <View style={styles.reportDateContainer}>
             <Text style={styles.reportDateLabel}>Report Date:</Text>
-            <Text style={styles.reportDateValue}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
+            <Text style={styles.reportDateValue}>
+              {dayjs(report?.created_at).format("MMM DD, YYYY")}
+            </Text>
           </View>
 
           {/* Prepared For section */}
-          <View style={styles.preparedForContainer} >
+          <View style={styles.preparedForContainer}>
             <Text style={styles.preparedForLabel}>Prepared For:</Text>
             <Text style={styles.clientName}>{report?.client_info?.name}</Text>
-            <Text style={styles.clientContact}>{report?.client_info?.phone}</Text>
-            <Text style={styles.clientContact}>{report?.client_info?.email}</Text>
+            <Text style={styles.clientContact}>
+              {report?.client_info?.phone}
+            </Text>
+            <Text style={styles.clientContact}>
+              {report?.client_info?.email}
+            </Text>
           </View>
 
           {/* Vehicle section */}
           <View style={styles.vehicleContainer}>
             <Text style={styles.vehicleLabel}>Vehicle:</Text>
-            <Text style={styles.vehicleValue}>{report?.heading || (report?.year + ' ' + report?.make + ' ' + report?.model + ' ' + report?.trim)}</Text>
+            <Text style={styles.vehicleValue}>
+              {report?.heading ||
+                report?.year +
+                  " " +
+                  report?.make +
+                  " " +
+                  report?.model +
+                  " " +
+                  report?.trim}
+            </Text>
             <Text style={styles.accidentDateLabel}>Date of Accident:</Text>
-            <Text style={styles.accidentDateValue}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
+            <Text style={styles.accidentDateValue}>
+              {dayjs(report?.accident_date).format("MMM DD, YYYY")}
+            </Text>
           </View>
         </View>
       </Page>
 
-    {/* <Page size="A4">
+      {/* <Page size="A4">
       <View style={styles.coverPage}>
         {report?.backgroundImage && (
           <Image src={"https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} style={styles?.coverBackground} />
@@ -435,144 +402,183 @@ export const PDFDocument = ({ report }: PDFDocumentProps) =>{
       </View>
     </Page> */}
 
-    <Page size="A4" style={styles.page}>
-      <Text style={styles.title}>Understanding Inherent Diminished Value</Text>
-      
-      <View style={styles.methodologySection}>
-        <Text style={styles.methodologyText}>
-          Inherent diminished value is the loss in a vehicle's market value specifically due to its accident history, even after repairs are completed. The best way to calculate Fair Market Value pre- and post-accident is through verifiable market data and accepted industry appraisal methods.
+      <Page size="A4" style={styles.page}>
+        <Text style={styles.title}>
+          Understanding Inherent Diminished Value
         </Text>
-      </View>
 
-      <Text style={styles.subtitle}>Methodology for Determining Diminished Value</Text>
-      
-      <View style={styles.methodologySection}>
-        <Text style={styles.sectionTitle}>Data Collection:</Text>
-        <Text style={styles.methodologyText}>
-           Data is sourced from real-time active dealership listings in the last 90 days to ensure current market accuracy.
-        </Text>
-      </View>
-
-      <View style={styles.methodologySection}>
-        <Text style={styles.sectionTitle}>Vehicle Matching:</Text>
-        <Text style={styles.methodologyText}>
- Comparable vehicles are selected based on year, make and model, similar mileage ranges, and geographic proximity (100 mile radius) for the most reliable market comparisons.
-        </Text>
-      </View>
-
-      <View style={styles.methodologySection}>
-        <Text style={styles.sectionTitle}>Pre-Accident Value Determination:</Text>
-        <Text style={styles.methodologyText}>
-          The pre-accident value is established by calculating the average fair market value of comparable clean-title vehicles (vehicles with no accident history).
-        </Text>
-      </View>
-
-      <View style={styles.methodologySection}>
-        <Text style={styles.sectionTitle}>Post-Accident Value Determination:</Text>
-        <Text style={styles.methodologyText}>
-          The post-accident value is established by calculating the average fair market value of similar vehicles that have a reported accident history.
-        </Text>
-      </View>
-
-      <View style={styles.methodologySection}>
-        <Text style={styles.sectionTitle}>Diminished Value Calculation:</Text>
-        <Text style={styles.methodologyText}>
-          Diminished Value = Pre-Accident Value - Post-Accident Value
-        </Text>
-      </View>
-
-      <View style={styles.footer}>
-        <Text>
-          This report was prepared based on real-time market data and accepted valuation methods.
-          Sources include AutoTrader, Cars.com, CarGurus, eBay Motors, and dealer feeds.
-        </Text>
-      </View>
-    </Page>
-
-    <Page size="A4" style={styles.page}>
-      <Text style={styles.subtitle}>Pre-Accident Comparable Listings</Text>
-      <View style={styles.table}>
-        <View style={styles.tableHeader}>
-          <Text style={styles.cell}>Date Listed</Text>
-          <Text style={styles.vinCell}>VIN</Text>
-          <Text style={styles.cell}>Year</Text>
-          <Text style={styles.makeModelCell}>Make/Model</Text>
-          <Text style={styles.cell}>Mileage</Text>
-          <Text style={styles.cell}>Zipcode</Text>
-          <Text style={styles.cell}>Price</Text>
-          <Text style={styles.cell}>Status</Text>
+        <View style={styles.methodologySection}>
+          <Text style={styles.methodologyText}>
+            Inherent diminished value is the loss in a vehicle's market value
+            specifically due to its accident history, even after repairs are
+            completed. The best way to calculate Fair Market Value pre- and
+            post-accident is through verifiable market data and accepted
+            industry appraisal methods.
+          </Text>
         </View>
-        {report?.top_clean_listings?.map((listing, index) => (
-          <View key={listing?.vin} style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}>
-            <Text style={styles.cell}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
-            <Text style={styles.vinCell}>{listing?.vin}</Text>
-            <Text style={styles.cell}>{listing?.year}</Text>
-            <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model}</Text>
-            <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
-            <Text style={styles.cell}>{listing?.dealer_zip}</Text>
-            <Text style={styles.cell}>${listing?.price.toLocaleString()}</Text>
-            {/* <Text style={styles.cell}>{listing.status}</Text> */}
-            <Text style={styles.cell}>Clean</Text>
-          </View>
-        ))}
-      </View>
 
-      <Text style={styles.subtitle}>Post-Accident Comparable Listings</Text>
-      <View style={styles.table}>
-        <View style={styles.tableHeader}>
-          <Text style={styles.cell}>Date Listed</Text>
-          <Text style={styles.vinCell}>VIN</Text>
-          <Text style={styles.cell}>Year</Text>
-          <Text style={styles.makeModelCell}>Make/Model</Text>
-          <Text style={styles.cell}>Mileage</Text>
-          <Text style={styles.cell}>Zipcode</Text>
-          <Text style={styles.cell}>Price</Text>
-          <Text style={styles.cell}>Status</Text>
+        <Text style={styles.subtitle}>
+          Methodology for Determining Diminished Value
+        </Text>
+
+        <View style={styles.methodologySection}>
+          <Text style={styles.sectionTitle}>Data Collection:</Text>
+          <Text style={styles.methodologyText}>
+            Data is sourced from real-time active dealership listings in the
+            last 90 days to ensure current market accuracy.
+          </Text>
         </View>
-        {report?.bottom_damaged_listings?.map((listing, index) => (
-          <View key={listing?.vin} style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}>
-             <Text style={styles.cell}>{dayjs(report?.accident_date).format('MMM DD, YYYY')}</Text>
-            <Text style={styles.vinCell}>{listing?.vin}</Text>
-            <Text style={styles.cell}>{listing?.year}</Text>
-            <Text style={styles.makeModelCell}>{listing?.make + ', ' + listing?.model }</Text>
-            <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
-            <Text style={styles.cell}>{listing?.dealer_zip}</Text>
-            <Text style={styles.cell}>${listing?.price.toLocaleString()}</Text>
-            {/* <Text style={styles.cell}>{listing.status}</Text> */}
-            <Text style={styles.cell}>Damaged</Text>
+
+        <View style={styles.methodologySection}>
+          <Text style={styles.sectionTitle}>Vehicle Matching:</Text>
+          <Text style={styles.methodologyText}>
+            Comparable vehicles are selected based on year, make and model,
+            similar mileage ranges, and geographic proximity (100 mile radius)
+            for the most reliable market comparisons.
+          </Text>
+        </View>
+
+        <View style={styles.methodologySection}>
+          <Text style={styles.sectionTitle}>
+            Pre-Accident Value Determination:
+          </Text>
+          <Text style={styles.methodologyText}>
+            The pre-accident value is established by calculating the average
+            fair market value of comparable clean-title vehicles (vehicles with
+            no accident history).
+          </Text>
+        </View>
+
+        <View style={styles.methodologySection}>
+          <Text style={styles.sectionTitle}>
+            Post-Accident Value Determination:
+          </Text>
+          <Text style={styles.methodologyText}>
+            The post-accident value is established by calculating the average
+            fair market value of similar vehicles that have a reported accident
+            history.
+          </Text>
+        </View>
+
+        <View style={styles.methodologySection}>
+          <Text style={styles.sectionTitle}>Diminished Value Calculation:</Text>
+          <Text style={styles.methodologyText}>
+            Diminished Value = Pre-Accident Value - Post-Accident Value
+          </Text>
+        </View>
+
+        <View style={styles.footer}>
+          <Text>
+            This report was prepared based on real-time market data and accepted
+            valuation methods. Sources include AutoTrader, Cars.com, CarGurus,
+            eBay Motors, and dealer feeds.
+          </Text>
+        </View>
+      </Page>
+
+      <Page size="A4" style={styles.page}>
+        <Text style={styles.subtitle}>Pre-Accident Comparable Listings</Text>
+        <View style={styles.table}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.cell}>Date Listed</Text>
+            <Text style={styles.vinCell}>VIN</Text>
+            <Text style={styles.cell}>Year</Text>
+            <Text style={styles.makeModelCell}>Make/Model</Text>
+            <Text style={styles.cell}>Mileage</Text>
+            <Text style={styles.cell}>Zipcode</Text>
+            <Text style={styles.cell}>Price</Text>
+            <Text style={styles.cell}>Status</Text>
           </View>
-        ))}
-      </View>
+          {report?.top_clean_listings?.map((listing, index) => (
+            <View
+              key={listing?.vin}
+              style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
+            >
+              <Text style={styles.cell}>
+                {dayjs(report?.first_seen_at_date).format("MMM DD, YYYY")}
+              </Text>
+              <Text style={styles.vinCell}>{listing?.vin}</Text>
+              <Text style={styles.cell}>{listing?.year}</Text>
+              <Text style={styles.makeModelCell}>
+                {listing?.make + ", " + listing?.model}
+              </Text>
+              <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
+              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
+              <Text style={styles.cell}>
+                ${listing?.price.toLocaleString()}
+              </Text>
+              {/* <Text style={styles.cell}>{listing.status}</Text> */}
+              <Text style={styles.cell}>Clean</Text>
+            </View>
+          ))}
+        </View>
 
-      <View style={styles.summary}>
-        <Text style={styles.summaryText}>
-          Fair Market Value with No Accident: ${report?.average_clean_price_top5?.toFixed(2)?.toLocaleString()}
-        </Text>
-        <Text style={styles.summaryText}>
-          Fair Market Value with Accident: ${report?.average_damaged_price_bottom5?.toFixed(2)?.toLocaleString()}
-        </Text>
-        <Text style={[styles.summaryText, { fontWeight: 'bold', fontSize: 14, marginTop: 10 }]}>
-          Calculated Diminished Value: ${report?.estimated_diminished_value?.toFixed(2)?.toLocaleString()}
-        </Text>
-      </View>
+        <Text style={styles.subtitle}>Post-Accident Comparable Listings</Text>
+        <View style={styles.table}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.cell}>Date Listed</Text>
+            <Text style={styles.vinCell}>VIN</Text>
+            <Text style={styles.cell}>Year</Text>
+            <Text style={styles.makeModelCell}>Make/Model</Text>
+            <Text style={styles.cell}>Mileage</Text>
+            <Text style={styles.cell}>Zipcode</Text>
+            <Text style={styles.cell}>Price</Text>
+            <Text style={styles.cell}>Status</Text>
+          </View>
+          {report?.bottom_damaged_listings?.map((listing, index) => (
+            <View
+              key={listing?.vin}
+              style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
+            >
+              <Text style={styles.cell}>
+                {dayjs(report?.first_seen_at_date).format("MMM DD, YYYY")}
+              </Text>
+              <Text style={styles.vinCell}>{listing?.vin}</Text>
+              <Text style={styles.cell}>{listing?.year}</Text>
+              <Text style={styles.makeModelCell}>
+                {listing?.make + ", " + listing?.model}
+              </Text>
+              <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
+              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
+              <Text style={styles.cell}>
+                ${listing?.price.toLocaleString()}
+              </Text>
+              {/* <Text style={styles.cell}>{listing.status}</Text> */}
+              <Text style={styles.cell}>Damaged</Text>
+            </View>
+          ))}
+        </View>
 
-      <View style={styles.footer}>
-        <Text>
-          This report was prepared based on real-time market data and accepted valuation methods.
-          Sources include AutoTrader, Cars.com, CarGurus, eBay Motors, and dealer feeds.
-        </Text>
-      </View>
-    </Page>
-  </Document>
-)};
+        <View style={styles.summary}>
+          <Text style={styles.summaryText}>
+            Fair Market Value with No Accident: $
+            {report?.average_clean_price_top5?.toFixed(2)?.toLocaleString()}
+          </Text>
+          <Text style={styles.summaryText}>
+            Fair Market Value with Accident: $
+            {report?.average_damaged_price_bottom5
+              ?.toFixed(2)
+              ?.toLocaleString()}
+          </Text>
+          <Text
+            style={[
+              styles.summaryText,
+              { fontWeight: "bold", fontSize: 14, marginTop: 10 },
+            ]}
+          >
+            Calculated Diminished Value: $
+            {report?.estimated_diminished_value?.toFixed(2)?.toLocaleString()}
+          </Text>
+        </View>
 
-
-
-
-
-
-
-
-
-
-
+        <View style={styles.footer}>
+          <Text>
+            This report was prepared based on real-time market data and accepted
+            valuation methods. Sources include AutoTrader, Cars.com, CarGurus,
+            eBay Motors, and dealer feeds.
+          </Text>
+        </View>
+      </Page>
+    </Document>
+  );
+};

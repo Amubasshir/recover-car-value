@@ -1,6 +1,6 @@
 // app/api/diminished-value/route.ts
 
-import { fetchListings } from "@/lib/api/marketCheck";
+import { fetchListings, fetchVinHistory } from "@/lib/api/marketCheck";
 import { supabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
@@ -184,7 +184,7 @@ export async function POST(req: Request) {
       heading,
     } = body;
 
-    console.log("🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥", body)
+    // console.log("🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥🐦‍🔥", body)
 
     // const year = searchParams.get("year");
     // const make = searchParams.get("make");
@@ -199,7 +199,9 @@ export async function POST(req: Request) {
     // const page = searchParams.get("page");
     // const zip = searchParams.get("zip");
 
-    // const data = await fetchVinHistory({ vin, order, page });
+    const vinHistoryData = await fetchVinHistory({ vin, order, page });
+
+    // console.log("📞📞📞📞📞📞", data)
     const listingsData = await fetchListings({
       api_key,
       year,
@@ -267,6 +269,8 @@ export async function POST(req: Request) {
       repair_cost: repairCost,
       accident_date: accidentDate,
       heading: heading,
+      dealer_name: vinHistoryData?.length ? vinHistoryData[0]?.seller_name : '',
+
       //   },
       //   search_parameters: {
       //     clean_radius_used_miles: cleanRadius,
@@ -351,7 +355,7 @@ function selectAndCleanListings(
   count: number
 ) {
   // Filter out listings without prices
-  console.log({listings});
+//   console.log({listings});
   const validListings = listings?.filter((car) => car?.price) || [];
 //   console.log(validListings);
 
@@ -382,6 +386,7 @@ function selectAndCleanListings(
     dealer_city: car.dealer?.city,
     dealer_state: car.dealer?.state,
     dealer_zip: car.dealer?.zip,
+    first_seen_at_date: car?.first_seen_at_date,
   }));
 }
 
