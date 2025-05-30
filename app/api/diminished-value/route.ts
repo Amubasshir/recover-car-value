@@ -366,6 +366,8 @@ function selectAndCleanListings(
       : a.price - b.price; // Ascending for damaged (bottom prices)
   });
 
+  console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", sortedListings, sortedListings.length)
+
   // Take the requested number of listings
   const selectedListings = sortedListings.slice(0, count);
 
