@@ -28,8 +28,12 @@ interface ListingParamsExpanded {
   make: string | null;
   zip: string | null;
   radius: string | null;
-  history: string | null;
+  history?: string | null;
+  title_status?: string | null;
+  sort_by?: string;
+  sort_order?: string;
   rows: string | null;
+  start: string;
 }
 
 export async function fetchListings({
@@ -41,6 +45,10 @@ export async function fetchListings({
   radius,
   history,
   rows,
+  title_status,
+  sort_by,
+  sort_order,
+  start,
 }: ListingParamsExpanded) {
   if (!api_key) {
     throw new Error("MarketCheck API key not configured");
@@ -58,8 +66,34 @@ export async function fetchListings({
 //   url.searchParams.append("zip", "32771");
   url.searchParams.append("zip", zip as string);
   url.searchParams.append("radius", radius as string);
-  url.searchParams.append("history", history as string);
-  url.searchParams.append("rows", rows as string);
+  if(history){
+      url.searchParams.append("history", history as string);
+    }
+    if(title_status){
+        url.searchParams.append("title_status", title_status);        
+    }
+    url.searchParams.append("rows", rows as string);
+    if(sort_by){
+      url.searchParams.append("sort_by", sort_by);        
+  }
+    if(sort_order){
+      url.searchParams.append("sort_order", sort_order);        
+  }
+    if(start){
+      url.searchParams.append("start", start);        
+  }
+
+  console.log("👂👂👂👂👂👂👂👂👂👂👍👍👍👍", url, {
+    api_key,
+  year,
+  model,
+  make,
+  zip,
+  radius,
+  history,
+  rows,
+  title_status,
+  })
 
   try {
     const response = await fetch(url.toString());
