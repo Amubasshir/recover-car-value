@@ -137,14 +137,18 @@ export async function fetchVinHistory({
   try {
     const response = await fetch(url.toString());
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        errorData.error_message || "Failed to fetch vehicle vin history"
-      );
-    }
-
     const data = await response.json();
+
+    // console.log("i am from all data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", data);
+
+    // if (!response.ok) {
+    //   const errorData = await response.json();
+    //   throw new Error(
+    //     errorData.error_message || "Failed to fetch vehicle vin history"
+    //   );
+    // }
+
+    // const data = await response.json();
     return data;
   } catch (error) {
     console.error("MarketCheck API error:", error);

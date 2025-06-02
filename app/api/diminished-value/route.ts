@@ -189,7 +189,25 @@ export async function POST(req: Request) {
       heading,
     } = body;
 
-    const vinHistoryData = await fetchVinHistory({ vin, order, page });
+    // console.log("👍👍👍👍👍👍👍👍👍👍", {
+    //   year,
+    //   make,
+    //   model,
+    //   trim,
+    //   accidentMileage,
+    //   accidentZip,
+    //   repairCost,
+    //   accidentDate,
+    //   vin,
+    //   order,
+    //   page,
+    //   zip,
+    //   client_info,
+    //   qualify_answers,
+    //   heading,
+    // })
+
+    // const vinHistoryData = await fetchVinHistory({ vin, order, page });
 
     const cleanListingsData = await fetchListings({
       api_key,
@@ -282,7 +300,7 @@ export async function POST(req: Request) {
       repair_cost: repairCost,
       accident_date: accidentDate,
       heading: heading,
-      dealer_name: vinHistoryData?.length ? vinHistoryData[0]?.seller_name : '',
+      dealer_name: '',
 
       //   },
       //   search_parameters: {
