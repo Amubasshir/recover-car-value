@@ -189,26 +189,9 @@ export async function POST(req: Request) {
       heading,
     } = body;
 
-    // console.log("👍👍👍👍👍👍👍👍👍👍", {
-    //   year,
-    //   make,
-    //   model,
-    //   trim,
-    //   accidentMileage,
-    //   accidentZip,
-    //   repairCost,
-    //   accidentDate,
-    //   vin,
-    //   order,
-    //   page,
-    //   zip,
-    //   client_info,
-    //   qualify_answers,
-    //   heading,
-    // })
 
     // const vinHistoryData = await fetchVinHistory({ vin, order, page });
-
+    
     const cleanListingsData = await fetchListings({
       api_key,
       year,
@@ -222,9 +205,10 @@ export async function POST(req: Request) {
       sort_by: SORT_BY,
       start: '0',
     });
-    if (!cleanListingsData?.listings?.length) {
-      return NextResponse.json(
-        { error: 'Cleaning data retrieving failed!' },
+      console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", cleanListingsData)
+    if (cleanListingsData?.num_found < 1) {
+        return NextResponse.json(
+         { error: "No data found. Please try with valid information." },
         { status: 400 }
       );
     }
@@ -332,9 +316,9 @@ export async function POST(req: Request) {
       .insert(result)
       .select("*")
       .single();
-
-    if (queries.error) {
-      console.error("Error inserting data into Supabase:", queries.error);
+      
+      if (queries.error) {
+          console.error("Error inserting data into Supabase:", queries.error);
       return NextResponse.json(
         { error: "Failed to proceed!" },
         { status: 500 }
@@ -397,7 +381,7 @@ function selectAndCleanListings(
       : a.price - b.price; // Ascending for damaged (bottom prices)
   });
 
-  console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", sortedListings, sortedListings.length)
+//   console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", sortedListings, sortedListings.length)
 
   // Take the requested number of listings
   const selectedListings = sortedListings.slice(0, count);

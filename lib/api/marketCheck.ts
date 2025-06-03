@@ -83,17 +83,7 @@ export async function fetchListings({
       url.searchParams.append("start", start);        
   }
 
-  console.log("👂👂👂👂👂👂👂👂👂👂👍👍👍👍", url, {
-    api_key,
-  year,
-  model,
-  make,
-  zip,
-  radius,
-  history,
-  rows,
-  title_status,
-  })
+  console.log("👂👂👂👂👂👂👂👂👂👂👍👍👍👍", url)
 
   try {
     const response = await fetch(url.toString());
