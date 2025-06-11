@@ -34,6 +34,7 @@ interface ListingParamsExpanded {
   sort_order?: string;
   rows: string | null;
   start: string;
+  trim?: string;
 }
 
 export async function fetchListings({
@@ -42,6 +43,7 @@ export async function fetchListings({
   model,
   make,
   zip,
+  trim,
   radius,
   history,
   rows,
@@ -63,27 +65,30 @@ export async function fetchListings({
   url.searchParams.append("year", year as string);
   url.searchParams.append("model", model as string);
   url.searchParams.append("make", make as string);
-//   url.searchParams.append("zip", "32771");
+  //   url.searchParams.append("zip", "32771");
   url.searchParams.append("zip", zip as string);
   url.searchParams.append("radius", radius as string);
-  if(history){
-      url.searchParams.append("history", history as string);
-    }
-    if(title_status){
-        url.searchParams.append("title_status", title_status);        
-    }
-    url.searchParams.append("rows", rows as string);
-    if(sort_by){
-      url.searchParams.append("sort_by", sort_by);        
+  //   if (trim) {
+  //       url.searchParams.append("trim", trim as string);
+  //   }
+  if (history) {
+    url.searchParams.append("history", history as string);
   }
-    if(sort_order){
-      url.searchParams.append("sort_order", sort_order);        
+  if (title_status) {
+    url.searchParams.append("title_status", title_status);
   }
-    if(start){
-      url.searchParams.append("start", start);        
+  url.searchParams.append("rows", rows as string);
+  if (sort_by) {
+    url.searchParams.append("sort_by", sort_by);
+  }
+  if (sort_order) {
+    url.searchParams.append("sort_order", sort_order);
+  }
+  if (start) {
+    url.searchParams.append("start", start);
   }
 
-  console.log("👂👂👂👂👂👂👂👂👂👂👍👍👍👍", url)
+  console.log("👂👂👂👂👂👂👂👂👂👂👍👍👍👍", url);
 
   try {
     const response = await fetch(url.toString());

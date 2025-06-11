@@ -198,6 +198,7 @@ export async function POST(req: Request) {
       model,
       make,
       zip,
+      trim,
       radius: String(BASE_CLEAN_RADIUS),
       history: HISTORY,
       rows: String(5),
@@ -209,8 +210,8 @@ export async function POST(req: Request) {
     if (cleanListingsData?.num_found < 1) {
         return NextResponse.json(
          { error: "No data found. Please try with valid information." },
-        { status: 400 }
-      );
+         { status: 400 }
+        );
     }
     
     const damagedListingsData = await fetchListings({
@@ -219,6 +220,7 @@ export async function POST(req: Request) {
         model,
         make,
         zip,
+        trim,
         radius: String(BASE_CLEAN_RADIUS),
         title_status: TITLE_STATUS,
         sort_order: SORT_ORDER_DESC, // asc should be

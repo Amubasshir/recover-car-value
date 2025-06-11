@@ -72,10 +72,19 @@ export default function Results() {
         <Card className="w-full border-0 shadow-card rounded-2xl overflow-hidden animate-slide-up">
           <CardHeader className="text-center pb-4 pt-4 px-4">
             <CardDescription className="text-base mt-2">
-              Great news, You Qualify For:
+              {/* Great news, You Qualify For: */}
+              Great news, Your diminished value range:
             </CardDescription>
-            <div className="text-5xl md:text-6xl font-bold text-success-600 mt-6 animate-pulse-subtle">
+            <div className="text-4xl md:text-4xl font-bold text-success-600 mt-6 animate-pulse-subtle flex flex-col md:flex-row justify-center items-center gap-3">
+              <span>
+              ${(estimatedValue * 0.6)?.toFixed(2) }
+              </span>
+              <span>
+              {" "} To {" "}
+              </span>
+              <span>
               ${estimatedValue?.toFixed(2)}
+              </span>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 px-4">
