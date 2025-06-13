@@ -56,9 +56,9 @@ export async function GET(request: Request) {
     const data = await response.json();
 
     const listings = data.listings || [];
-    const extractedData = listings.map(
-      (listing: any) => listing?.build?.["trim"]
-    );
+    const extractedData = [...new Set(
+  listings.map((listing: any) => listing?.build?.["trim"])
+)];
 
     return NextResponse.json({ data: extractedData });
   } catch (error) {
