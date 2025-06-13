@@ -58,6 +58,8 @@ export async function GET(request: Request) {
 
     const { data, error } = await query;
 
+    console.log("😶😶😶😶😶", data)
+
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     } // Extract unique values and sort them

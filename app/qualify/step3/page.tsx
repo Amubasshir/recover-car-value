@@ -90,6 +90,8 @@ export default function QualifyStep3() {
   const handleSubmit = async () => {
     // Store form data in localStorage
 
+
+
     const query = new URLSearchParams({
       year: vehicleData.year,
       make: vehicleData.make,
@@ -103,7 +105,9 @@ export default function QualifyStep3() {
       vin: vehicleData.vin,
     }).toString();
 
-    // return;
+
+
+    
     try {
       //   const response = await fetch(`/api/diminished-value/?${query}`, {
       const response = await fetch(`/api/diminished-value`, {
@@ -112,6 +116,7 @@ export default function QualifyStep3() {
           year: vehicleData.year,
           make: vehicleData.make,
           model: vehicleData.model,
+          state: vehicleData?.state,
           trim: vehicleData.trim,
           heading: vehicleData.year + ' ' + vehicleData.make + ' ' + vehicleData.model,
           zip: formData.zipcode,
@@ -126,6 +131,7 @@ export default function QualifyStep3() {
             phone: formData.phone,
             email: formData.email,
           },
+          mileage: formData.mileage,
         }),
       });
 

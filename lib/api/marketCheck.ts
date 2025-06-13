@@ -35,6 +35,9 @@ interface ListingParamsExpanded {
   rows: string | null;
   start: string;
   trim?: string;
+  state?: string;
+  min_miles?: number;
+  max_miles?: number;
 }
 
 export async function fetchListings({
@@ -51,6 +54,9 @@ export async function fetchListings({
   sort_by,
   sort_order,
   start,
+  state,
+  min_miles,
+  max_miles,
 }: ListingParamsExpanded) {
   if (!api_key) {
     throw new Error("MarketCheck API key not configured");
@@ -66,35 +72,39 @@ export async function fetchListings({
   url.searchParams.append("model", model as string);
   url.searchParams.append("make", make as string);
   //   url.searchParams.append("zip", "32771");
-  url.searchParams.append("zip", zip as string);
-  url.searchParams.append("radius", radius as string);
+  //   url.searchParams.append("zip", zip as string);
+  //   url.searchParams.append("state", state as string);
+  url.searchParams.append("state", state as string);
+//   url.searchParams.append("state", "CA");
+  url.searchParams.append("min_miles", String(min_miles));
+  url.searchParams.append("max_miles", String(max_miles));
+  //   url.searchParams.append("radius", radius as string);
+  url.searchParams.append("title_status", "clean");
   //   if (trim) {
   //       url.searchParams.append("trim", trim as string);
   //   }
-  if (history) {
-    url.searchParams.append("history", history as string);
-  }
-  if (title_status) {
-    url.searchParams.append("title_status", title_status);
-  }
-  url.searchParams.append("rows", rows as string);
+//   console.log({ history });
+  //   if (history) {
+  //     url.searchParams.append("history", history as string);
+  //   }
+  //   if (title_status) {
+  //     url.searchParams.append("title_status", title_status);
+  //   }
+  //   url.searchParams.append("rows", rows as string);
   if (sort_by) {
     url.searchParams.append("sort_by", sort_by);
   }
   if (sort_order) {
     url.searchParams.append("sort_order", sort_order);
   }
-  if (start) {
-    url.searchParams.append("start", start);
-  }
+  //   if (start) {
+  //     url.searchParams.append("start", start);
+  //   }
 
-  console.log("👂👂👂👂👂👂👂👂👂👂👍👍👍👍", url);
 
   try {
     const response = await fetch(url.toString());
     const data = await response.json();
-
-    // console.log("MarketCheck API URL:", url.toString(), data);
 
     if (!data) throw new Error("Failed to fetch vehicle listings");
 
