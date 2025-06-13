@@ -159,8 +159,7 @@ export default function QualifyStep3() {
       localStorage.setItem("confirmationData", JSON.stringify(formData));
       setIsLoading(false);
       router.push("/qualify/results");
-
-      // onVehicleIdentified(vehicleInfo);
+      
     } catch (error) {
       toast.error(
         error instanceof Error

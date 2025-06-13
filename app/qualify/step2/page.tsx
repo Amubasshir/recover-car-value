@@ -96,10 +96,15 @@ export default function QualifyStep2() {
     setLoading((prev) => ({ ...prev, [field]: true }));
     try {
       const params = new URLSearchParams({ field, ...filters });
-      const response = await fetch(`/api/vehicles/options?${params}`);
+    //   const response = await fetch(`/api/vehicles/options?${params}`);
+      let response;
+      console.log({field});
+      if(field !== "trim"){
+          response = await fetch(`/api/vehicles/options?${params}`);
+      }else{
+        response = await fetch(`/api/vehicles/trims?${params}`);
+      }
       const result = await response.json();
-
-      console.log({result});
 
       if (result.error) throw new Error(result.error);
 
@@ -209,6 +214,7 @@ export default function QualifyStep2() {
             ...vehicleInfo,
             licensePlate: vehicleData.licensePlate,
             plate: vehicleData.licensePlate,
+            trim: vehicleData.trim,
           })
         );
         setIsLoading(false);
