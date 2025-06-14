@@ -111,6 +111,7 @@ export default function QualifyStep3() {
 
     
     try {
+        console.log({vehicleData});
       //   const response = await fetch(`/api/diminished-value/?${query}`, {
       const response = await fetch(`/api/diminished-value`, {
         method: "POST",

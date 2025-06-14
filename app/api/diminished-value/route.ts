@@ -1,6 +1,6 @@
 // app/api/diminished-value/route.ts
 
-import { fetchListings, fetchVinHistory } from "@/lib/api/marketCheck";
+import { fetchListings } from "@/lib/api/marketCheck";
 import { supabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
@@ -22,7 +22,7 @@ const MAX_RADIUS = parseInt(process.env.MAX_RADIUS || "200", 10);
 
 export async function POST(req: Request) {
   try {
-     const body = await req.json();
+    const body = await req.json();
     //   const { year, make, model, trim, accidentMileage, accidentZip, repairCost, accidentDate, vin, order, page } = req.query;
     // const { searchParams } = new URL(req.url);
     const {
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
       mileage,
     } = body;
 
-    console.log({mileage});
+    console.log({ mileage });
 
     // const min_miles = Number(mileage) - 10000;
     // const max_miles = Number(mileage) + 10000;
@@ -53,9 +53,8 @@ export async function POST(req: Request) {
     const min_miles = 10001 - 10000;
     const max_miles = 10001 + 10000;
 
-
     // const vinHistoryData = await fetchVinHistory({ vin, order, page });
-    
+
     const cleanListingsData = await fetchListings({
       api_key,
       year,
@@ -68,43 +67,43 @@ export async function POST(req: Request) {
       rows: String(5),
       sort_order: SORT_ORDER_DESC,
       sort_by: SORT_BY,
-      start: '0',
+      start: "0",
       state,
       min_miles,
       max_miles,
     });
-    console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", cleanListingsData)
+    // console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", cleanListingsData)
     if (cleanListingsData?.num_found < 1) {
-        return NextResponse.json(
-         { error: "No data found. Please try with valid information." },
-         { status: 400 }
-        );
+      return NextResponse.json(
+        { error: "No data found. Please try with valid information." },
+        { status: 400 }
+      );
     }
-    
+
     const damagedListingsData = await fetchListings({
-        api_key,
-        year,
-        model,
-        make,
-        zip,
-        trim,
-        radius: String(BASE_CLEAN_RADIUS),
-        title_status: TITLE_STATUS,
-        sort_order: SORT_ORDER_DESC, // asc should be
-        sort_by: SORT_BY,
-        rows: String(10),
-        start: String(cleanListingsData?.num_found - 20),
-        state,
-        min_miles,
-        max_miles,
+      api_key,
+      year,
+      model,
+      make,
+      zip,
+      trim,
+      radius: String(BASE_CLEAN_RADIUS),
+      title_status: TITLE_STATUS,
+      sort_order: SORT_ORDER_DESC, // asc should be
+      sort_by: SORT_BY,
+      rows: String(10),
+      start: String(cleanListingsData?.num_found - 20),
+      state,
+      min_miles,
+      max_miles,
     });
     // Input validation
     // console.log("clean", damagedListingsData)
-    if ( !damagedListingsData?.listings?.length) {
-        return NextResponse.json(
-            { error: 'Damaged data retrieving failed!' },
-            { status: 400 }
-        );
+    if (!damagedListingsData?.listings?.length) {
+      return NextResponse.json(
+        { error: "Damaged data retrieving failed!" },
+        { status: 400 }
+      );
     }
 
     // // Fetch clean and damaged listings with dynamic radius expansion
@@ -147,16 +146,17 @@ export async function POST(req: Request) {
     // // Build response
     const result = {
       // vehicle_info_input: {
-      year,
+      year: Number(year),
       make,
       model,
       trim,
       accident_mileage: accidentMileage,
-      accident_zip: accidentZip,
-      repair_cost: repairCost,
+      //   accident_zip: "accidentZip",
+      //   accident_zip: "45646",
+      //   repair_cost: repairCost,
       accident_date: accidentDate,
       heading: heading,
-      dealer_name: '',
+      dealer_name: "",
 
       //   },
       //   search_parameters: {
@@ -183,14 +183,16 @@ export async function POST(req: Request) {
       //       }
     };
 
+    console.log({ result });
+
     let queries = await supabase
       .from("diminished_car_value")
       .insert(result)
       .select("*")
       .single();
-      
-      if (queries.error) {
-          console.error("Error inserting data into Supabase:", queries.error);
+
+    if (queries.error) {
+      console.error("Error inserting data into Supabase:", queries.error);
       return NextResponse.json(
         { error: "Failed to proceed!" },
         { status: 500 }
@@ -242,9 +244,9 @@ function selectAndCleanListings(
   count: number
 ) {
   // Filter out listings without prices
-//   console.log({listings});
+  //   console.log({listings});
   const validListings = listings?.filter((car) => car?.price) || [];
-//   console.log(validListings);
+  //   console.log(validListings);
 
   // Sort by price (descending for clean, ascending for damaged)
   const sortedListings = [...validListings].sort((a, b) => {
@@ -253,7 +255,7 @@ function selectAndCleanListings(
       : a.price - b.price; // Ascending for damaged (bottom prices)
   });
 
-//   console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", sortedListings, sortedListings.length)
+  //   console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", sortedListings, sortedListings.length)
 
   // Take the requested number of listings
   const selectedListings = sortedListings.slice(0, count);
