@@ -21,7 +21,7 @@ export default function QualifyStep3() {
   const [formData, setFormData] = useState({
     accidentDate: "",
     repairCost: "",
-    zipcode: "",
+    // zipcode: "",
     mileage: "",
     firstName: "",
     lastName: "",
@@ -39,7 +39,7 @@ export default function QualifyStep3() {
 
   // Add this after the formData state
   const [errors, setErrors] = useState({
-    zipcode: "",
+    // zipcode: "",
     phone: "",
   });
 
@@ -62,16 +62,16 @@ export default function QualifyStep3() {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     // Validate zipcode and phone
-    if (name === "zipcode") {
-      if (value.length < 5) {
-        setErrors((prev) => ({
-          ...prev,
-          zipcode: "Zipcode must be at least 5 digits",
-        }));
-      } else {
-        setErrors((prev) => ({ ...prev, zipcode: "" }));
-      }
-    }
+    // if (name === "zipcode") {
+    //   if (value.length < 5) {
+    //     setErrors((prev) => ({
+    //       ...prev,
+    //       zipcode: "Zipcode must be at least 5 digits",
+    //     }));
+    //   } else {
+    //     setErrors((prev) => ({ ...prev, zipcode: "" }));
+    //   }
+    // }
 
     if (name === "phone") {
       if (value.length < 10) {
@@ -99,9 +99,9 @@ export default function QualifyStep3() {
       make: vehicleData.make,
       model: vehicleData.model,
       trim: vehicleData.trim,
-      zip: formData.zipcode,
+    //   zip: formData.zipcode,
       accidentMileage: formData.mileage,
-      accidentZip: formData.zipcode,
+    //   accidentZip: formData.zipcode,
       repairCost: formData.repairCost,
       accidentDate: formData.accidentDate,
       vin: vehicleData.vin,
@@ -121,9 +121,9 @@ export default function QualifyStep3() {
           state: formData?.state,
           trim: vehicleData.trim,
           heading: vehicleData.year + ' ' + vehicleData.make + ' ' + vehicleData.model,
-          zip: formData.zipcode,
+        //   zip: formData.zipcode,
           accidentMileage: formData.mileage,
-          accidentZip: formData.zipcode,
+        //   accidentZip: formData.zipcode,
           repairCost: formData.repairCost,
           accidentDate: formData.accidentDate,
           vin: vehicleData.vin,
@@ -179,14 +179,14 @@ export default function QualifyStep3() {
   // Replace the existing isFormValid check
   const isFormValid =
     formData.accidentDate &&
-    formData.zipcode &&
+    // formData.zipcode &&
     formData.firstName &&
     formData.lastName &&
     formData.phone &&
     formData.email &&
-    formData.zipcode.length >= 5 &&
+    // formData.zipcode.length >= 5 &&
     formData.phone.length >= 10 &&
-    !errors.zipcode &&
+    // !errors.zipcode &&
     !errors.phone;
 
   return (
