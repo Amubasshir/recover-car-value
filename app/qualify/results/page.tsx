@@ -75,12 +75,12 @@ export default function Results() {
               {/* Great news, You Qualify For: */}
               Great news, Your diminished value range:
             </CardDescription>
-            <div className="text-4xl md:text-4xl font-bold text-success-600 mt-6 animate-pulse-subtle flex flex-col md:flex-row justify-center items-center gap-3">
+            <div className="text-3xl md:text-4xl font-bold text-success-600 mt-6 animate-pulse-subtle flex  md:flex-row justify-center items-center gap-1.5 md:gap-3">
               <span>
               ${(estimatedValue * 0.6)?.toFixed(2) }
               </span>
               <span>
-              {" "} To {" "}
+              {" "} - {" "}
               </span>
               <span>
               ${estimatedValue?.toFixed(2)}
