@@ -789,10 +789,10 @@ export const PDFDocument = ({ report }: PDFDocumentProps) => {
               <Text style={styles.makeModelCell}>
                 {listing?.make + ", " + listing?.model}
               </Text>
-              <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
+              <Text style={styles.cell}>{listing?.miles?.toLocaleString()}</Text>
               <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>
-                ${listing?.price.toLocaleString()}
+                ${listing?.price?.toLocaleString()}
               </Text>
               {/* <Text style={styles.cell}>{listing.status}</Text> */}
               <Text style={styles.cell}>Clean</Text>
@@ -825,10 +825,10 @@ export const PDFDocument = ({ report }: PDFDocumentProps) => {
               <Text style={styles.makeModelCell}>
                 {listing?.make + ", " + listing?.model}
               </Text>
-              <Text style={styles.cell}>{listing?.miles.toLocaleString()}</Text>
+              <Text style={styles.cell}>{listing?.miles?.toLocaleString()}</Text>
               <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>
-                ${listing?.price.toLocaleString()}
+                ${listing?.price?.toLocaleString()}
               </Text>
               {/* <Text style={styles.cell}>{listing.status}</Text> */}
               <Text style={styles.cell}>Damaged</Text>
