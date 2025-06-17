@@ -18,6 +18,8 @@ export async function GET(request: Request) {
   const year = searchParams.get("year");
   const make = searchParams.get("make");
   const model = searchParams.get("model");
+
+  console.log({field, year, make, model});
   
   if (!field) {
       return NextResponse.json(
@@ -43,12 +45,14 @@ if (year) url.searchParams.append("year", year);
 // if(field === 'year'){
 //     if (year) url.searchParams.append("year", year);
 // }
-if(field === 'make'){
-    if (make) url.searchParams.append("make", make);
-}
-if(field === 'trim'){
-    if (model) url.searchParams.append("model", model);
-}
+if (make) url.searchParams.append("make", make);
+// if(field === 'make'){
+//     if (make) url.searchParams.append("make", make);
+// }
+if (model) url.searchParams.append("model", model);
+// if(field === 'trim'){
+//     if (model) url.searchParams.append("model", model);
+// }
 
 console.log("urls ", url.toString());
 
