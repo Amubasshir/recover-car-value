@@ -63,7 +63,8 @@ export async function fetchListings({
   }
 
   // Construct API URL
-  const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
+//   const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
+  const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/active";
 
   // Create URL with parameters
   const url = new URL(baseUrl);
@@ -100,7 +101,7 @@ export async function fetchListings({
   //   if (start) {
   //     url.searchParams.append("start", start);
   //   }
-
+console.log(url.toString());
 
   try {
     const response = await fetch(url.toString());

@@ -29,16 +29,28 @@ export async function GET(request: Request) {
     );
 }
 
-const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/active";
+// const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/active";
+const baseUrl = "https://api.marketcheck.com/v2/search/car/active";
+// https://api.marketcheck.com/v2/search/car/active?api_key=U6N8lDZRXuH8T7Yq5JyKwZ2l1xNnFojR&car_type=used&rows=0&facet_sort=index&facets=year|0|1000
 const url = new URL(baseUrl);
 url.searchParams.append("api_key", API_KEY);
+url.searchParams.append("facet_sort", "index");
+url.searchParams.append("rows", "0");
+url.searchParams.append("car_type", "used");
+url.searchParams.append("facets", `${field}|0|1000`);
+
 if (year) url.searchParams.append("year", year);
-if (make) url.searchParams.append("make", make);
+// if(field === 'year'){
+//     if (year) url.searchParams.append("year", year);
+// }
+if(field === 'make'){
+    if (make) url.searchParams.append("make", make);
+}
 if(field === 'trim'){
     if (model) url.searchParams.append("model", model);
 }
-if (model) url.searchParams.append("rows", "50");
-if (model) url.searchParams.append("start", "0");
+
+console.log("urls ", url.toString());
 
   try {
     const response = await fetch(url.toString());
@@ -57,18 +69,20 @@ if (model) url.searchParams.append("start", "0");
 
     const data = await response.json();
 
-    const listings = data.listings || [];
-    let extractedData;
+    console.log("i am from data ", {data});
 
-    if(field === "trim"){
-        extractedData = [...new Set(
-        listings.map((listing: any) => listing?.build?.["trim"])
-        )];
-    }else{
-        extractedData = [...new Set(
-        listings.map((listing: any) => listing?.build?.["model"])
-        )];
-    }
+    const listings = data?.facets[field] || [];
+    let extractedData = [...new Set(listings?.map(facet=> facet?.item))];
+
+    // if(field === "trim"){
+    //     extractedData = [...new Set(
+    //     listings.map((listing: any) => listing?.build?.["trim"])
+    //     )];
+    // }else{
+    //     extractedData = [...new Set(
+    //     listings.map((listing: any) => listing?.build?.["model"])
+    //     )];
+    // }
 
     return NextResponse.json({ data: extractedData });
   } catch (error) {
