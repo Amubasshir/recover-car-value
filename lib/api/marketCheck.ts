@@ -36,6 +36,7 @@ interface ListingParamsExpanded {
   start: string;
   trim?: string;
   state?: string;
+  accident?: string;
   min_miles?: number;
   max_miles?: number;
 }
@@ -57,6 +58,7 @@ export async function fetchListings({
   state,
   min_miles,
   max_miles,
+  accident,
 }: ListingParamsExpanded) {
   if (!api_key) {
     throw new Error("MarketCheck API key not configured");
@@ -80,7 +82,8 @@ export async function fetchListings({
   url.searchParams.append("min_miles", String(min_miles));
   url.searchParams.append("max_miles", String(max_miles));
   //   url.searchParams.append("radius", radius as string);
-  url.searchParams.append("title_status", "clean");
+//   url.searchParams.append("title_status", "clean");
+  url.searchParams.append("accident", accident);
   //   if (trim) {
   //       url.searchParams.append("trim", trim as string);
   //   }

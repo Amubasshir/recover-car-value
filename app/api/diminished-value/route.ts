@@ -71,6 +71,7 @@ export async function POST(req: Request) {
       state,
       min_miles,
       max_miles,
+      accident: "false",
     });
     // console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", cleanListingsData)
     if (cleanListingsData?.num_found < 1) {
@@ -96,6 +97,7 @@ export async function POST(req: Request) {
       state,
       min_miles,
       max_miles,
+      accident: "true",
     });
     // Input validation
     // console.log("clean", damagedListingsData)
