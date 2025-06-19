@@ -1,24 +1,24 @@
 // app/api/diminished-value/route.ts
 
-import { fetchListings } from "@/lib/api/marketCheck";
-import { supabase } from "@/lib/supabase";
-import { NextResponse } from "next/server";
+import { fetchListings } from '@/lib/api/marketCheck';
+import { supabase } from '@/lib/supabase';
+import { NextResponse } from 'next/server';
 
 // Constants for radius settings
 // const BASE_CLEAN_RADIUS = parseInt(process.env.BASE_CLEAN_RADIUS || '50', 10);
 const BASE_CLEAN_RADIUS = 100;
-const TITLE_STATUS = "salvage|rebuild";
-const HISTORY = "clean";
-const SORT_BY = "price";
-const SORT_ORDER_DESC = "desc";
-const SORT_ORDER_ASC = "asc";
+const TITLE_STATUS = 'salvage|rebuild';
+const HISTORY = 'clean';
+const SORT_BY = 'price';
+const SORT_ORDER_DESC = 'desc';
+const SORT_ORDER_ASC = 'asc';
 const api_key = process.env.MARKETCHECK_API_KEY as string;
 const BASE_DAMAGED_RADIUS = parseInt(
-  process.env.BASE_DAMAGED_RADIUS || "100",
+  process.env.BASE_DAMAGED_RADIUS || '100',
   10
 );
-const RADIUS_INCREMENT = parseInt(process.env.RADIUS_INCREMENT || "50", 10);
-const MAX_RADIUS = parseInt(process.env.MAX_RADIUS || "200", 10);
+const RADIUS_INCREMENT = parseInt(process.env.RADIUS_INCREMENT || '50', 10);
+const MAX_RADIUS = parseInt(process.env.MAX_RADIUS || '200', 10);
 
 export async function POST(req: Request) {
   try {
@@ -63,20 +63,19 @@ export async function POST(req: Request) {
       zip,
       trim,
       radius: String(BASE_CLEAN_RADIUS),
-      history: HISTORY,
       rows: String(5),
       sort_order: SORT_ORDER_DESC,
       sort_by: SORT_BY,
-      start: "0",
+      start: '0',
       state,
       min_miles,
       max_miles,
-      accident: "false",
+      accident: 'false',
     });
     // console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", cleanListingsData)
     if (cleanListingsData?.num_found < 1) {
       return NextResponse.json(
-        { error: "No data found. Please try with valid information." },
+        { error: 'No data found. Please try with valid information.' },
         { status: 400 }
       );
     }
@@ -97,13 +96,13 @@ export async function POST(req: Request) {
       state,
       min_miles,
       max_miles,
-      accident: "true",
+      accident: 'true',
     });
     // Input validation
     // console.log("clean", damagedListingsData)
     if (!damagedListingsData?.listings?.length) {
       return NextResponse.json(
-        { error: "Damaged data retrieving failed!" },
+        { error: 'Damaged data retrieving failed!' },
         { status: 400 }
       );
     }
@@ -122,12 +121,12 @@ export async function POST(req: Request) {
     // // Process listings and calculate values
     const topCleanListings = selectAndCleanListings(
       cleanListingsData.listings,
-      "clean",
+      'clean',
       5
     );
     const bottomDamagedListings = selectAndCleanListings(
       damagedListingsData.listings,
-      "damaged",
+      'damaged',
       5
     );
 
@@ -158,7 +157,7 @@ export async function POST(req: Request) {
       //   repair_cost: repairCost,
       accident_date: accidentDate,
       heading: heading,
-      dealer_name: "",
+      dealer_name: '',
 
       //   },
       //   search_parameters: {
@@ -188,24 +187,24 @@ export async function POST(req: Request) {
     console.log({ result });
 
     let queries = await supabase
-      .from("diminished_car_value")
+      .from('diminished_car_value')
       .insert(result)
-      .select("*")
+      .select('*')
       .single();
 
     if (queries.error) {
-      console.error("Error inserting data into Supabase:", queries.error);
+      console.error('Error inserting data into Supabase:', queries.error);
       return NextResponse.json(
-        { error: "Failed to proceed!" },
+        { error: 'Failed to proceed!' },
         { status: 500 }
       );
     }
 
     return NextResponse.json(queries);
   } catch (error) {
-    console.error("Diminished value calculation error:", error);
+    console.error('Diminished value calculation error:', error);
     return NextResponse.json(
-      { error: "Failed to calculate diminished value" },
+      { error: 'Failed to calculate diminished value' },
       { status: 500 }
     );
   }
@@ -231,7 +230,7 @@ async function fetchListingsWithRadiusExpansion(
 
       radius += RADIUS_INCREMENT;
     } catch (error) {
-      console.error("Error fetching listings:", error);
+      console.error('Error fetching listings:', error);
       break;
     }
   }
@@ -242,7 +241,7 @@ async function fetchListingsWithRadiusExpansion(
 // Helper function to clean and select top/bottom listings
 function selectAndCleanListings(
   listings: any[],
-  type: "clean" | "damaged",
+  type: 'clean' | 'damaged',
   count: number
 ) {
   // Filter out listings without prices
@@ -252,7 +251,7 @@ function selectAndCleanListings(
 
   // Sort by price (descending for clean, ascending for damaged)
   const sortedListings = [...validListings].sort((a, b) => {
-    return type === "clean"
+    return type === 'clean'
       ? b.price - a.price // Descending for clean (top prices)
       : a.price - b.price; // Ascending for damaged (bottom prices)
   });
