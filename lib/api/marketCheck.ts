@@ -84,6 +84,7 @@ export async function fetchListings({
   //   url.searchParams.append("radius", radius as string);
   //   url.searchParams.append("title_status", "clean");
   url.searchParams.append('accident', accident as string);
+  url.searchParams.append('listing_type', "used");
   //   if (trim) {
   //       url.searchParams.append("trim", trim as string);
   //   }
