@@ -45,13 +45,13 @@ export async function POST(req: Request) {
       mileage,
     } = body;
 
-    console.log({ mileage });
+    console.log("highest lowest ✅✅✅✅✅", { mileage });
 
-    // const min_miles = Number(mileage) - 10000;
-    // const max_miles = Number(mileage) + 10000;
+    const min_miles = Number(mileage) - 10000;
+    const max_miles = Number(mileage) + 10000;
 
-    const min_miles = 10001 - 10000;
-    const max_miles = 10001 + 10000;
+    // const min_miles = 10001 - 10000;
+    // const max_miles = 10001 + 10000;
 
     // const vinHistoryData = await fetchVinHistory({ vin, order, page });
 

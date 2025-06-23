@@ -364,6 +364,7 @@ export default function QualifyStep3() {
                 </Label>
                 <Input
                   id="mileage"
+                  type="number"
                   name="mileage"
                   value={formData.mileage}
                   onChange={handleChange}
