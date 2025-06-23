@@ -14,14 +14,14 @@ const CONFIG = {
   subject_trim: "XSE",
   subject_mileage: 28000,
   subject_zip: "30301",
-  
+
   BASE_CLEAN_RADIUS: 50,
   BASE_DAMAGED_RADIUS: 100,
   RADIUS_INCREMENT: 50,
   MAX_RADIUS: 200,
-  
-//   API_URL: "https://api.marketcheck.com/v2/search/car/recents"
-  API_URL: "https://api.marketcheck.com/v2/search/car/active"
+
+  //   API_URL: "https://api.marketcheck.com/v2/search/car/recents"
+  API_URL: "https://api.marketcheck.com/v2/search/car/recents",
 };
 
 // -------------------------------
@@ -37,30 +37,34 @@ const CONFIG = {
  */
 async function fetchListings(params, minCount = 5, baseRadius = 50) {
   let radius = baseRadius;
-  
+
   while (radius <= CONFIG.MAX_RADIUS) {
     params.radius = radius;
-    
+
     try {
-      const response = await fetch(CONFIG.API_URL + "?" + new URLSearchParams(params));
+      const response = await fetch(
+        CONFIG.API_URL + "?" + new URLSearchParams(params)
+      );
       const data = await response.json();
       const listings = data.listings || [];
-      
+
       if (listings.length >= minCount) {
         return [listings, radius];
       }
-      
+
       radius += CONFIG.RADIUS_INCREMENT;
     } catch (error) {
       console.error("Error fetching listings:", error);
       return [[], radius];
     }
   }
-  
+
   // If we couldn't find enough listings, return what we found
   try {
     params.radius = radius - CONFIG.RADIUS_INCREMENT;
-    const response = await fetch(CONFIG.API_URL + "?" + new URLSearchParams(params));
+    const response = await fetch(
+      CONFIG.API_URL + "?" + new URLSearchParams(params)
+    );
     const data = await response.json();
     return [data.listings || [], radius - CONFIG.RADIUS_INCREMENT];
   } catch (error) {
@@ -75,7 +79,7 @@ async function fetchListings(params, minCount = 5, baseRadius = 50) {
  * @returns {Array} - Cleaned listings
  */
 function cleanCompData(listings) {
-  return listings.map(car => ({
+  return listings.map((car) => ({
     year: car.year,
     make: car.make,
     model: car.model,
@@ -90,7 +94,7 @@ function cleanCompData(listings) {
     dealer_name: car.dealer?.name,
     dealer_city: car.dealer?.city,
     dealer_state: car.dealer?.state,
-    dealer_zip: car.dealer?.zip
+    dealer_zip: car.dealer?.zip,
   }));
 }
 
@@ -120,24 +124,26 @@ async function calculateDiminishedValue() {
     make: CONFIG.subject_make,
     model: CONFIG.subject_model,
     trim: CONFIG.subject_trim,
-    miles_range: `${CONFIG.subject_mileage - 10000},${CONFIG.subject_mileage + 10000}`,
+    miles_range: `${CONFIG.subject_mileage - 10000},${
+      CONFIG.subject_mileage + 10000
+    }`,
     history: "clean",
-    rows: 10
+    rows: 10,
   };
 
   const [cleanListingsRaw, radiusClean] = await fetchListings(
-    paramsClean, 
-    5, 
+    paramsClean,
+    5,
     CONFIG.BASE_CLEAN_RADIUS
   );
 
   // Sort by price descending
   const sortedCleanListings = cleanListingsRaw
-    .filter(car => car.price)
+    .filter((car) => car.price)
     .sort((a, b) => b.price - a.price);
 
   const topCleanListingsRaw = sortedCleanListings.slice(0, 5);
-  const topCleanPrices = topCleanListingsRaw.map(car => car.price);
+  const topCleanPrices = topCleanListingsRaw.map((car) => car.price);
 
   // Clean top clean comps
   const topCleanListings = cleanCompData(topCleanListingsRaw);
@@ -152,24 +158,26 @@ async function calculateDiminishedValue() {
     make: CONFIG.subject_make,
     model: CONFIG.subject_model,
     trim: CONFIG.subject_trim,
-    miles_range: `${CONFIG.subject_mileage - 10000},${CONFIG.subject_mileage + 10000}`,
+    miles_range: `${CONFIG.subject_mileage - 10000},${
+      CONFIG.subject_mileage + 10000
+    }`,
     title_status: "salvage,rebuild",
-    rows: 10
+    rows: 10,
   };
 
   const [damagedListingsRaw, radiusDamaged] = await fetchListings(
-    paramsDamaged, 
-    5, 
+    paramsDamaged,
+    5,
     CONFIG.BASE_DAMAGED_RADIUS
   );
 
   // Sort by price ascending
   const sortedDamagedListings = damagedListingsRaw
-    .filter(car => car.price)
+    .filter((car) => car.price)
     .sort((a, b) => a.price - b.price);
 
   const bottomDamagedListingsRaw = sortedDamagedListings.slice(0, 5);
-  const bottomDamagedPrices = bottomDamagedListingsRaw.map(car => car.price);
+  const bottomDamagedPrices = bottomDamagedListingsRaw.map((car) => car.price);
 
   // Clean bottom damaged comps
   const bottomDamagedListings = cleanCompData(bottomDamagedListingsRaw);
@@ -183,8 +191,10 @@ async function calculateDiminishedValue() {
   // -------------------------------
   // CALCULATE DIMINISHED VALUE
   // -------------------------------
-  const diminishedValue = avgCleanPrice && avgDamagedPrice ? 
-    Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100 : 0;
+  const diminishedValue =
+    avgCleanPrice && avgDamagedPrice
+      ? Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100
+      : 0;
 
   // -------------------------------
   // BUILD FINAL RESULT
@@ -196,26 +206,28 @@ async function calculateDiminishedValue() {
       model: CONFIG.subject_model,
       trim: CONFIG.subject_trim,
       accident_mileage: CONFIG.subject_mileage,
-      accident_zip: CONFIG.subject_zip
+      accident_zip: CONFIG.subject_zip,
     },
     search_parameters: {
       clean_radius_used_miles: radiusClean,
       damaged_radius_used_miles: radiusDamaged,
-      mileage_range_searched: `${CONFIG.subject_mileage - 10000}-${CONFIG.subject_mileage + 10000}`
+      mileage_range_searched: `${CONFIG.subject_mileage - 10000}-${
+        CONFIG.subject_mileage + 10000
+      }`,
     },
     valuation: {
       average_clean_price_top5: avgCleanPrice,
       average_damaged_price_bottom5: avgDamagedPrice,
-      estimated_diminished_value: diminishedValue
+      estimated_diminished_value: diminishedValue,
     },
     comps_data: {
       top_clean_listings: topCleanListings,
-      bottom_damaged_listings: bottomDamagedListings
+      bottom_damaged_listings: bottomDamagedListings,
     },
     comps_found_summary: {
       number_of_clean_listings: cleanListingsRaw.length,
-      number_of_damaged_listings: damagedListingsRaw.length
-    }
+      number_of_damaged_listings: damagedListingsRaw.length,
+    },
   };
 
   return result;
@@ -231,7 +243,7 @@ async function getDiminishedValueReport() {
     return {
       error: true,
       message: "Failed to calculate diminished value",
-      details: error.message
+      details: error.message,
     };
   }
 }
@@ -246,11 +258,11 @@ function updateConfig(newConfig) {
 }
 
 // Export functions if using as a module
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     calculateDiminishedValue,
     getDiminishedValueReport,
     updateConfig,
-    CONFIG
+    CONFIG,
   };
 }
