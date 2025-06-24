@@ -75,7 +75,9 @@ export async function fetchListings({
   url.searchParams.append("model", model as string);
   url.searchParams.append("make", make as string);
   //   url.searchParams.append("zip", "32771");
-  //   url.searchParams.append("zip", zip as string);
+  if(trim){
+      url.searchParams.append("trim", trim as string);
+    }
   //   url.searchParams.append("state", state as string);
   url.searchParams.append("state", state as string);
   //   url.searchParams.append("state", "CA");

@@ -86,10 +86,10 @@ export async function POST(req: Request) {
       model,
       make,
       zip,
-      trim,
+    //   trim,
       radius: String(BASE_CLEAN_RADIUS),
       title_status: TITLE_STATUS,
-      sort_order: SORT_ORDER_DESC, // asc should be
+      sort_order: SORT_ORDER_ASC, // asc should be
       sort_by: SORT_BY,
       rows: String(10),
       start: String(cleanListingsData?.num_found - 20),
