@@ -32,7 +32,7 @@ export async function GET(request: Request) {
   }
 
   // const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
-  const baseUrl = "https://api.marketcheck.com/v2/search/car/recents";
+  const baseUrl = "https://api.marketcheck.com/v2/search/car/active";
   // https://api.marketcheck.com/v2/search/car/recents?api_key=U6N8lDZRXuH8T7Yq5JyKwZ2l1xNnFojR&car_type=used&rows=0&facet_sort=index&facets=year|0|1000
   const url = new URL(baseUrl);
   url.searchParams.append("api_key", API_KEY);
