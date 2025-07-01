@@ -89,9 +89,9 @@ export async function fetchListings({
   //   url.searchParams.append("title_status", "clean");
   url.searchParams.append("accident", accident as string);
   url.searchParams.append("listing_type", "used");
-  //   if (trim) {
-  //       url.searchParams.append("trim", trim as string);
-  //   }
+    if (trim) {
+        url.searchParams.append("trim", trim as string);
+    }
   //   console.log({ history });
   //   if (history) {
   //     url.searchParams.append("history", history as string);
