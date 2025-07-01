@@ -37,6 +37,7 @@ interface ListingParamsExpanded {
   trim?: string;
   state?: string;
   accident?: string;
+  price_range?: string;
   min_miles?: number;
   max_miles?: number;
 }
@@ -59,6 +60,7 @@ export async function fetchListings({
   min_miles,
   max_miles,
   accident,
+  price_range,
 }: ListingParamsExpanded) {
   if (!api_key) {
     throw new Error("MarketCheck API key not configured");
@@ -75,9 +77,9 @@ export async function fetchListings({
   url.searchParams.append("model", model as string);
   url.searchParams.append("make", make as string);
   //   url.searchParams.append("zip", "32771");
-  if(trim){
-      url.searchParams.append("trim", trim as string);
-    }
+//   if(trim){
+//       url.searchParams.append("trim", trim as string);
+//     }
   //   url.searchParams.append("state", state as string);
   url.searchParams.append("state", state as string);
   //   url.searchParams.append("state", "CA");
@@ -101,8 +103,14 @@ export async function fetchListings({
   if (sort_by) {
     url.searchParams.append("sort_by", sort_by);
   }
+  if (sort_by) {
+    url.searchParams.append("sort_by", sort_by);
+  }
   if (sort_order) {
     url.searchParams.append("sort_order", sort_order);
+  }
+  if (price_range) {
+    url.searchParams.append("price_range", price_range);
   }
   //   if (start) {
   //     url.searchParams.append("start", start);
@@ -112,6 +120,8 @@ export async function fetchListings({
   try {
     const response = await fetch(url.toString());
     const data = await response.json();
+
+    // console.log({data});
 
     if (!data) throw new Error("Failed to fetch vehicle listings");
 

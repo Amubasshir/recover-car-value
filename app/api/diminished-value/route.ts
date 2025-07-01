@@ -45,7 +45,6 @@ export async function POST(req: Request) {
       mileage,
     } = body;
 
-    console.log("highest lowest ✅✅✅✅✅", { mileage });
 
     const min_miles = Number(mileage) - 10000;
     const max_miles = Number(mileage) + 10000;
@@ -72,32 +71,33 @@ export async function POST(req: Request) {
       max_miles,
       accident: 'false',
     });
-    // console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", cleanListingsData)
     if (cleanListingsData?.num_found < 1) {
-      return NextResponse.json(
-        { error: 'No data found. Please try with valid information.' },
-        { status: 400 }
-      );
+        return NextResponse.json(
+            { error: 'No data found. Please try with valid information.' },
+            { status: 400 }
+        );
     }
-
+    
     const damagedListingsData = await fetchListings({
-      api_key,
-      year,
-      model,
-      make,
-      zip,
-    //   trim,
-      radius: String(BASE_CLEAN_RADIUS),
-      title_status: TITLE_STATUS,
-      sort_order: SORT_ORDER_ASC, // asc should be
-      sort_by: SORT_BY,
-      rows: String(10),
-      start: String(cleanListingsData?.num_found - 20),
-      state,
-      min_miles,
+        api_key,
+        year,
+        model,
+        make,
+        zip,
+        //   trim,
+        radius: String(BASE_CLEAN_RADIUS),
+        title_status: TITLE_STATUS,
+        sort_order: SORT_ORDER_ASC, // asc should be
+        sort_by: SORT_BY,
+        rows: String(10),
+        start: String(cleanListingsData?.num_found - 20),
+        state,
+        min_miles,
       max_miles,
       accident: 'true',
+      price_range: '1-9999999',
     });
+    
     // Input validation
     // console.log("clean", damagedListingsData)
     if (!damagedListingsData?.listings?.length) {
@@ -184,7 +184,6 @@ export async function POST(req: Request) {
       //       }
     };
 
-    console.log({ result });
 
     let queries = await supabase
       .from('diminished_car_value')

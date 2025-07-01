@@ -4,7 +4,6 @@ const API_KEY = process.env.MARKETCHECK_API_KEY;
 
 export async function GET(request: Request) {
   if (!API_KEY) {
-    console.error("MarketCheck API key is not configured in .env");
     return NextResponse.json(
       { error: "Server configuration error. Please contact support." },
       { status: 500 }
@@ -42,19 +41,8 @@ export async function GET(request: Request) {
   url.searchParams.append("facets", `${field}|0|1000`);
 
   if (year) url.searchParams.append("year", year);
-  // if(field === 'year'){
-  //     if (year) url.searchParams.append("year", year);
-  // }
   if (make) url.searchParams.append("make", make);
-  // if(field === 'make'){
-  //     if (make) url.searchParams.append("make", make);
-  // }
   if (model) url.searchParams.append("model", model);
-  // if(field === 'trim'){
-  //     if (model) url.searchParams.append("model", model);
-  // }
-
-  console.log("urls ", url.toString());
 
   try {
     const response = await fetch(url.toString());
@@ -73,7 +61,6 @@ export async function GET(request: Request) {
 
     const data = await response.json();
 
-    console.log("i am from data ", { data });
 
     const listings = data?.facets[field] || [];
     let extractedData = [...new Set(listings?.map((facet) => facet?.item))];

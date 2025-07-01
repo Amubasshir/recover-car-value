@@ -145,7 +145,6 @@ export default function QualifyStep3() {
       //     toast.error(errorData.error);
       //   }
 
-      console.log("Response Data:", data);
 
       if (data?.error) {
         toast.error(data.error);
