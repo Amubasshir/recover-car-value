@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -39,8 +45,8 @@ export default function QualifyStep3() {
 
   // Add this after the formData state
   const [errors, setErrors] = useState({
-    // zipcode: "",
     phone: "",
+    mileage: "",
   });
 
   useEffect(() => {
@@ -61,18 +67,6 @@ export default function QualifyStep3() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Validate zipcode and phone
-    // if (name === "zipcode") {
-    //   if (value.length < 5) {
-    //     setErrors((prev) => ({
-    //       ...prev,
-    //       zipcode: "Zipcode must be at least 5 digits",
-    //     }));
-    //   } else {
-    //     setErrors((prev) => ({ ...prev, zipcode: "" }));
-    //   }
-    // }
-
     if (name === "phone") {
       if (value.length < 10) {
         setErrors((prev) => ({
@@ -81,6 +75,16 @@ export default function QualifyStep3() {
         }));
       } else {
         setErrors((prev) => ({ ...prev, phone: "" }));
+      }
+    }
+    if (name === "mileage") {
+      if (!value || Number(value) < 3000) {
+        setErrors((prev) => ({
+          ...prev,
+          mileage: "Mileage must be at least 3000",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, mileage: "" }));
       }
     }
   };
@@ -92,26 +96,21 @@ export default function QualifyStep3() {
   const handleSubmit = async () => {
     // Store form data in localStorage
 
-
-
     const query = new URLSearchParams({
       year: vehicleData.year,
       make: vehicleData.make,
       model: vehicleData.model,
       trim: vehicleData.trim,
-    //   zip: formData.zipcode,
+      //   zip: formData.zipcode,
       accidentMileage: formData.mileage,
-    //   accidentZip: formData.zipcode,
+      //   accidentZip: formData.zipcode,
       repairCost: formData.repairCost,
       accidentDate: formData.accidentDate,
       vin: vehicleData.vin,
     }).toString();
 
-
-
-    
     try {
-        console.log({vehicleData});
+      console.log({ vehicleData });
       //   const response = await fetch(`/api/diminished-value/?${query}`, {
       const response = await fetch(`/api/diminished-value`, {
         method: "POST",
@@ -121,10 +120,11 @@ export default function QualifyStep3() {
           model: vehicleData.model,
           state: formData?.state,
           trim: vehicleData.trim,
-          heading: vehicleData.year + ' ' + vehicleData.make + ' ' + vehicleData.model,
-        //   zip: formData.zipcode,
+          heading:
+            vehicleData.year + " " + vehicleData.make + " " + vehicleData.model,
+          //   zip: formData.zipcode,
           accidentMileage: formData.mileage,
-        //   accidentZip: formData.zipcode,
+          //   accidentZip: formData.zipcode,
           repairCost: formData.repairCost,
           accidentDate: formData.accidentDate,
           vin: vehicleData.vin,
@@ -145,7 +145,6 @@ export default function QualifyStep3() {
       //     toast.error(errorData.error);
       //   }
 
-
       if (data?.error) {
         toast.error(data.error);
         return;
@@ -161,7 +160,6 @@ export default function QualifyStep3() {
       localStorage.setItem("confirmationData", JSON.stringify(formData));
       setIsLoading(false);
       router.push("/qualify/results");
-      
     } catch (error) {
       toast.error(
         error instanceof Error
@@ -177,17 +175,28 @@ export default function QualifyStep3() {
   };
 
   // Replace the existing isFormValid check
+  //   const isFormValid =
+  //     formData.accidentDate &&
+  //     // formData.zipcode &&
+  //     formData.firstName &&
+  //     formData.lastName &&
+  //     formData.phone &&
+  //     formData.email &&
+  //     // formData.zipcode.length >= 5 &&
+  //     formData.phone.length >= 10 &&
+  //     // !errors.zipcode &&
+  //     !errors.phone;
+
   const isFormValid =
     formData.accidentDate &&
-    // formData.zipcode &&
     formData.firstName &&
     formData.lastName &&
     formData.phone &&
     formData.email &&
-    // formData.zipcode.length >= 5 &&
+    Number(formData.mileage) >= 3000 &&
     formData.phone.length >= 10 &&
-    // !errors.zipcode &&
-    !errors.phone;
+    !errors.phone &&
+    !errors.mileage;
 
   return (
     <div className="bg-gradient-to-b from-slate-50 to-white flex flex-col">
@@ -248,114 +257,77 @@ export default function QualifyStep3() {
                   className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
                 />
               </div>
-              {/* <div className="space-y-2">
-                <Label htmlFor="repairCost" className="text-sm font-medium">
-                  What was the estimated or actual cost of repairs?
-                </Label>
-                <Input
-                  id="repairCost"
-                  name="repairCost"
-                  value={formData.repairCost}
-                  type="number"
-                  onChange={handleChange}
-                  placeholder="$5,000"
-                  className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                />
-              </div> */}
               <div className="space-y-2">
-                    <Label htmlFor="state" className="text-sm font-medium">
-                      State
-                    </Label>
-                    <Select
-                      value={formData.state}
-                      onValueChange={(value) =>
-                        handleSelectChange("state", value)
-                      }
-                    >
-                      <SelectTrigger
-                        id="state"
-                        className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                      >
-                        <SelectValue placeholder="Select state" />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-lg shadow-md">
-                        <SelectItem value="AL">Alabama</SelectItem>
-                        <SelectItem value="AK">Alaska</SelectItem>
-                        <SelectItem value="AZ">Arizona</SelectItem>
-                        <SelectItem value="AR">Arkansas</SelectItem>
-                        <SelectItem value="CA">California</SelectItem>
-                        <SelectItem value="CO">Colorado</SelectItem>
-                        <SelectItem value="CT">Connecticut</SelectItem>
-                        <SelectItem value="DE">Delaware</SelectItem>
-                        <SelectItem value="FL">Florida</SelectItem>
-                        <SelectItem value="GA">Georgia</SelectItem>
-                        <SelectItem value="HI">Hawaii</SelectItem>
-                        <SelectItem value="ID">Idaho</SelectItem>
-                        <SelectItem value="IL">Illinois</SelectItem>
-                        <SelectItem value="IN">Indiana</SelectItem>
-                        <SelectItem value="IA">Iowa</SelectItem>
-                        <SelectItem value="KS">Kansas</SelectItem>
-                        <SelectItem value="KY">Kentucky</SelectItem>
-                        <SelectItem value="LA">Louisiana</SelectItem>
-                        <SelectItem value="ME">Maine</SelectItem>
-                        <SelectItem value="MD">Maryland</SelectItem>
-                        <SelectItem value="MA">Massachusetts</SelectItem>
-                        <SelectItem value="MI">Michigan</SelectItem>
-                        <SelectItem value="MN">Minnesota</SelectItem>
-                        <SelectItem value="MS">Mississippi</SelectItem>
-                        <SelectItem value="MO">Missouri</SelectItem>
-                        <SelectItem value="MT">Montana</SelectItem>
-                        <SelectItem value="NE">Nebraska</SelectItem>
-                        <SelectItem value="NV">Nevada</SelectItem>
-                        <SelectItem value="NH">New Hampshire</SelectItem>
-                        <SelectItem value="NJ">New Jersey</SelectItem>
-                        <SelectItem value="NM">New Mexico</SelectItem>
-                        <SelectItem value="NY">New York</SelectItem>
-                        <SelectItem value="NC">North Carolina</SelectItem>
-                        <SelectItem value="ND">North Dakota</SelectItem>
-                        <SelectItem value="OH">Ohio</SelectItem>
-                        <SelectItem value="OK">Oklahoma</SelectItem>
-                        <SelectItem value="OR">Oregon</SelectItem>
-                        <SelectItem value="PA">Pennsylvania</SelectItem>
-                        <SelectItem value="RI">Rhode Island</SelectItem>
-                        <SelectItem value="SC">South Carolina</SelectItem>
-                        <SelectItem value="SD">South Dakota</SelectItem>
-                        <SelectItem value="TN">Tennessee</SelectItem>
-                        <SelectItem value="TX">Texas</SelectItem>
-                        <SelectItem value="UT">Utah</SelectItem>
-                        <SelectItem value="VT">Vermont</SelectItem>
-                        <SelectItem value="VA">Virginia</SelectItem>
-                        <SelectItem value="WA">Washington</SelectItem>
-                        <SelectItem value="WV">West Virginia</SelectItem>
-                        <SelectItem value="WI">Wisconsin</SelectItem>
-                        <SelectItem value="WY">Wyoming</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <Label htmlFor="state" className="text-sm font-medium">
+                  State
+                </Label>
+                <Select
+                  value={formData.state}
+                  onValueChange={(value) => handleSelectChange("state", value)}
+                >
+                  <SelectTrigger
+                    id="state"
+                    className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+                  >
+                    <SelectValue placeholder="Select state" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-lg shadow-md">
+                    <SelectItem value="AL">Alabama</SelectItem>
+                    <SelectItem value="AK">Alaska</SelectItem>
+                    <SelectItem value="AZ">Arizona</SelectItem>
+                    <SelectItem value="AR">Arkansas</SelectItem>
+                    <SelectItem value="CA">California</SelectItem>
+                    <SelectItem value="CO">Colorado</SelectItem>
+                    <SelectItem value="CT">Connecticut</SelectItem>
+                    <SelectItem value="DE">Delaware</SelectItem>
+                    <SelectItem value="FL">Florida</SelectItem>
+                    <SelectItem value="GA">Georgia</SelectItem>
+                    <SelectItem value="HI">Hawaii</SelectItem>
+                    <SelectItem value="ID">Idaho</SelectItem>
+                    <SelectItem value="IL">Illinois</SelectItem>
+                    <SelectItem value="IN">Indiana</SelectItem>
+                    <SelectItem value="IA">Iowa</SelectItem>
+                    <SelectItem value="KS">Kansas</SelectItem>
+                    <SelectItem value="KY">Kentucky</SelectItem>
+                    <SelectItem value="LA">Louisiana</SelectItem>
+                    <SelectItem value="ME">Maine</SelectItem>
+                    <SelectItem value="MD">Maryland</SelectItem>
+                    <SelectItem value="MA">Massachusetts</SelectItem>
+                    <SelectItem value="MI">Michigan</SelectItem>
+                    <SelectItem value="MN">Minnesota</SelectItem>
+                    <SelectItem value="MS">Mississippi</SelectItem>
+                    <SelectItem value="MO">Missouri</SelectItem>
+                    <SelectItem value="MT">Montana</SelectItem>
+                    <SelectItem value="NE">Nebraska</SelectItem>
+                    <SelectItem value="NV">Nevada</SelectItem>
+                    <SelectItem value="NH">New Hampshire</SelectItem>
+                    <SelectItem value="NJ">New Jersey</SelectItem>
+                    <SelectItem value="NM">New Mexico</SelectItem>
+                    <SelectItem value="NY">New York</SelectItem>
+                    <SelectItem value="NC">North Carolina</SelectItem>
+                    <SelectItem value="ND">North Dakota</SelectItem>
+                    <SelectItem value="OH">Ohio</SelectItem>
+                    <SelectItem value="OK">Oklahoma</SelectItem>
+                    <SelectItem value="OR">Oregon</SelectItem>
+                    <SelectItem value="PA">Pennsylvania</SelectItem>
+                    <SelectItem value="RI">Rhode Island</SelectItem>
+                    <SelectItem value="SC">South Carolina</SelectItem>
+                    <SelectItem value="SD">South Dakota</SelectItem>
+                    <SelectItem value="TN">Tennessee</SelectItem>
+                    <SelectItem value="TX">Texas</SelectItem>
+                    <SelectItem value="UT">Utah</SelectItem>
+                    <SelectItem value="VT">Vermont</SelectItem>
+                    <SelectItem value="VA">Virginia</SelectItem>
+                    <SelectItem value="WA">Washington</SelectItem>
+                    <SelectItem value="WV">West Virginia</SelectItem>
+                    <SelectItem value="WI">Wisconsin</SelectItem>
+                    <SelectItem value="WY">Wyoming</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-5 ">
-              {/* <div className="space-y-2">
-                <Label htmlFor="zipcode" className="text-sm font-medium">
-                  Zipcode
-                </Label>
-                <Input
-                  id="zipcode"
-                  name="zipcode"
-                  value={formData.zipcode}
-                  onChange={handleChange}
-                  placeholder="12345"
-                  minLength={5}
-                  type="number"
-                  required
-                  className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
-                    errors.zipcode ? "border-red-500" : ""
-                  }`}
-                />
-                {errors.zipcode && (
-                  <p className="text-sm text-red-500 mt-1">{errors.zipcode}</p>
-                )}
-              </div> */}
               <div className="space-y-2">
                 <Label htmlFor="mileage" className="text-sm font-medium">
                   How many miles were on your odometer at the time of the
@@ -365,11 +337,18 @@ export default function QualifyStep3() {
                   id="mileage"
                   type="number"
                   name="mileage"
+                  min={3000}
                   value={formData.mileage}
                   onChange={handleChange}
-                  placeholder="25000"
-                  className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
+                  placeholder="At least 3000 miles required."
+                  className={`rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary ${
+                    errors.mileage ? "border-red-500" : ""
+                  }`}
+                  required
                 />
+                {errors.mileage && (
+                  <p className="text-sm text-red-500 mt-1">{errors.mileage}</p>
+                )}
               </div>
             </div>
 

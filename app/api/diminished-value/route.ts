@@ -1,24 +1,25 @@
 // app/api/diminished-value/route.ts
 
-import { fetchListings } from '@/lib/api/marketCheck';
-import { supabase } from '@/lib/supabase';
-import { NextResponse } from 'next/server';
+import { fetchListings } from "@/lib/api/marketCheck";
+import { supabase } from "@/lib/supabase";
+import { calculateDiminishedPercentValue } from "@/lib/utils/calculateDiminishedPercentValue";
+import { NextResponse } from "next/server";
 
 // Constants for radius settings
 // const BASE_CLEAN_RADIUS = parseInt(process.env.BASE_CLEAN_RADIUS || '50', 10);
 const BASE_CLEAN_RADIUS = 100;
-const TITLE_STATUS = 'salvage|rebuild';
-const HISTORY = 'clean';
-const SORT_BY = 'price';
-const SORT_ORDER_DESC = 'desc';
-const SORT_ORDER_ASC = 'asc';
+const TITLE_STATUS = "salvage|rebuild";
+const HISTORY = "clean";
+const SORT_BY = "price";
+const SORT_ORDER_DESC = "desc";
+const SORT_ORDER_ASC = "asc";
 const api_key = process.env.MARKETCHECK_API_KEY as string;
 const BASE_DAMAGED_RADIUS = parseInt(
-  process.env.BASE_DAMAGED_RADIUS || '100',
+  process.env.BASE_DAMAGED_RADIUS || "100",
   10
 );
-const RADIUS_INCREMENT = parseInt(process.env.RADIUS_INCREMENT || '50', 10);
-const MAX_RADIUS = parseInt(process.env.MAX_RADIUS || '200', 10);
+const RADIUS_INCREMENT = parseInt(process.env.RADIUS_INCREMENT || "50", 10);
+const MAX_RADIUS = parseInt(process.env.MAX_RADIUS || "200", 10);
 
 export async function POST(req: Request) {
   try {
@@ -45,9 +46,13 @@ export async function POST(req: Request) {
       mileage,
     } = body;
 
+    let min_miles = Number(mileage) - 10000;
+    let max_miles = Number(mileage) + 10000;
 
-    const min_miles = Number(mileage) - 10000;
-    const max_miles = Number(mileage) + 10000;
+    if (min_miles < 3000) {
+      min_miles = 3000;
+      max_miles = 3000 + 10000; // This will be 13000
+    }
 
     // const min_miles = 10001 - 10000;
     // const max_miles = 10001 + 10000;
@@ -65,44 +70,45 @@ export async function POST(req: Request) {
       rows: String(5),
       sort_order: SORT_ORDER_DESC,
       sort_by: SORT_BY,
-      start: '0',
+      start: "0",
       state,
       min_miles,
       max_miles,
-      accident: 'false',
+      accident: "false",
     });
     if (cleanListingsData?.num_found < 1) {
-        return NextResponse.json(
-            { error: 'No data found. Please try with valid information.' },
-            { status: 400 }
-        );
+      return NextResponse.json(
+        { error: "No data found. Please try with valid information." },
+        { status: 400 }
+      );
     }
-    
+
     const damagedListingsData = await fetchListings({
-        api_key,
-        year,
-        model,
-        make,
-        zip,
-        //   trim,
-        radius: String(BASE_CLEAN_RADIUS),
-        title_status: TITLE_STATUS,
-        sort_order: SORT_ORDER_ASC, // asc should be
-        sort_by: SORT_BY,
-        rows: String(10),
-        start: String(cleanListingsData?.num_found - 20),
-        state,
-        min_miles,
+      api_key,
+      year,
+      model,
+      make,
+      zip,
+      //   trim,
+      radius: String(BASE_CLEAN_RADIUS),
+      title_status: TITLE_STATUS,
+      sort_order: SORT_ORDER_ASC, // asc should be
+      sort_by: SORT_BY,
+      rows: String(10),
+      start: String(cleanListingsData?.num_found - 20),
+      state,
+      min_miles,
       max_miles,
-      accident: 'true',
-      price_range: '1-9999999',
+      accident: "true",
+      price_range: "1-9999999",
     });
-    
+
+    console.log("damaged data", cleanListingsData, damagedListingsData)
     // Input validation
     // console.log("clean", damagedListingsData)
     if (!damagedListingsData?.listings?.length) {
       return NextResponse.json(
-        { error: 'Damaged data retrieving failed!' },
+        { error: "Damaged data retrieving failed!" },
         { status: 400 }
       );
     }
@@ -121,28 +127,32 @@ export async function POST(req: Request) {
     // // Process listings and calculate values
     const topCleanListings = selectAndCleanListings(
       cleanListingsData.listings,
-      'clean',
+      "clean",
       5
     );
     const bottomDamagedListings = selectAndCleanListings(
       damagedListingsData.listings,
-      'damaged',
+      "damaged",
       5
     );
 
     // // Calculate averages
-    const avgCleanPrice = calculateAverage(
+    const avgCleanPrice = calculateSum(
       topCleanListings.map((listing) => listing.price)
     );
-    const avgDamagedPrice = calculateAverage(
+    const avgDamagedPrice = calculateSum(
       bottomDamagedListings.map((listing) => listing.price)
     );
 
     // // Calculate diminished value
-    const diminishedValue =
-      avgCleanPrice && avgDamagedPrice
-        ? Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100
-        : 0;
+    // const diminishedValue =
+    //   avgCleanPrice && avgDamagedPrice
+    //     ? Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100
+    //     : 0;
+    const diminishedValue = calculateDiminishedPercentValue(
+            Number(avgCleanPrice),
+            Number(avgDamagedPrice)
+          );
 
     // // Build response
     const result = {
@@ -157,7 +167,7 @@ export async function POST(req: Request) {
       //   repair_cost: repairCost,
       accident_date: accidentDate,
       heading: heading,
-      dealer_name: '',
+      dealer_name: "",
 
       //   },
       //   search_parameters: {
@@ -168,7 +178,7 @@ export async function POST(req: Request) {
       // valuation: {
       average_clean_price_top5: avgCleanPrice,
       average_damaged_price_bottom5: avgDamagedPrice,
-      estimated_diminished_value: diminishedValue,
+      estimated_diminished_value: diminishedValue.diminishedValue,
       // repair_cost: repairCost,
       // },
       // comps_data: {
@@ -184,26 +194,25 @@ export async function POST(req: Request) {
       //       }
     };
 
-
     let queries = await supabase
-      .from('diminished_car_value')
+      .from("diminished_car_value")
       .insert(result)
-      .select('*')
+      .select("*")
       .single();
 
     if (queries.error) {
-      console.error('Error inserting data into Supabase:', queries.error);
+      console.error("Error inserting data into Supabase:", queries.error);
       return NextResponse.json(
-        { error: 'Failed to proceed!' },
+        { error: "Failed to proceed!" },
         { status: 500 }
       );
     }
 
     return NextResponse.json(queries);
   } catch (error) {
-    console.error('Diminished value calculation error:', error);
+    console.error("Diminished value calculation error:", error);
     return NextResponse.json(
-      { error: 'Failed to calculate diminished value' },
+      { error: "Failed to calculate diminished value" },
       { status: 500 }
     );
   }
@@ -229,7 +238,7 @@ async function fetchListingsWithRadiusExpansion(
 
       radius += RADIUS_INCREMENT;
     } catch (error) {
-      console.error('Error fetching listings:', error);
+      console.error("Error fetching listings:", error);
       break;
     }
   }
@@ -240,7 +249,7 @@ async function fetchListingsWithRadiusExpansion(
 // Helper function to clean and select top/bottom listings
 function selectAndCleanListings(
   listings: any[],
-  type: 'clean' | 'damaged',
+  type: "clean" | "damaged",
   count: number
 ) {
   // Filter out listings without prices
@@ -250,7 +259,7 @@ function selectAndCleanListings(
 
   // Sort by price (descending for clean, ascending for damaged)
   const sortedListings = [...validListings].sort((a, b) => {
-    return type === 'clean'
+    return type === "clean"
       ? b.price - a.price // Descending for clean (top prices)
       : a.price - b.price; // Ascending for damaged (bottom prices)
   });
@@ -286,4 +295,9 @@ function calculateAverage(values: number[]): number {
   if (!values.length) return 0;
   const sum = values.reduce((total, val) => total + val, 0);
   return Math.round((sum / values.length) * 100) / 100;
+}
+function calculateSum(values: number[]): number {
+  if (!values.length) return 0;
+  const sum = values.reduce((total, val) => total + val, 0);
+  return sum;
 }
