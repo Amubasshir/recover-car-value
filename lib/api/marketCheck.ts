@@ -103,15 +103,31 @@ export async function fetchListings({
   if (sort_by) {
     url.searchParams.append("sort_by", sort_by);
   }
-  if (sort_by) {
-    url.searchParams.append("sort_by", sort_by);
+   url.searchParams.append("facet_fields", "miles");
+  url.searchParams.append("stats_fields", "miles");
+//   if (sort_by) {
+//     url.searchParams.append("sort_by", sort_by);
+//   }
+//   if (sort_order) {
+//     url.searchParams.append("sort_order", sort_order);
+//   }
+//   if (price_range) {
+//     url.searchParams.append("price_range", price_range);
+//   }
+// Add mileage filters only if both are provided and valid
+  if (typeof min_miles === 'number' && min_miles >= 0) {
+    url.searchParams.append("min_miles", min_miles.toString());
   }
-  if (sort_order) {
-    url.searchParams.append("sort_order", sort_order);
+  
+  if (typeof max_miles === 'number' && max_miles > 0) {
+    // Some APIs require max_miles > min_miles
+    if (typeof min_miles === 'number' && max_miles <= min_miles) {
+      console.warn("max_miles should be greater than min_miles");
+    } else {
+      url.searchParams.append("max_miles", max_miles.toString());
+    }
   }
-  if (price_range) {
-    url.searchParams.append("price_range", price_range);
-  }
+
   //   if (start) {
   //     url.searchParams.append("start", start);
   //   }

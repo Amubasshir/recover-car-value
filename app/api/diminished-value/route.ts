@@ -10,7 +10,8 @@ import { NextResponse } from "next/server";
 const BASE_CLEAN_RADIUS = 100;
 const TITLE_STATUS = "salvage|rebuild";
 const HISTORY = "clean";
-const SORT_BY = "price";
+// const SORT_BY = "price";
+const SORT_BY = "miles";
 const SORT_ORDER_DESC = "desc";
 const SORT_ORDER_ASC = "asc";
 const api_key = process.env.MARKETCHECK_API_KEY as string;
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
 
     if (min_miles < 3000) {
       min_miles = 3000;
-      max_miles = 3000 + 10000; // This will be 13000
+      max_miles = 3000 + 10000; 
     }
 
     // const min_miles = 10001 - 10000;

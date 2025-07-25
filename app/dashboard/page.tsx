@@ -112,6 +112,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer"
 import { PDFDocument } from "./components/PDFDocument"
 import { sampleReport } from "@/lib/data/sampleData"
 import { supabase } from "@/lib/supabase"
+import ChartPdfImage from "./components/ChartPdfImage"
 
 // Add this function to fetch data from Supabase
 const fetchDiminishedValueData = async (supabase, page = 1, itemsPerPage = 5) => {
@@ -263,7 +264,7 @@ export default function Dashboard() {
                         <TableCell>{item?.client_info?.email}</TableCell>
                         <TableCell>${item?.totalDiminishedValue || item?.estimated_diminished_value?.toFixed(2)}</TableCell>
                         <TableCell className="text-right">
-                          <PDFDownloadLink
+                          {/* <PDFDownloadLink
                             // document={<PDFDocument report={sampleReport} />}
                             document={<PDFDocument report={item} />}
                             fileName="diminished-value-report.pdf"
@@ -276,10 +277,12 @@ export default function Dashboard() {
                                 <span>{loading ? 'Preparing...' : 'Download PDF'}</span>
                               </>
                             )}
-                          </PDFDownloadLink>
+                          </PDFDownloadLink> */}
+                            <ChartPdfImage item={item} />
                         </TableCell>
                       </TableRow>
                     ))}
+
                   </TableBody>
                 </Table>
                 <div className="flex items-center justify-center py-4">

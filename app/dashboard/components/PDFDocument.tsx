@@ -10,6 +10,7 @@ import {
 import image from "../../../public/recover-car-value.jpg";
 import { Report } from "../types/report";
 import dayjs from "dayjs"; // ES 2015
+import ChartPdfImage from "./ChartPdfImage";
 
 Font.register({
   family: 'Telegraph',
@@ -590,9 +591,11 @@ const styles = StyleSheet.create({
 });
 interface PDFDocumentProps {
   report: Report;
+  topListChartImage?: string;
+  bottomListChartImage?: string;
 }
 
-export const PDFDocument = ({ report }: PDFDocumentProps) => {
+export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }: PDFDocumentProps) => {
   console.log({ report });
   return (
     <Document>
@@ -794,12 +797,82 @@ export const PDFDocument = ({ report }: PDFDocumentProps) => {
               <Text style={styles.cell}>
                 ${listing?.price?.toLocaleString()}
               </Text>
-              {/* <Text style={styles.cell}>{listing.status}</Text> */}
               <Text style={styles.cell}>Clean</Text>
             </View>
           ))}
+
+          <View style={{height: "auto", width: "100%", border: "1px solid #e2e8f0", marginTop: 30, marginBottom: 20}}>
+            <Image src={topListChartImage} style={{ width: "100%", height: "auto" }} />
+          </View>
         </View>
 
+        {/* <Text style={styles.subtitle}>Post-Accident Comparable Listings</Text>
+        <View style={styles.table}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.cell}>Date Listed</Text>
+            <Text style={styles.vinCell}>VIN</Text>
+            <Text style={styles.cell}>Year</Text>
+            <Text style={styles.makeModelCell}>Make/Model</Text>
+            <Text style={styles.cell}>Mileage</Text>
+            <Text style={styles.cell}>Zipcode</Text>
+            <Text style={styles.cell}>Price</Text>
+            <Text style={styles.cell}>Status</Text>
+          </View>
+          {report?.bottom_damaged_listings?.map((listing, index) => (
+            <View
+              key={listing?.vin}
+              style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
+            >
+              <Text style={styles.cell}>
+                {dayjs(listing?.first_seen_at_source_date).format("MMM DD, YYYY")}
+              </Text>
+              <Text style={styles.vinCell}>{listing?.vin}</Text>
+              <Text style={styles.cell}>{listing?.year}</Text>
+              <Text style={styles.makeModelCell}>
+                {listing?.make + ", " + listing?.model}
+              </Text>
+              <Text style={styles.cell}>{listing?.miles?.toLocaleString()}</Text>
+              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
+              <Text style={styles.cell}>
+                ${listing?.price?.toLocaleString()}
+              </Text>
+              <Text style={styles.cell}>Damaged</Text>
+            </View>
+          ))}
+        </View> */}
+{/* 
+        <View style={styles.summary}>
+          <Text style={styles.summaryText}>
+            Fair Market Value with No Accident: $
+            {report?.average_clean_price_top5?.toFixed(2)?.toLocaleString()}
+          </Text>
+          <Text style={styles.summaryText}>
+            Fair Market Value with Accident: $
+            {report?.average_damaged_price_bottom5
+              ?.toFixed(2)
+              ?.toLocaleString()}
+          </Text>
+          <Text
+            style={[
+              styles.summaryText,
+              { fontWeight: "bold", fontFamily: "Telegraph", fontSize: 14, marginTop: 10 },
+            ]}
+          >
+            Calculated Diminished Value: $
+            {report?.estimated_diminished_value?.toFixed(2)?.toLocaleString()}
+          </Text>
+        </View> */}
+
+        <View style={styles.footer}>
+          <Text>
+            This report was prepared based on real-time market data and accepted
+            valuation methods. Sources include AutoTrader, Cars.com, CarGurus,
+            eBay Motors, and dealer feeds.
+          </Text>
+        </View>
+      </Page>
+
+      <Page size="A4" style={styles.page}>
         <Text style={styles.subtitle}>Post-Accident Comparable Listings</Text>
         <View style={styles.table}>
           <View style={styles.tableHeader}>
@@ -834,6 +907,10 @@ export const PDFDocument = ({ report }: PDFDocumentProps) => {
               <Text style={styles.cell}>Damaged</Text>
             </View>
           ))}
+
+            <View style={{height: "auto", width: "100%", border: "1px solid #e2e8f0", marginTop: 30, marginBottom: 20}}>
+            <Image src={bottomListChartImage} style={{ width: "100%", height: "auto" }} />
+          </View>
         </View>
 
         <View style={styles.summary}>
