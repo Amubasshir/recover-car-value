@@ -596,7 +596,7 @@ interface PDFDocumentProps {
 }
 
 export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }: PDFDocumentProps) => {
-  console.log({ report });
+//   console.log({ report });
   return (
     <Document>
       <Page size="A4" style={styles.page}>

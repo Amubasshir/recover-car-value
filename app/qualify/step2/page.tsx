@@ -98,7 +98,7 @@ export default function QualifyStep2() {
       const params = new URLSearchParams({ field, ...filters });
     //   const response = await fetch(`/api/vehicles/options?${params}`);
       const response = await fetch(`/api/vehicles/trims?${params}`);
-      console.log({field});
+    //   console.log({field});
 //       if (field === "trim" || field === "model") {
 //   response = await fetch(`/api/vehicles/trims?${params}`);
 // } else {

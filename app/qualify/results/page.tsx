@@ -38,7 +38,7 @@ export default function Results() {
         repairClaimNumber: data.repairClaimNumber, // Add new field
       });
       const vehicleData = JSON.parse(diminishedVehicleData || '{}');
-      console.log('User data loaded:', diminishedVehicleData);
+    //   console.log('User data loaded:', diminishedVehicleData);
         
         setEstimatedValue(vehicleData?.estimated_diminished_value || 0);
       
@@ -53,7 +53,7 @@ export default function Results() {
     // For now, we'll just use a fixed value
   }, [router]);
 
-  console.log(estimatedValue)
+//   console.log(estimatedValue)
 
   const handleSignUp = () => {
     // In a real application, you would send this data to your server

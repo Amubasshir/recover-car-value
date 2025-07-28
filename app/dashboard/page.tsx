@@ -126,7 +126,7 @@ const fetchDiminishedValueData = async (supabase, page = 1, itemsPerPage = 5) =>
       .order('created_at', { ascending: false }) // Change to 'id' if you prefer ordering by ID
       .range(from, to)
 
-      console.log('Fetched data:', data, 'Count:', count)
+    //   console.log('Fetched data:', data, 'Count:', count)
     if (error) {
       console.error('Error fetching data:', error)
       return { data: [], count: 0, error }

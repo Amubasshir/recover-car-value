@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     );
   }
 
-  console.log({ API_KEY });
+//   console.log({ API_KEY });
 
   const { searchParams } = new URL(request.url);
   const field = searchParams.get("field");
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const make = searchParams.get("make");
   const model = searchParams.get("model");
 
-  console.log({ field, year, make, model });
+//   console.log({ field, year, make, model });
 
   if (!field) {
     return NextResponse.json(

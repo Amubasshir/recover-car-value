@@ -110,7 +110,7 @@ export default function QualifyStep3() {
     }).toString();
 
     try {
-      console.log({ vehicleData });
+    //   console.log({ vehicleData });
       //   const response = await fetch(`/api/diminished-value/?${query}`, {
       const response = await fetch(`/api/diminished-value`, {
         method: "POST",

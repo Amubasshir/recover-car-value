@@ -131,7 +131,7 @@ export async function fetchListings({
   //   if (start) {
   //     url.searchParams.append("start", start);
   //   }
-  console.log(url.toString());
+//   console.log(url.toString());
 
   try {
     const response = await fetch(url.toString());
