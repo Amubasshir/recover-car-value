@@ -478,6 +478,7 @@ import {
   Tooltip,
   Legend,
   ScatterController,
+  LineController,
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import { Card } from '@/components/ui/card';
@@ -491,7 +492,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ScatterController
+  ScatterController,
+  LineController,
 );
 
 
