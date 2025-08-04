@@ -14,7 +14,6 @@ const HeroSection = () => (
           <div className="space-y-4 flex flex-col items-center md:items-start">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl text-balance text-center md:text-left">
               Your Car Loses Value After an Auto Accident - <br />
-              {/* <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-800"> */}
               We'll Help You Get That Money Back
             </h1>
             <p className="text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed max-w-[600px] text-center md:text-left">
@@ -59,7 +58,6 @@ const QuoteCard = () => (
   <div className="mx-auto lg:mx-0 mt-16 md:mt-36 relative animate-slide-up">
     <div className="bg-white p-8 rounded-2xl shadow-card hover:shadow-elevated transition-all duration-300 border border-gray-100">
       <div className="text-center mb-8">
-        {/* <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-800"> */}
         <h2 className="text-2xl font-bold bg-clip-text">FREE INSTANT QUOTE</h2>
         <p className="text-sm text-gray-500 mt-1">
           See how much you could recover in minutes

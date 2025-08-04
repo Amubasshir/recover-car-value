@@ -10,7 +10,6 @@ export async function GET(request: Request) {
     );
   }
 
-//   console.log({ API_KEY });
 
   const { searchParams } = new URL(request.url);
   const field = searchParams.get("field");
@@ -18,7 +17,6 @@ export async function GET(request: Request) {
   const make = searchParams.get("make");
   const model = searchParams.get("model");
 
-//   console.log({ field, year, make, model });
 
   if (!field) {
     return NextResponse.json(
@@ -30,9 +28,7 @@ export async function GET(request: Request) {
     );
   }
 
-  // const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
   const baseUrl = "https://api.marketcheck.com/v2/search/car/active";
-  // https://api.marketcheck.com/v2/search/car/recents?api_key=U6N8lDZRXuH8T7Yq5JyKwZ2l1xNnFojR&car_type=used&rows=0&facet_sort=index&facets=year|0|1000
   const url = new URL(baseUrl);
   url.searchParams.append("api_key", API_KEY);
   url.searchParams.append("facet_sort", "index");
@@ -64,16 +60,6 @@ export async function GET(request: Request) {
 
     const listings = data?.facets[field] || [];
     let extractedData = [...new Set(listings?.map((facet) => facet?.item))];
-
-    // if(field === "trim"){
-    //     extractedData = [...new Set(
-    //     listings.map((listing: any) => listing?.build?.["trim"])
-    //     )];
-    // }else{
-    //     extractedData = [...new Set(
-    //     listings.map((listing: any) => listing?.build?.["model"])
-    //     )];
-    // }
 
     return NextResponse.json({ data: extractedData });
   } catch (error) {

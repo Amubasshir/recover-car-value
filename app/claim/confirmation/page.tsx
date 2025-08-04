@@ -60,11 +60,6 @@ export default function Confirmation() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-3 px-8 pb-8">
-          {/* <Link href="/" className="w-full">
-            <Button className="w-full bg-gradient-primary hover:opacity-90 text-white rounded-xl shadow-md hover:shadow-lg py-6 text-lg">
-              Return to Home
-            </Button>
-          </Link> */}
           <p className="text-sm text-gray-500 mt-2">
             Reference ID:{' '}
             {Math.random().toString(36).substring(2, 10).toUpperCase()}

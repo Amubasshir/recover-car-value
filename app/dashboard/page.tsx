@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Download, Home, LayoutDashboard, Settings, Users } from "lucide-react"
-import Link from "next/link"
+import { Home, LayoutDashboard, Settings, Users } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 // Dummy data for the table
 const dummyData = [
@@ -96,9 +96,8 @@ const dummyData = [
     email: "m.hall@example.com",
     totalDiminishedValue: "$8,340.50",
   },
-]
+];
 
-import { Button } from "@/components/ui/button"
 import {
   Pagination,
   PaginationContent,
@@ -106,90 +105,101 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { PDFDownloadLink } from "@react-pdf/renderer"
-import { PDFDocument } from "./components/PDFDocument"
-import { sampleReport } from "@/lib/data/sampleData"
-import { supabase } from "@/lib/supabase"
-import ChartPdfImage from "./components/ChartPdfImage"
+} from "@/components/ui/pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { supabase } from "@/lib/supabase";
+import ChartPdfImage from "./components/ChartPdfImage";
 
 // Add this function to fetch data from Supabase
-const fetchDiminishedValueData = async (supabase, page = 1, itemsPerPage = 5) => {
+const fetchDiminishedValueData = async (
+  supabase,
+  page = 1,
+  itemsPerPage = 5
+) => {
   try {
-    const from = (page - 1) * itemsPerPage
-    const to = from + itemsPerPage - 1
+    const from = (page - 1) * itemsPerPage;
+    const to = from + itemsPerPage - 1;
 
     const { data, error, count } = await supabase
-      .from('diminished_car_value')
-      .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false }) // Change to 'id' if you prefer ordering by ID
-      .range(from, to)
+      .from("diminished_car_value")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
-    //   console.log('Fetched data:', data, 'Count:', count)
     if (error) {
-      console.error('Error fetching data:', error)
-      return { data: [], count: 0, error }
+      console.error("Error fetching data:", error);
+      return { data: [], count: 0, error };
     }
 
-    return { data: data || [], count: count || 0, error: null }
+    return { data: data || [], count: count || 0, error: null };
   } catch (err) {
-    console.error('Unexpected error:', err)
-    return { data: [], count: 0, error: err }
+    console.error("Unexpected error:", err);
+    return { data: [], count: 0, error: err };
   }
-}
+};
 
 export default function Dashboard() {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [currentItems, setCurrentItems] = useState([])
-  const [totalCount, setTotalCount] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const itemsPerPage = 5
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentItems, setCurrentItems] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const itemsPerPage = 5;
 
   // Calculate total pages
-  const totalPages = Math.ceil(totalCount / itemsPerPage)
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   // Load data on component mount and page change
   useEffect(() => {
     const loadData = async () => {
-      setLoading(true)
-      
+      setLoading(true);
+
       // You need to pass your supabase instance here
       // Assuming you have it available as a prop or imported
-      const { data, count, error } = await fetchDiminishedValueData(supabase, currentPage, itemsPerPage)
-      
-      if (error) {
-        setError(error)
-        setCurrentItems([])
-        setTotalCount(0)
-      } else {
-        setCurrentItems(data)
-        setTotalCount(count)
-        setError(null)
-      }
-      
-      setLoading(false)
-    }
+      const { data, count, error } = await fetchDiminishedValueData(
+        supabase,
+        currentPage,
+        itemsPerPage
+      );
 
-    loadData()
-  }, [currentPage])
+      if (error) {
+        setError(error);
+        setCurrentItems([]);
+        setTotalCount(0);
+      } else {
+        setCurrentItems(data);
+        setTotalCount(count);
+        setError(null);
+      }
+
+      setLoading(false);
+    };
+
+    loadData();
+  }, [currentPage]);
 
   // Handle page change
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
+    setCurrentPage(pageNumber);
+  };
 
   // Generate page numbers for pagination
-  const pageNumbers = []
+  const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i)
+    pageNumbers.push(i);
   }
 
   const handleDownloadPDF = (id) => {
     // This would normally trigger a PDF download
-    alert(`Downloading PDF for report ${id}`)
-  }
+    alert(`Downloading PDF for report ${id}`);
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -201,7 +211,9 @@ export default function Dashboard() {
         </div>
         <nav className="flex-1 overflow-auto py-4">
           <div className="px-4 py-2">
-            <h2 className="mb-2 text-xs font-semibold text-muted-foreground">Navigation</h2>
+            <h2 className="mb-2 text-xs font-semibold text-muted-foreground">
+              Navigation
+            </h2>
             <div className="space-y-1">
               <Link
                 href="#"
@@ -259,10 +271,16 @@ export default function Dashboard() {
                   <TableBody>
                     {currentItems.map((item) => (
                       <TableRow key={item?.id}>
-                        <TableCell className="font-medium">{item?.id}</TableCell>
+                        <TableCell className="font-medium">
+                          {item?.id}
+                        </TableCell>
                         <TableCell>{item?.client_info?.name}</TableCell>
                         <TableCell>{item?.client_info?.email}</TableCell>
-                        <TableCell>${item?.totalDiminishedValue || item?.estimated_diminished_value?.toFixed(2)}</TableCell>
+                        <TableCell>
+                          $
+                          {item?.totalDiminishedValue ||
+                            item?.estimated_diminished_value?.toFixed(2)}
+                        </TableCell>
                         <TableCell className="text-right">
                           {/* <PDFDownloadLink
                             // document={<PDFDocument report={sampleReport} />}
@@ -278,11 +296,10 @@ export default function Dashboard() {
                               </>
                             )}
                           </PDFDownloadLink> */}
-                            <ChartPdfImage item={item} />
+                          <ChartPdfImage item={item} />
                         </TableCell>
                       </TableRow>
                     ))}
-
                   </TableBody>
                 </Table>
                 <div className="flex items-center justify-center py-4">
@@ -290,14 +307,23 @@ export default function Dashboard() {
                     <PaginationContent>
                       <PaginationItem>
                         <PaginationPrevious
-                          onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
-                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          onClick={() =>
+                            currentPage > 1 && handlePageChange(currentPage - 1)
+                          }
+                          className={
+                            currentPage === 1
+                              ? "pointer-events-none opacity-50"
+                              : "cursor-pointer"
+                          }
                         />
                       </PaginationItem>
 
                       {pageNumbers.map((number) => (
                         <PaginationItem key={number}>
-                          <PaginationLink onClick={() => handlePageChange(number)} isActive={currentPage === number}>
+                          <PaginationLink
+                            onClick={() => handlePageChange(number)}
+                            isActive={currentPage === number}
+                          >
                             {number}
                           </PaginationLink>
                         </PaginationItem>
@@ -305,8 +331,15 @@ export default function Dashboard() {
 
                       <PaginationItem>
                         <PaginationNext
-                          onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
-                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                          onClick={() =>
+                            currentPage < totalPages &&
+                            handlePageChange(currentPage + 1)
+                          }
+                          className={
+                            currentPage === totalPages
+                              ? "pointer-events-none opacity-50"
+                              : "cursor-pointer"
+                          }
                         />
                       </PaginationItem>
                     </PaginationContent>
@@ -318,6 +351,5 @@ export default function Dashboard() {
         </main>
       </div>
     </div>
-  )
+  );
 }
-

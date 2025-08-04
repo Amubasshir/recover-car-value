@@ -1,5 +1,4 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
 
 export function SiteHeader() {
   return (
@@ -7,18 +6,19 @@ export function SiteHeader() {
       <div className="container flex h-20 items-center justify-between px-4 md:px-6">
         <div className="flex items-center">
           <Link href="/">
-            <img src="https://i.ibb.co/ccSw4bWf/shodwe-4-e1744727392385.png" alt="Recover Car Value" className="h-10 md:h-14" />
+            <img
+              src="https://i.ibb.co/ccSw4bWf/shodwe-4-e1744727392385.png"
+              alt="Recover Car Value"
+              className="h-10 md:h-14"
+            />
           </Link>
         </div>
-        
+
         <div className="flex items-center flex-col gap-0 text-xs md:text-base">
-          {/* <Link href="/qualify/step1">
-            <Button className="font-bold text-xs md:text-sm rounded-xl">FREE INSTANT QUOTE</Button>
-          </Link> */}
-            <span className="">⭐⭐⭐⭐⭐ </span>
-            <span className="!text-black"> Trusted Law Firm</span>
+          <span className="">⭐⭐⭐⭐⭐ </span>
+          <span className="!text-black"> Trusted Law Firm</span>
         </div>
       </div>
     </header>
-  )
+  );
 }

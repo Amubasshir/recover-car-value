@@ -1,309 +1,25 @@
 import {
   Document,
+  Font,
+  Image,
   Page,
+  StyleSheet,
   Text,
   View,
-  StyleSheet,
-  Image,
-  Font,
 } from "@react-pdf/renderer";
+import dayjs from "dayjs"; // ES 2015
 import image from "../../../public/recover-car-value.jpg";
 import { Report } from "../types/report";
-import dayjs from "dayjs"; // ES 2015
-import ChartPdfImage from "./ChartPdfImage";
 
 Font.register({
-  family: 'Telegraph',
+  family: "Telegraph",
   src: `/fonts/PPTelegraf-Ultrabold.otf`,
-//   src: `/fonts/PPTelegraf-Regular.otf`,
 });
 
 Font.register({
-  family: 'Garet',
-  src: `/fonts/Garet-Book.ttf`
+  family: "Garet",
+  src: `/fonts/Garet-Book.ttf`,
 });
-
-
-// const styles = StyleSheet.create({
-//   page: {
-//     padding: 20,
-//     fontFamily: "Garet",
-//   },
-
-//   //! v2
-//   coverPage: {
-//     position: "relative",
-//     height: "100%",
-//     width: "100%",
-//   },
-//   // Main diagonal blue background
-//   mainBackground: {
-//     position: "absolute",
-//     top: -50,
-//     left: 0,
-//     right: 0,
-//     height: "120%",
-//     background:
-//       "linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 60%, #60a5fa 100%)",
-//     transform: "skewY(-0deg)",
-//     transformOrigin: "top left",
-//   },
-//   // Car image overlay
-//   coverBackground: {
-//     position: "absolute",
-//     top: -220,
-//     left: -0.5,
-//     right: 0,
-//     height: "120%",
-//     opacity: 1,
-//     transform: "skewY(8deg)", // 0deg
-//     transformOrigin: "top left",
-//   },
-//   //   coverBackgroundColor: {
-//   //     position: "absolute",
-//   //     top: -220,
-//   //     left: -0.5,
-//   //     right: 0,
-//   //     height: "120%",
-//   //     opacity: 1,
-//   //     transform: "skewY(0deg)",
-//   //     transformOrigin: "top left",
-//   //     backgroundColor: "#142445bd",
-//   //   },
-//   // Blue diagonal stripe at top
-//   blueOverlayStripe: {
-//     position: "absolute",
-//     top: 100,
-//     left: 0,
-//     right: 0,
-//     width: "100%",
-//     height: 525,
-//     // backgroundColor: "#142445bd",
-//     backgroundColor: "#21597aa3",
-//     transform: "skewY(-17deg)",
-//     transformOrigin: "top left",
-//   },
-//   // Blue diagonal stripe at top
-//   blueStripe: {
-//     position: "absolute",
-//     top: -48,
-//     left: -50,
-//     width: "100%",
-//     height: 180,
-//     backgroundColor: "#142445",
-//     transform: "skewY(-17deg)",
-//     transformOrigin: "top left",
-//   },
-//   // Red diagonal stripe at top
-//   redStripe: {
-//     position: "absolute",
-//     top: 100,
-//     left: 50,
-//     width: "100%",
-//     height: 20,
-//     backgroundColor: "#ef4444",
-//     transform: "skewY(-17deg)",
-//     transformOrigin: "top left",
-//   },
-//   // White bottom section
-//   whiteBottomSection: {
-//     position: "absolute",
-//     bottom: -220,
-//     left: -3,
-//     right: -3,
-//     width: "105%",
-//     height: 400,
-//     backgroundColor: "#ffffff",
-//     transform: "skewY(-17deg)",
-//     transformOrigin: "bottom left",
-//   },
-//   // Red diagonal element at bottom left
-//   redBottomElement: {
-//     position: "absolute",
-//     bottom: -10,
-//     left: -80,
-//     width: 260,
-//     height: 80,
-//     backgroundColor: "#ef4444",
-//     transform: "skewY(27deg)",
-//     transformOrigin: "bottom left",
-//   },
-//   coverTitle: {
-//     position: "absolute",
-//     fontSize: 64,
-//     fontWeight: "bold",
-//     color: "#ffffff",
-//     top: 180,
-//     left: 60,
-//     width: 400,
-//     lineHeight: 1.1,
-//   },
-//   // Report Date section
-//   reportDateContainer: {
-//     position: "absolute",
-//     top: 560,
-//     textAlign: "right",
-//     right: 40,
-//   },
-//   reportDateLabel: {
-//     fontSize: 18,
-//     color: "#ef4444",
-//     fontWeight: "bold",
-//     marginBottom: 4,
-//     textAlign: "right",
-//   },
-//   reportDateValue: {
-//     fontSize: 18,
-//     color: "#374151",
-//     fontWeight: "bold",
-//     textAlign: "right",
-//   },
-//   // Prepared For section
-//   preparedForContainer: {
-//     position: "absolute",
-//     bottom: 70,
-//     left: 40,
-//   },
-//   preparedForLabel: {
-//     fontSize: 16,
-//     color: "#ef4444",
-//     fontWeight: "bold",
-//     marginBottom: 8,
-//   },
-//   clientName: {
-//     fontSize: 14,
-//     color: "#1f2937",
-//     fontWeight: "bold",
-//     marginBottom: 4,
-//   },
-//   clientContact: {
-//     fontSize: 14,
-//     color: "#374151",
-//     marginBottom: 2,
-//   },
-//   // Vehicle section
-//   vehicleContainer: {
-//     position: "absolute",
-//     bottom: 70,
-//     right: 40,
-//     textAlign: "right",
-//     display: "flex",
-//     flexDirection: "column",
-//     justifyContent: "flex-end",
-//     alignItems: "flex-end",
-//   },
-//   vehicleLabel: {
-//     fontSize: 16,
-//     color: "#ef4444",
-//     fontWeight: "bold",
-//     marginBottom: 8,
-//     textAlign: "right",
-//   },
-//   vehicleValue: {
-//     fontSize: 14,
-//     color: "#1f2937",
-//     fontWeight: "bold",
-//     marginBottom: 12,
-//     textAlign: "right",
-//   },
-//   accidentDateLabel: {
-//     fontSize: 14,
-//     color: "#ef4444",
-//     fontWeight: "bold",
-//     marginBottom: 4,
-//     textAlign: "right",
-//   },
-//   accidentDateValue: {
-//     fontSize: 14,
-//     color: "#374151",
-//     fontWeight: "bold",
-//     textAlign: "right",
-//   },
-
-//   //   page 1 end
-
-//   title: {
-//     fontSize: 24,
-//     marginBottom: 15,
-//     fontWeight: "bold",
-//     color: "#1a365d",
-//   },
-//   subtitle: {
-//     fontSize: 16,
-//     marginBottom: 15,
-//     fontWeight: "bold",
-//     color: "#1a365d",
-//   },
-//   methodologyText: {
-//     fontSize: 12,
-//     marginBottom: 20,
-//     lineHeight: 1.5,
-//   },
-//   methodologySection: {
-//     marginBottom: 20,
-//   },
-//   sectionTitle: {
-//     fontSize: 14,
-//     fontWeight: "bold",
-//     color: "#1a365d",
-//     marginBottom: 8,
-//   },
-//   table: {
-//     width: "100%",
-//     marginBottom: 20,
-//   },
-//   tableHeader: {
-//     flexDirection: "row",
-//     backgroundColor: "#1a365d",
-//     color: "white",
-//     padding: 8,
-//     fontSize: 10,
-//     fontWeight: "bold",
-//   },
-//   tableRow: {
-//     flexDirection: "row",
-//     padding: 8,
-//     fontSize: 9,
-//     borderBottomWidth: 1,
-//     borderBottomColor: "#e2e8f0",
-//   },
-//   alternateRow: {
-//     backgroundColor: "#f8fafc",
-//   },
-//   cell: {
-//     flex: 0.9,
-//     textAlign: "center",
-//   },
-//   vinCell: {
-//     flex: 2,
-//     flexWrap: "nowrap",
-//     textAlign: "center",
-//   },
-//   makeModelCell: {
-//     flex: 1.5,
-//     textAlign: "center",
-//   },
-//   summary: {
-//     marginTop: 20,
-//     padding: 15,
-//     backgroundColor: "#f1f5f9",
-//     textAlign: "center",
-//   },
-//   summaryText: {
-//     fontSize: 12,
-//     marginBottom: 8,
-//   },
-//   footer: {
-//     position: "absolute",
-//     bottom: 30,
-//     left: 30,
-//     right: 30,
-//     fontSize: 8,
-//     color: "#64748b",
-//   },
-// });
-
-
 
 const styles = StyleSheet.create({
   page: {
@@ -595,8 +311,12 @@ interface PDFDocumentProps {
   bottomListChartImage?: string;
 }
 
-export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }: PDFDocumentProps) => {
-//   console.log({ report });
+export const PDFDocument = ({
+  report,
+  topListChartImage,
+  bottomListChartImage,
+}: PDFDocumentProps) => {
+  //   console.log({ report });
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -663,34 +383,6 @@ export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }:
           </View>
         </View>
       </Page>
-
-      {/* <Page size="A4">
-      <View style={styles.coverPage}>
-        {report?.backgroundImage && (
-          <Image src={"https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"} style={styles?.coverBackground} />
-        )}
-        <View style={styles.diagonalStripe} />
-        <View style={styles.coverContent}>
-          <Text style={styles.coverTitle}>Diminished Value Analysis Report</Text>
-          <View style={styles.coverInfo}>
-            <View style={styles.clientInfo}>
-              <Text style={styles.infoLabel}>Prepared For:</Text>
-              <Text style={styles.infoValue}>{report?.client_info?.name}</Text>
-              <Text style={styles.infoValue}>{report?.client_info?.phone}</Text>
-              <Text style={styles.infoValue}>{report?.client_info?.email}</Text>
-            </View>
-            <View style={styles.vehicleInfo}>
-              <Text style={styles.infoLabel}>Report Date:</Text>
-              <Text style={styles.infoValue}>{dayjs(report?.created_at).format('MMM DD, YYYY')}</Text>
-              <Text style={styles.infoLabel}>Vehicle:</Text>
-              <Text style={styles.infoValue}>{report.vehicleInfo}</Text> //! have to add
-              <Text style={styles.infoLabel}>Date of Accident:</Text>
-              <Text style={styles.infoValue}>{report.accident_date}</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-    </Page> */}
 
       <Page size="A4" style={styles.page}>
         <Text style={styles.title}>
@@ -785,14 +477,18 @@ export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }:
               style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
             >
               <Text style={styles.cell}>
-                {dayjs(listing?.first_seen_at_source_date).format("MMM DD, YYYY")}
+                {dayjs(listing?.first_seen_at_source_date).format(
+                  "MMM DD, YYYY"
+                )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
               <Text style={styles.cell}>{listing?.year}</Text>
               <Text style={styles.makeModelCell}>
                 {listing?.make + ", " + listing?.model}
               </Text>
-              <Text style={styles.cell}>{listing?.miles?.toLocaleString()}</Text>
+              <Text style={styles.cell}>
+                {listing?.miles?.toLocaleString()}
+              </Text>
               <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>
                 ${listing?.price?.toLocaleString()}
@@ -801,67 +497,21 @@ export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }:
             </View>
           ))}
 
-          <View style={{height: "auto", width: "100%", border: "1px solid #e2e8f0", marginTop: 30, marginBottom: 20}}>
-            <Image src={topListChartImage} style={{ width: "100%", height: "auto" }} />
+          <View
+            style={{
+              height: "auto",
+              width: "100%",
+              border: "1px solid #e2e8f0",
+              marginTop: 30,
+              marginBottom: 20,
+            }}
+          >
+            <Image
+              src={topListChartImage}
+              style={{ width: "100%", height: "auto" }}
+            />
           </View>
         </View>
-
-        {/* <Text style={styles.subtitle}>Post-Accident Comparable Listings</Text>
-        <View style={styles.table}>
-          <View style={styles.tableHeader}>
-            <Text style={styles.cell}>Date Listed</Text>
-            <Text style={styles.vinCell}>VIN</Text>
-            <Text style={styles.cell}>Year</Text>
-            <Text style={styles.makeModelCell}>Make/Model</Text>
-            <Text style={styles.cell}>Mileage</Text>
-            <Text style={styles.cell}>Zipcode</Text>
-            <Text style={styles.cell}>Price</Text>
-            <Text style={styles.cell}>Status</Text>
-          </View>
-          {report?.bottom_damaged_listings?.map((listing, index) => (
-            <View
-              key={listing?.vin}
-              style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
-            >
-              <Text style={styles.cell}>
-                {dayjs(listing?.first_seen_at_source_date).format("MMM DD, YYYY")}
-              </Text>
-              <Text style={styles.vinCell}>{listing?.vin}</Text>
-              <Text style={styles.cell}>{listing?.year}</Text>
-              <Text style={styles.makeModelCell}>
-                {listing?.make + ", " + listing?.model}
-              </Text>
-              <Text style={styles.cell}>{listing?.miles?.toLocaleString()}</Text>
-              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
-              <Text style={styles.cell}>
-                ${listing?.price?.toLocaleString()}
-              </Text>
-              <Text style={styles.cell}>Damaged</Text>
-            </View>
-          ))}
-        </View> */}
-{/* 
-        <View style={styles.summary}>
-          <Text style={styles.summaryText}>
-            Fair Market Value with No Accident: $
-            {report?.average_clean_price_top5?.toFixed(2)?.toLocaleString()}
-          </Text>
-          <Text style={styles.summaryText}>
-            Fair Market Value with Accident: $
-            {report?.average_damaged_price_bottom5
-              ?.toFixed(2)
-              ?.toLocaleString()}
-          </Text>
-          <Text
-            style={[
-              styles.summaryText,
-              { fontWeight: "bold", fontFamily: "Telegraph", fontSize: 14, marginTop: 10 },
-            ]}
-          >
-            Calculated Diminished Value: $
-            {report?.estimated_diminished_value?.toFixed(2)?.toLocaleString()}
-          </Text>
-        </View> */}
 
         <View style={styles.footer}>
           <Text>
@@ -891,14 +541,18 @@ export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }:
               style={[styles.tableRow, index % 2 === 1 && styles.alternateRow]}
             >
               <Text style={styles.cell}>
-                {dayjs(listing?.first_seen_at_source_date).format("MMM DD, YYYY")}
+                {dayjs(listing?.first_seen_at_source_date).format(
+                  "MMM DD, YYYY"
+                )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
               <Text style={styles.cell}>{listing?.year}</Text>
               <Text style={styles.makeModelCell}>
                 {listing?.make + ", " + listing?.model}
               </Text>
-              <Text style={styles.cell}>{listing?.miles?.toLocaleString()}</Text>
+              <Text style={styles.cell}>
+                {listing?.miles?.toLocaleString()}
+              </Text>
               <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>
                 ${listing?.price?.toLocaleString()}
@@ -908,8 +562,19 @@ export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }:
             </View>
           ))}
 
-            <View style={{height: "auto", width: "100%", border: "1px solid #e2e8f0", marginTop: 30, marginBottom: 20}}>
-            <Image src={bottomListChartImage} style={{ width: "100%", height: "auto" }} />
+          <View
+            style={{
+              height: "auto",
+              width: "100%",
+              border: "1px solid #e2e8f0",
+              marginTop: 30,
+              marginBottom: 20,
+            }}
+          >
+            <Image
+              src={bottomListChartImage}
+              style={{ width: "100%", height: "auto" }}
+            />
           </View>
         </View>
 
@@ -927,7 +592,12 @@ export const PDFDocument = ({ report, topListChartImage, bottomListChartImage }:
           <Text
             style={[
               styles.summaryText,
-              { fontWeight: "bold", fontFamily: "Telegraph", fontSize: 14, marginTop: 10 },
+              {
+                fontWeight: "bold",
+                fontFamily: "Telegraph",
+                fontSize: 14,
+                marginTop: 10,
+              },
             ]}
           >
             Calculated Diminished Value: $

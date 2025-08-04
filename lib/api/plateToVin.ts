@@ -1,8 +1,3 @@
-// lib/api/plateToVin.ts
-
-/**
- * PlateToVin API client for license plate lookups
- */
 
 interface PlateToVinRequest {
   licensePlate: string;
@@ -42,14 +37,10 @@ export async function lookupLicensePlate({ licensePlate, state }: PlateToVinRequ
 
     
     const data = await response.json();
-    // console.log("😶😶😶😶", data);
     if (!data.success) {
       throw new Error('Failed to lookup license plate');
     }
 
-    // const data = await response.json();
-    
-    // return {};
     return {
       vin: data.vin.vin,
       year: parseInt(data.vin.year, 10),

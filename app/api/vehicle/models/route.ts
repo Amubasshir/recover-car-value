@@ -1,4 +1,4 @@
-// app/api/vehicle/models/route.ts
+
 
 import { NextResponse } from 'next/server';
 import fs from 'fs';

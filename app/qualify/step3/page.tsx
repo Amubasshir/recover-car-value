@@ -27,7 +27,6 @@ export default function QualifyStep3() {
   const [formData, setFormData] = useState({
     accidentDate: "",
     repairCost: "",
-    // zipcode: "",
     mileage: "",
     firstName: "",
     lastName: "",
@@ -57,9 +56,6 @@ export default function QualifyStep3() {
     setVehicleData(JSON.parse(vehicleData || "{}"));
     setQualifiedAnswers(JSON.parse(qualifyAnswers || "{}"));
 
-    // if (!qualifyAnswers || !vehicleData) {
-    //   router.push("/qualify/step1");
-    // }
   }, [router]);
 
   // Replace the existing handleChange function
@@ -94,24 +90,8 @@ export default function QualifyStep3() {
   };
 
   const handleSubmit = async () => {
-    // Store form data in localStorage
-
-    const query = new URLSearchParams({
-      year: vehicleData.year,
-      make: vehicleData.make,
-      model: vehicleData.model,
-      trim: vehicleData.trim,
-      //   zip: formData.zipcode,
-      accidentMileage: formData.mileage,
-      //   accidentZip: formData.zipcode,
-      repairCost: formData.repairCost,
-      accidentDate: formData.accidentDate,
-      vin: vehicleData.vin,
-    }).toString();
 
     try {
-    //   console.log({ vehicleData });
-      //   const response = await fetch(`/api/diminished-value/?${query}`, {
       const response = await fetch(`/api/diminished-value`, {
         method: "POST",
         body: JSON.stringify({
@@ -122,9 +102,7 @@ export default function QualifyStep3() {
           trim: vehicleData.trim,
           heading:
             vehicleData.year + " " + vehicleData.make + " " + vehicleData.model,
-          //   zip: formData.zipcode,
           accidentMileage: formData.mileage,
-          //   accidentZip: formData.zipcode,
           repairCost: formData.repairCost,
           accidentDate: formData.accidentDate,
           vin: vehicleData.vin,
@@ -140,11 +118,6 @@ export default function QualifyStep3() {
 
       const data = await response.json();
 
-      //   if (!response.ok) {
-      //     const errorData = await response.json();
-      //     toast.error(errorData.error);
-      //   }
-
       if (data?.error) {
         toast.error(data.error);
         return;
@@ -154,8 +127,6 @@ export default function QualifyStep3() {
         "Vehicle information retrieved successfully! Please check your email for the report."
       );
 
-      // const vehicleInfo = (await response.json()) as VehicleInfo;
-      // console.log("Vehicle Info:", vehicleInfo);
       localStorage.setItem("diminishedVehicleData", JSON.stringify(data?.data));
       localStorage.setItem("confirmationData", JSON.stringify(formData));
       setIsLoading(false);
@@ -170,22 +141,7 @@ export default function QualifyStep3() {
       setIsLoading(false);
     }
 
-    // In a real application, you would send this data to your server
-    // For now, we'll just navigate to the results page
   };
-
-  // Replace the existing isFormValid check
-  //   const isFormValid =
-  //     formData.accidentDate &&
-  //     // formData.zipcode &&
-  //     formData.firstName &&
-  //     formData.lastName &&
-  //     formData.phone &&
-  //     formData.email &&
-  //     // formData.zipcode.length >= 5 &&
-  //     formData.phone.length >= 10 &&
-  //     // !errors.zipcode &&
-  //     !errors.phone;
 
   const isFormValid =
     formData.accidentDate &&

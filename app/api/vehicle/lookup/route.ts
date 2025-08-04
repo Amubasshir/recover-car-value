@@ -17,8 +17,6 @@ export async function POST(request: Request) {
 
     const vehicleInfo = await lookupLicensePlate({ licensePlate, state });
 
-    // return NextResponse.json(vehicleInfo);
-    // return NextResponse.json(JSON.parse(JSON.stringify(vehicleInfo)));
     return NextResponse.json(vehicleInfo);
 
   } catch (error) {

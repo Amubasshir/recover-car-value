@@ -5,28 +5,18 @@ import { supabase } from "@/lib/supabase";
 import { calculateDiminishedPercentValue } from "@/lib/utils/calculateDiminishedPercentValue";
 import { NextResponse } from "next/server";
 
-// Constants for radius settings
-// const BASE_CLEAN_RADIUS = parseInt(process.env.BASE_CLEAN_RADIUS || '50', 10);
 const BASE_CLEAN_RADIUS = 100;
 const TITLE_STATUS = "salvage|rebuild";
-const HISTORY = "clean";
-// const SORT_BY = "price";
 const SORT_BY = "miles";
 const SORT_ORDER_DESC = "desc";
 const SORT_ORDER_ASC = "asc";
 const api_key = process.env.MARKETCHECK_API_KEY as string;
-const BASE_DAMAGED_RADIUS = parseInt(
-  process.env.BASE_DAMAGED_RADIUS || "100",
-  10
-);
 const RADIUS_INCREMENT = parseInt(process.env.RADIUS_INCREMENT || "50", 10);
 const MAX_RADIUS = parseInt(process.env.MAX_RADIUS || "200", 10);
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    //   const { year, make, model, trim, accidentMileage, accidentZip, repairCost, accidentDate, vin, order, page } = req.query;
-    // const { searchParams } = new URL(req.url);
     const {
       year,
       make,
@@ -52,13 +42,9 @@ export async function POST(req: Request) {
 
     if (min_miles < 3000) {
       min_miles = 3000;
-      max_miles = 3000 + 10000; 
+      max_miles = 3000 + 10000;
     }
 
-    // const min_miles = 10001 - 10000;
-    // const max_miles = 10001 + 10000;
-
-    // const vinHistoryData = await fetchVinHistory({ vin, order, page });
 
     const cleanListingsData = await fetchListings({
       api_key,
@@ -104,9 +90,8 @@ export async function POST(req: Request) {
       price_range: "1-9999999",
     });
 
-    console.log("damaged data", cleanListingsData, damagedListingsData)
+    console.log("damaged data", cleanListingsData, damagedListingsData);
     // Input validation
-    // console.log("clean", damagedListingsData)
     if (!damagedListingsData?.listings?.length) {
       return NextResponse.json(
         { error: "Damaged data retrieving failed!" },
@@ -114,18 +99,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // // Fetch clean and damaged listings with dynamic radius expansion
-    // const { listings: cleanListings, radius: cleanRadius } = await fetchListingsWithRadiusExpansion(
-    //     () => fetchCleanListings(vehicleDetails),
-    //     BASE_CLEAN_RADIUS
-    // );
 
-    // const { listings: damagedListings, radius: damagedRadius } = await fetchListingsWithRadiusExpansion(
-    //   () => fetchDamagedListings(vehicleDetails),
-    //   BASE_DAMAGED_RADIUS
-    // );
-
-    // // Process listings and calculate values
+    // Process listings and calculate values
     const topCleanListings = selectAndCleanListings(
       cleanListingsData.listings,
       "clean",
@@ -137,7 +112,7 @@ export async function POST(req: Request) {
       5
     );
 
-    // // Calculate averages
+    // Calculate averages
     const avgCleanPrice = calculateSum(
       topCleanListings.map((listing) => listing.price)
     );
@@ -145,54 +120,29 @@ export async function POST(req: Request) {
       bottomDamagedListings.map((listing) => listing.price)
     );
 
-    // // Calculate diminished value
-    // const diminishedValue =
-    //   avgCleanPrice && avgDamagedPrice
-    //     ? Math.round((avgCleanPrice - avgDamagedPrice) * 100) / 100
-    //     : 0;
+    // Calculate diminished value
     const diminishedValue = calculateDiminishedPercentValue(
-            Number(avgCleanPrice),
-            Number(avgDamagedPrice)
-          );
+      Number(avgCleanPrice),
+      Number(avgDamagedPrice)
+    );
 
-    // // Build response
+    // Build response
     const result = {
-      // vehicle_info_input: {
       year: Number(year),
       make,
       model,
       trim,
       accident_mileage: accidentMileage,
-      //   accident_zip: "accidentZip",
-      //   accident_zip: "45646",
-      //   repair_cost: repairCost,
       accident_date: accidentDate,
       heading: heading,
       dealer_name: "",
-
-      //   },
-      //   search_parameters: {
-      //     clean_radius_used_miles: cleanRadius,
-      //     damaged_radius_used_miles: damagedRadius,
-      //     mileage_range_searched: `${accidentMileage - 10000}-${accidentMileage + 10000}`,
-      //   },
-      // valuation: {
       average_clean_price_top5: avgCleanPrice,
       average_damaged_price_bottom5: avgDamagedPrice,
       estimated_diminished_value: diminishedValue.diminishedValue,
-      // repair_cost: repairCost,
-      // },
-      // comps_data: {
       top_clean_listings: topCleanListings,
       bottom_damaged_listings: bottomDamagedListings,
       client_info,
       qualify_answers,
-      // },
-
-      //   comps_found_summary: {
-      //         number_of_clean_listings: cleanListings.length,
-      //         number_of_damaged_listings: damagedListings.length,
-      //       }
     };
 
     let queries = await supabase
@@ -254,9 +204,7 @@ function selectAndCleanListings(
   count: number
 ) {
   // Filter out listings without prices
-  //   console.log({listings});
   const validListings = listings?.filter((car) => car?.price) || [];
-  //   console.log(validListings);
 
   // Sort by price (descending for clean, ascending for damaged)
   const sortedListings = [...validListings].sort((a, b) => {
@@ -264,8 +212,6 @@ function selectAndCleanListings(
       ? b.price - a.price // Descending for clean (top prices)
       : a.price - b.price; // Ascending for damaged (bottom prices)
   });
-
-  //   console.log("sorted 🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨", sortedListings, sortedListings.length)
 
   // Take the requested number of listings
   const selectedListings = sortedListings.slice(0, count);

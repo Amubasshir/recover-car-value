@@ -1,35 +1,40 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-} from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Results() {
   const router = useRouter();
   const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    repairClaimNumber: '', // Add new field
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    repairClaimNumber: "", // Add new field
   });
   const [agreedToRepresentation, setAgreedToRepresentation] = useState(false);
   const [estimatedValue, setEstimatedValue] = useState(0);
 
   useEffect(() => {
     // Get user data from localStorage
-    const confirmationData = localStorage.getItem('confirmationData');
-    const diminishedVehicleData = localStorage.getItem('diminishedVehicleData');
-    if (confirmationData && diminishedVehicleData && confirmationData !== 'null' && diminishedVehicleData !== 'undefined') {
-      const data = JSON.parse(confirmationData || '{}');
+    const confirmationData = localStorage.getItem("confirmationData");
+    const diminishedVehicleData = localStorage.getItem("diminishedVehicleData");
+    if (
+      confirmationData &&
+      diminishedVehicleData &&
+      confirmationData !== "null" &&
+      diminishedVehicleData !== "undefined"
+    ) {
+      const data = JSON.parse(confirmationData || "{}");
       setUserData({
         firstName: data.firstName,
         lastName: data.lastName,
@@ -37,33 +42,20 @@ export default function Results() {
         email: data.email,
         repairClaimNumber: data.repairClaimNumber, // Add new field
       });
-      const vehicleData = JSON.parse(diminishedVehicleData || '{}');
-    //   console.log('User data loaded:', diminishedVehicleData);
-        
-        setEstimatedValue(vehicleData?.estimated_diminished_value || 0);
-      
+      const vehicleData = JSON.parse(diminishedVehicleData || "{}");
+
+      setEstimatedValue(vehicleData?.estimated_diminished_value || 0);
     } else {
       // If no data found, redirect to step 1
-      router.push('/qualify/step3');
+      router.push("/qualify/step3");
     }
-    
 
-
-    // In a real application, you would calculate the diminished value based on the vehicle and accident details
-    // For now, we'll just use a fixed value
   }, [router]);
 
-//   console.log(estimatedValue)
 
   const handleSignUp = () => {
-    // In a real application, you would send this data to your server
-    // console.log('User signed up for representation:', {
-    //   ...userData,
-    //   agreedToRepresentation,
-    // });
-
     // Navigate to thank you page
-    router.push('/qualify/thank-you');
+    router.push("/qualify/thank-you");
   };
 
   return (
@@ -76,15 +68,9 @@ export default function Results() {
               Great news, Your diminished value range:
             </CardDescription>
             <div className="text-3xl md:text-4xl font-bold text-success-600 mt-6 animate-pulse-subtle flex  md:flex-row justify-center items-center gap-1.5 md:gap-3">
-              <span>
-              ${(estimatedValue * 0.6)?.toFixed(2) }
-              </span>
-              <span>
-              {" "} - {" "}
-              </span>
-              <span>
-              ${estimatedValue?.toFixed(2)}
-              </span>
+              <span>${(estimatedValue * 0.6)?.toFixed(2)}</span>
+              <span> - </span>
+              <span>${estimatedValue?.toFixed(2)}</span>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 px-4">

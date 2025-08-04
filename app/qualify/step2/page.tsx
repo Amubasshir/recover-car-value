@@ -53,16 +53,10 @@ export default function QualifyStep2() {
   const [activeTab, setActiveTab] = useState("license");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch years on component mount
-  //   useEffect(() => {
-  //     fetchOptions("year");
-  //   }, []);
-
   // Fetch makes when year changes
   useEffect(() => {
     if (vehicleData.year) {
       fetchOptions("make", { year: vehicleData.year });
-      // Reset dependent fields
       setVehicleData((prev) => ({ ...prev, make: "", model: "", trim: "" }));
       setModels([]);
       setTrims([]);
@@ -73,7 +67,6 @@ export default function QualifyStep2() {
   useEffect(() => {
     if (vehicleData.make) {
       fetchOptions("model", { year: vehicleData.year, make: vehicleData.make });
-      // Reset dependent fields
       setVehicleData((prev) => ({ ...prev, model: "", trim: "" }));
       setTrims([]);
     }
@@ -96,14 +89,7 @@ export default function QualifyStep2() {
     setLoading((prev) => ({ ...prev, [field]: true }));
     try {
       const params = new URLSearchParams({ field, ...filters });
-    //   const response = await fetch(`/api/vehicles/options?${params}`);
       const response = await fetch(`/api/vehicles/trims?${params}`);
-    //   console.log({field});
-//       if (field === "trim" || field === "model") {
-//   response = await fetch(`/api/vehicles/trims?${params}`);
-// } else {
-//   response = await fetch(`/api/vehicles/options?${params}`);
-// }
 
       const result = await response.json();
 
@@ -173,9 +159,6 @@ export default function QualifyStep2() {
   };
 
   const handleContinue = async () => {
-    // functions
-    // onError(null);
-
     if (activeTab === "license" && !vehicleData.licensePlate) {
       toast.error("License plate is required");
       return;
@@ -200,15 +183,12 @@ export default function QualifyStep2() {
           }),
         });
 
-        // console.log({response})
-
         if (!response.ok) {
           const errorData = await response.json();
           toast.error(errorData.error || "Failed to lookup license plate");
         }
 
         const vehicleInfo = (await response.json()) as VehicleInfo;
-        // console.log("Vehicle Info:", vehicleInfo);
         localStorage.setItem(
           "vehicleData",
           JSON.stringify({
@@ -221,7 +201,6 @@ export default function QualifyStep2() {
         setIsLoading(false);
         router.push("/qualify/step3");
 
-        // onVehicleIdentified(vehicleInfo);
       } catch (error) {
         toast.error(
           error instanceof Error
@@ -416,36 +395,6 @@ export default function QualifyStep2() {
               </TabsContent>
               <TabsContent value="select" className="space-y-5 pt-6">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  {/* <div className="space-y-2">
-                    <Label htmlFor="year" className="text-sm font-medium">
-                      Year
-                    </Label>
-                    <Select
-                      value={vehicleData.year}
-                      onValueChange={(value) =>
-                        handleSelectChange("year", value)
-                      }
-                      disabled={loading.year}
-                    >
-                      <SelectTrigger
-                        id="year"
-                        className="rounded-lg border-gray-200 shadow-sm focus:border-primary focus:ring-primary"
-                      >
-                        <SelectValue
-                          placeholder={
-                            loading.year ? "Loading years..." : "Select year"
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent className="rounded-lg shadow-md max-h-[240px]">
-                        {years.map((year) => (
-                          <SelectItem key={year} value={year}>
-                            {year}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div> */}
                   <div className="space-y-2">
                     <Label htmlFor="year" className="text-sm font-medium">
                       Year
@@ -455,7 +404,6 @@ export default function QualifyStep2() {
                       onValueChange={(value) =>
                         handleSelectChange("year", value)
                       }
-                      // disabled={loading.year}
                     >
                       <SelectTrigger
                         id="year"
@@ -463,7 +411,6 @@ export default function QualifyStep2() {
                       >
                         <SelectValue
                           placeholder={"Select year"}
-                          // placeholder={loading.year ? "Loading years..." : "Select year"}
                         />
                       </SelectTrigger>
                       <SelectContent className="rounded-lg shadow-md max-h-[240px]">
@@ -567,7 +514,6 @@ export default function QualifyStep2() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
                 </div>
               </TabsContent>
             </Tabs>
