@@ -62,6 +62,7 @@ export async function POST(req: Request) {
       min_miles,
       max_miles,
       accident: "false",
+      isAccident: 0,
     });
     if (cleanListingsData?.num_found < 1) {
       return NextResponse.json(
@@ -88,9 +89,10 @@ export async function POST(req: Request) {
       max_miles,
       accident: "true",
       price_range: "1-9999999",
+      isAccident: 1,
     });
 
-    console.log("damaged data", cleanListingsData, damagedListingsData);
+    console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", cleanListingsData, damagedListingsData);
     // Input validation
     if (!damagedListingsData?.listings?.length) {
       return NextResponse.json(
@@ -101,23 +103,29 @@ export async function POST(req: Request) {
 
 
     // Process listings and calculate values
-    const topCleanListings = selectAndCleanListings(
-      cleanListingsData.listings,
-      "clean",
-      5
-    );
-    const bottomDamagedListings = selectAndCleanListings(
-      damagedListingsData.listings,
-      "damaged",
-      5
-    );
+    // const topCleanListings = selectAndCleanListings(
+    //   cleanListingsData.listings,
+    //   "clean",
+    //   5
+    // );
+    // const bottomDamagedListings = selectAndCleanListings(
+    //   damagedListingsData.listings,
+    //   "damaged",
+    //   5
+    // );
 
     // Calculate averages
+    // const avgCleanPrice = calculateSum(
+    //   topCleanListings.map((listing) => listing.price)
+    // );
+    // const avgDamagedPrice = calculateSum(
+    //   bottomDamagedListings.map((listing) => listing.price)
+    // );
     const avgCleanPrice = calculateSum(
-      topCleanListings.map((listing) => listing.price)
+      cleanListingsData?.cars?.map((listing) => listing?.price)
     );
     const avgDamagedPrice = calculateSum(
-      bottomDamagedListings.map((listing) => listing.price)
+      damagedListingsData?.cars?.map((listing) => listing?.price)
     );
 
     // Calculate diminished value
@@ -139,8 +147,10 @@ export async function POST(req: Request) {
       average_clean_price_top5: avgCleanPrice,
       average_damaged_price_bottom5: avgDamagedPrice,
       estimated_diminished_value: diminishedValue.diminishedValue,
-      top_clean_listings: topCleanListings,
-      bottom_damaged_listings: bottomDamagedListings,
+    //   top_clean_listings: topCleanListings,
+    //   bottom_damaged_listings: bottomDamagedListings,
+      top_clean_listings: cleanListingsData?.cars,
+      bottom_damaged_listings: damagedListingsData?.cars,
       client_info,
       qualify_answers,
     };

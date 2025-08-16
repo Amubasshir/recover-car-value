@@ -29,6 +29,7 @@ interface ListingParamsExpanded {
   price_range?: string;
   min_miles?: number;
   max_miles?: number;
+  isAccident?: number;
 }
 
 export async function fetchListings({
@@ -50,45 +51,48 @@ export async function fetchListings({
   max_miles,
   accident,
   price_range,
+  isAccident,
 }: ListingParamsExpanded) {
   if (!api_key) {
     throw new Error("MarketCheck API key not configured");
   }
 
-  const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
+//   const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
+  const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php";
 
   // Create URL with parameters
   const url = new URL(baseUrl);
-  url.searchParams.append("api_key", api_key);
+//   url.searchParams.append("api_key", api_key);
+url.searchParams.append("make", make as string);
+url.searchParams.append("model", model as string);
   url.searchParams.append("year", year as string);
-  url.searchParams.append("model", model as string);
-  url.searchParams.append("make", make as string);
-  url.searchParams.append("state", state as string);
-  url.searchParams.append("min_miles", String(min_miles));
-  url.searchParams.append("max_miles", String(max_miles));
-  url.searchParams.append("accident", accident as string);
-  url.searchParams.append("listing_type", "used");
-  if (trim) {
-    url.searchParams.append("trim", trim as string);
-  }
-  if (sort_by) {
-    url.searchParams.append("sort_by", sort_by);
-  }
-  url.searchParams.append("facet_fields", "miles");
-  url.searchParams.append("stats_fields", "miles");
-  // Add mileage filters only if both are provided and valid
-  if (typeof min_miles === "number" && min_miles >= 0) {
-    url.searchParams.append("min_miles", min_miles.toString());
-  }
+  url.searchParams.append("is_accident", String(isAccident));
+//   url.searchParams.append("state", state as string);
+//   url.searchParams.append("min_miles", String(min_miles));
+//   url.searchParams.append("max_miles", String(max_miles));
+//   url.searchParams.append("accident", accident as string);
+//   url.searchParams.append("listing_type", "used");
+//   if (trim) {
+//     url.searchParams.append("trim", trim as string);
+//   }
+//   if (sort_by) {
+//     url.searchParams.append("sort_by", sort_by);
+//   }
+//   url.searchParams.append("facet_fields", "miles");
+//   url.searchParams.append("stats_fields", "miles");
+//   // Add mileage filters only if both are provided and valid
+//   if (typeof min_miles === "number" && min_miles >= 0) {
+//     url.searchParams.append("min_miles", min_miles.toString());
+//   }
 
-  if (typeof max_miles === "number" && max_miles > 0) {
-    // Some APIs require max_miles > min_miles
-    if (typeof min_miles === "number" && max_miles <= min_miles) {
-      console.warn("max_miles should be greater than min_miles");
-    } else {
-      url.searchParams.append("max_miles", max_miles.toString());
-    }
-  }
+//   if (typeof max_miles === "number" && max_miles > 0) {
+//     // Some APIs require max_miles > min_miles
+//     if (typeof min_miles === "number" && max_miles <= min_miles) {
+//       console.warn("max_miles should be greater than min_miles");
+//     } else {
+//       url.searchParams.append("max_miles", max_miles.toString());
+//     }
+//   }
 
   try {
     const response = await fetch(url.toString());
