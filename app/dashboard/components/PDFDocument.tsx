@@ -21,6 +21,95 @@ Font.register({
   src: `/fonts/Garet-Book.ttf`,
 });
 
+const styles2 = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#FFFFFF',
+    padding: 40,
+    fontSize: 11,
+    fontFamily: 'Helvetica',
+    lineHeight: 1.4,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#000000',
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 30,
+    marginBottom: 15,
+    color: '#000000',
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 8,
+    color: '#000000',
+  },
+  methodologyText: {
+    fontSize: 11,
+    lineHeight: 1.5,
+    marginBottom: 10,
+    color: '#000000',
+    textAlign: 'justify',
+  },
+  bulletPoint: {
+    fontSize: 11,
+    marginLeft: 20,
+    marginBottom: 5,
+    lineHeight: 1.4,
+  },
+  numberedItem: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    marginTop: 15,
+    marginBottom: 8,
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  legalSection: {
+    marginTop: 30,
+  },
+  caseTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    marginBottom: 5,
+  },
+  caseText: {
+    fontSize: 11,
+    marginLeft: 20,
+    marginBottom: 10,
+    lineHeight: 1.4,
+  },
+  conclusion: {
+    marginTop: 30,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#CCCCCC',
+  },
+  conclusionTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+  italic: {
+    fontStyle: 'italic',
+  }
+});
+
+
 const styles = StyleSheet.create({
   page: {
     padding: 20,
@@ -384,23 +473,20 @@ export const PDFDocument = ({
         </View>
       </Page>
 
-      <Page size="A4" style={styles.page}>
+      {/* <Page size="A4" style={styles.page}>
         <Text style={styles.title}>
           Understanding Inherent Diminished Value
         </Text>
 
         <View style={styles.methodologySection}>
+          
           <Text style={styles.methodologyText}>
-            Inherent diminished value is the loss in a vehicle's market value
-            specifically due to its accident history, even after repairs are
-            completed. The best way to calculate Fair Market Value pre- and
-            post-accident is through verifiable market data and accepted
-            industry appraisal methods.
-          </Text>
+            Inherent diminished value is the loss in a <Text style={{fontWeight: 'bold'}}>vehicle's market value due solely to its accident history</Text>, even after professional repairs are completed. The most reliable way to determine this loss is by calculating the <Text style={{fontWeight: 'bold'}}>pre- and post-accident Fair Market Value (FMV)</Text> using <Text style={{fontWeight: 'bold'}}>verifiable market data</Text> and <Text style={{fontWeight: 'bold'}}>accepted statistical appraisal methods</Text>.
+            </Text>
         </View>
 
-        <Text style={styles.subtitle}>
-          Methodology for Determining Diminished Value
+        <Text style={{styles.subtitle}}>
+          Fair Market Value Methodology (Court-Defensible)
         </Text>
 
         <View style={styles.methodologySection}>
@@ -456,6 +542,142 @@ export const PDFDocument = ({
             eBay Motors, and dealer feeds.
           </Text>
         </View>
+      </Page> */}
+
+       {/* Page 1 */}
+      <Page size="A4" style={styles2.page}>
+        <Text style={styles2.title}>
+          Understanding Inherent Diminished Value
+        </Text>
+
+        <Text style={styles2.methodologyText}>
+          Inherent diminished value is the loss in a <Text style={styles2.bold}>vehicle's market value due solely to its accident history</Text>, even after professional repairs are completed. The most reliable way to determine this loss is by calculating the <Text style={styles2.bold}>pre- and post-accident Fair Market Value (FMV)</Text> using <Text style={styles2.bold}>verifiable market data</Text> and <Text style={styles2.bold}>accepted statistical appraisal methods</Text>.
+        </Text>
+
+        <View style={styles2.divider} />
+
+        <Text style={styles2.subtitle}>
+          Fair Market Value Methodology (Court-Defensible)
+        </Text>
+
+        <Text style={styles2.methodologyText}>
+          To calculate FMV, we use a structured, data-driven method grounded in <Text style={styles2.bold}>industry practices</Text> and <Text style={styles2.bold}>statistical reliability</Text>:
+        </Text>
+
+        <Text style={styles2.numberedItem}>
+          1. Market Data Collection
+        </Text>
+        
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles2.bulletPoint}>
+            • Pulled publicly listed sales of comparable vehicles from trusted marketplaces (e.g., Cars.com, AutoTrader, CarFax, and dealer feeds).
+          </Text>
+          <Text style={styles2.bulletPoint}>
+            • Filtered for <Text style={styles2.italic}>year, make, model, and trim</Text> to ensure true comparability.
+          </Text>
+        </View>
+
+        <Text style={styles2.numberedItem}>
+          2. Linear Regression Analysis
+        </Text>
+        
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles2.bulletPoint}>
+            • Plotted <Text style={styles2.bold}>price vs. mileage</Text> to establish a market-based depreciation curve.
+          </Text>
+          <Text style={styles2.bulletPoint}>
+            • Applied <Text style={styles2.bold}>linear regression</Text> to create a statistically valid trendline.
+          </Text>
+          <Text style={styles2.bulletPoint}>
+            • Interpolated the subject vehicle's value based on <Text style={styles2.bold}>actual mileage</Text>.
+          </Text>
+        </View>
+
+        <Text style={styles2.numberedItem}>
+          3. Outlier Filtering
+        </Text>
+        
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles2.bulletPoint}>
+            • Excluded listings beyond <Text style={styles2.bold}>±2 standard deviations</Text> from the mean to improve accuracy.
+          </Text>
+        </View>
+
+        <Text style={styles2.numberedItem}>
+          4. Diminished Value Calculation
+        </Text>
+        
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles2.bulletPoint}>
+            • Diminished Value = Pre-Accident Value - Post-Accident Value
+          </Text>
+        </View>
+
+        <View style={styles2.divider} />
+      </Page>
+
+      {/* Page 2 */}
+      <Page size="A4" style={styles2.page}>
+        <Text style={styles2.subtitle}>
+          Legal Validity
+        </Text>
+
+        <Text style={styles2.methodologyText}>
+          This methodology complies with the <Text style={styles2.bold}>Daubert standard</Text> (<Text style={styles2.italic}>Daubert v. Merrell Dow Pharm., Inc.</Text>, 509 U.S. 579 (1993)) requiring expert methods to be:
+        </Text>
+
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles2.bulletPoint}>
+            • <Text style={styles2.italic}>Testable</Text>
+          </Text>
+          <Text style={styles2.bulletPoint}>
+            • <Text style={styles2.italic}>Peer-reviewed</Text>
+          </Text>
+          <Text style={styles2.bulletPoint}>
+            • <Text style={styles2.italic}>Reliable</Text>
+          </Text>
+          <Text style={styles2.bulletPoint}>
+            • <Text style={styles2.italic}>Accepted in the field</Text>
+          </Text>
+        </View>
+
+        <Text style={styles2.sectionTitle}>
+          Case Law Support
+        </Text>
+
+        <Text style={styles2.caseTitle}>
+          McHale v. State Farm
+        </Text>
+        <Text style={styles2.caseText}>
+          (M.D. Fla. 2017): Inherent diminished value upheld via market regression model.
+        </Text>
+
+        <Text style={styles2.caseTitle}>
+          Douglas v. Allstate
+        </Text>
+        <Text style={styles2.caseText}>
+          (E.D. Mo. 2009): Regression analysis based on listings deemed admissible under <Text style={styles2.italic}>Daubert</Text>.
+        </Text>
+
+        <Text style={styles2.caseTitle}>
+          Chaudhary v. USAA
+        </Text>
+        <Text style={styles2.caseText}>
+          (S.D. Tex. 2022): Listing-based valuation accepted as reliable and independently verifiable.
+        </Text>
+
+        <View style={styles2.divider} />
+
+        <View style={styles2.conclusion}>
+          <Text style={styles2.conclusionTitle}>
+            Conclusion:
+          </Text>
+          <Text style={styles2.methodologyText}>
+            This valuation method is <Text style={styles2.bold}>transparent, repeatable, and accepted by courts and insurers</Text> for determining fair market value and inherent diminished value.
+          </Text>
+        </View>
+
+        <View style={styles2.divider} />
       </Page>
 
       <Page size="A4" style={styles.page}>

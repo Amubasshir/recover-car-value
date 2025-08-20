@@ -32,6 +32,82 @@ interface ListingParamsExpanded {
   isAccident?: number;
 }
 
+// export async function fetchListings({
+//   api_key,
+//   year,
+//   model,
+//   make,
+//   zip,
+//   trim,
+//   radius,
+//   history,
+//   rows,
+//   title_status,
+//   sort_by,
+//   sort_order,
+//   start,
+//   state,
+//   min_miles,
+//   max_miles,
+//   accident,
+//   price_range,
+//   isAccident,
+// }: ListingParamsExpanded) {
+//   if (!api_key) {
+//     throw new Error("MarketCheck API key not configured");
+//   }
+
+// //   const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
+//   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php";
+
+//   // Create URL with parameters
+//   const url = new URL(baseUrl);
+// //   url.searchParams.append("api_key", api_key);
+// url.searchParams.append("make", make as string);
+// url.searchParams.append("model", model as string);
+//   url.searchParams.append("year", year as string);
+//   url.searchParams.append("is_accident", String(isAccident));
+// //   url.searchParams.append("state", state as string);
+// //   url.searchParams.append("min_miles", String(min_miles));
+// //   url.searchParams.append("max_miles", String(max_miles));
+// //   url.searchParams.append("accident", accident as string);
+// //   url.searchParams.append("listing_type", "used");
+// //   if (trim) {
+// //     url.searchParams.append("trim", trim as string);
+// //   }
+// //   if (sort_by) {
+// //     url.searchParams.append("sort_by", sort_by);
+// //   }
+// //   url.searchParams.append("facet_fields", "miles");
+// //   url.searchParams.append("stats_fields", "miles");
+// //   // Add mileage filters only if both are provided and valid
+// //   if (typeof min_miles === "number" && min_miles >= 0) {
+// //     url.searchParams.append("min_miles", min_miles.toString());
+// //   }
+
+// //   if (typeof max_miles === "number" && max_miles > 0) {
+// //     // Some APIs require max_miles > min_miles
+// //     if (typeof min_miles === "number" && max_miles <= min_miles) {
+// //       console.warn("max_miles should be greater than min_miles");
+// //     } else {
+// //       url.searchParams.append("max_miles", max_miles.toString());
+// //     }
+// //   }
+// console.log({url, us: url.toString()})
+//   try {
+//     const response = await fetch(url.toString());
+//     const data = await response.json();
+
+//     console.log({data})
+//     if (!data) throw new Error("Failed to fetch vehicle listings");
+
+//     // return data;
+//   } catch (error) {
+//     console.error("MarketCheck API error:", error);
+//     throw error;
+//   }
+// }
+
 export async function fetchListings({
   api_key,
   year,
@@ -57,54 +133,48 @@ export async function fetchListings({
     throw new Error("MarketCheck API key not configured");
   }
 
-//   const baseUrl = "https://mc-api.marketcheck.com/v2/search/car/recents";
   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php";
-
-  // Create URL with parameters
+//   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?make=Tesla&model=Model%20Y&year_from=2020&year_to=2026&is_accidental=1";
+//   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&YearFrom=2022&YearTo=2022&isAccidental=1";
   const url = new URL(baseUrl);
-//   url.searchParams.append("api_key", api_key);
-url.searchParams.append("make", make as string);
-url.searchParams.append("model", model as string);
+  
+  url.searchParams.append("make", make as string);
+  url.searchParams.append("model", model as string);
   url.searchParams.append("year", year as string);
   url.searchParams.append("is_accident", String(isAccident));
-//   url.searchParams.append("state", state as string);
-//   url.searchParams.append("min_miles", String(min_miles));
-//   url.searchParams.append("max_miles", String(max_miles));
-//   url.searchParams.append("accident", accident as string);
-//   url.searchParams.append("listing_type", "used");
-//   if (trim) {
-//     url.searchParams.append("trim", trim as string);
-//   }
-//   if (sort_by) {
-//     url.searchParams.append("sort_by", sort_by);
-//   }
-//   url.searchParams.append("facet_fields", "miles");
-//   url.searchParams.append("stats_fields", "miles");
-//   // Add mileage filters only if both are provided and valid
-//   if (typeof min_miles === "number" && min_miles >= 0) {
-//     url.searchParams.append("min_miles", min_miles.toString());
-//   }
 
-//   if (typeof max_miles === "number" && max_miles > 0) {
-//     // Some APIs require max_miles > min_miles
-//     if (typeof min_miles === "number" && max_miles <= min_miles) {
-//       console.warn("max_miles should be greater than min_miles");
-//     } else {
-//       url.searchParams.append("max_miles", max_miles.toString());
-//     }
-//   }
+  console.log({url: url.toString()});
 
   try {
     const response = await fetch(url.toString());
+    
+    // // Check if response is OK (status 200-299)
+    // if (!response.ok) {
+    //   const errorText = await response.json();
+    // //   throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    // }
+    
+    // // Check content type to ensure it's JSON
+    // const contentType = response.headers.get('content-type');
+    // if (!contentType || !contentType.includes('application/json')) {
+    //   const body = await response.text();
+    //   console.error('Received non-JSON response:', body.substring(0, 200));
+    //   throw new Error('Server returned non-JSON response');
+    // }
+    
     const data = await response.json();
+    // console.log({data});
+    
     if (!data) throw new Error("Failed to fetch vehicle listings");
-
+    
     return data;
+    
   } catch (error) {
     console.error("MarketCheck API error:", error);
     throw error;
   }
 }
+
 
 export async function fetchVinHistory({
   vin,

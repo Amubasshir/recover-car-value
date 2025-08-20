@@ -1,0 +1,317 @@
+'use client'
+
+import React, { useEffect, useRef } from 'react';
+import * as echarts from 'echarts';
+
+const PreAccidentMarketChart = ({ 
+  data = [], 
+  subjectMileage = 35000,
+  title = "Pre-Accident Market Listings",
+  onImageReady
+}) => {
+  const chartRef = useRef(null);
+  
+
+  // Use provided data or fall back to default example data
+  const preAccidentListings = data.length > 0 ? data : [
+    {
+      vin: "1HGCM82633A123456",
+      make: "Honda",
+      trim: "EX",
+      year: 2020,
+      miles: 25000,
+      model: "Accord",
+      price: 21000,
+      dealer_zip: "90001",
+      dealer_name: "Los Angeles Honda"
+    },
+    {
+      vin: "5XYZUDLBXG1234567",
+      make: "Hyundai",
+      trim: "Limited",
+      year: 2021,
+      miles: 30000,
+      model: "Tucson",
+      price: 20000,
+      dealer_zip: "90210",
+      dealer_name: "Beverly Hills Hyundai"
+    },
+    {
+      vin: "1FM5K8D84G1234567",
+      make: "Ford",
+      trim: "XLT",
+      year: 2020,
+      miles: 35000,
+      model: "Explorer",
+      price: 20000,
+      dealer_zip: "60601",
+      dealer_name: "Chicago Ford"
+    },
+    {
+      vin: "5TDDKRFH8G1234567",
+      make: "Toyota",
+      trim: "LE",
+      year: 2019,
+      miles: 40000,
+      model: "Camry",
+      price: 19000,
+      dealer_zip: "10001",
+      dealer_name: "Manhattan Toyota"
+    },
+    {
+      vin: "2HGFC2F56L1234567",
+      make: "Honda",
+      trim: "Sport",
+      year: 2022,
+      miles: 45000,
+      model: "Civic",
+      price: 21000,
+      dealer_zip: "33139",
+      dealer_name: "Miami Honda"
+    }
+  ];
+
+
+   
+  
+// const preAccidentListings = [{"vin": "WP0AF2A92RS273793", "make": "Porsche", "trim": "S/T", "year": 2024, "miles": 489, "model": "911", "price": 749996, "dealer_zip": "28217", "dealer_name": "McLaren Charlotte"}, {"vin": "ZHWUM6ZD4MLA10608", "make": "Lamborghini", "trim": "Coupe", "year": 2021, "miles": 15680, "model": "Aventador SVJ", "price": 749995, "dealer_zip": "60435", "dealer_name": "Motor Cars of Chicago"}, {"vin": "WP0AF2A95RS273321", "make": "Porsche", "trim": "GT3 RS", "year": 2024, "miles": 767, "model": "911", "price": 749881, "dealer_zip": "94941", "dealer_name": "Porsche Marin"}, {"vin": "ZHWUC1ZM6RLA00997", "make": "Lamborghini", "trim": "Base", "year": 2024, "miles": 152, "model": "Revuelto", "price": 699950, "dealer_zip": "33181", "dealer_name": "Prestige Imports"}, {"vin": "ZFFKW66AX90166793", "make": "Ferrari", "trim": "Spider F1", "year": 2009, "miles": 25785, "model": "F430", "price": 649900, "dealer_zip": "33426", "dealer_name": "Ilusso Palm Beach"}]
+
+  useEffect(() => {
+    if (preAccidentListings.length === 0) return;
+    
+    const chartDom = chartRef.current;
+    const myChart = echarts.init(chartDom);
+
+    // Prepare data points
+    const dataPoints = preAccidentListings.map(item => [item.miles, item.price]);
+    
+    // Calculate dynamic axis ranges with padding
+    const mileages = dataPoints.map(point => point[0]);
+    const prices = dataPoints.map(point => point[1]);
+    
+    const minMileage = Math.min(...mileages);
+    const maxMileage = Math.max(...mileages);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    
+    // Add padding to ranges
+    const mileagePadding = (maxMileage - minMileage) * 0.1 || 5000;
+    const pricePadding = (maxPrice - minPrice) * 0.1 || 1000;
+    
+    const chartMinX = Math.max(0, minMileage - mileagePadding);
+    const chartMaxX = maxMileage + mileagePadding;
+    const chartMinY = Math.max(0, minPrice - pricePadding);
+    const chartMaxY = maxPrice + pricePadding;
+    
+    // Calculate regression line (only if we have more than 1 data point)
+    let regressionLine = [];
+    let slope = 0;
+    let intercept = 0;
+    
+    if (dataPoints.length > 1) {
+      const n = dataPoints.length;
+      const sumX = dataPoints.reduce((sum, point) => sum + point[0], 0);
+      const sumY = dataPoints.reduce((sum, point) => sum + point[1], 0);
+      const sumXY = dataPoints.reduce((sum, point) => sum + point[0] * point[1], 0);
+      const sumXX = dataPoints.reduce((sum, point) => sum + point[0] * point[0], 0);
+      
+      const denominator = n * sumXX - sumX * sumX;
+      if (denominator !== 0) {
+        slope = (n * sumXY - sumX * sumY) / denominator;
+        intercept = (sumY - slope * sumX) / n;
+        
+        // Create regression line data points
+        regressionLine = [
+          [chartMinX, slope * chartMinX + intercept],
+          [chartMaxX, slope * chartMaxX + intercept]
+        ];
+      }
+    }
+
+    // Prepare series data
+    const series = [
+      {
+        name: 'Market Listings',
+        type: 'scatter',
+        data: dataPoints,
+        symbolSize: 8,
+        itemStyle: {
+          color: '#4472C4'
+        },
+        symbol: 'rect',
+        symbolRotate: 45
+      }
+    ];
+
+    // Add regression line if we have enough data
+    if (regressionLine.length > 0) {
+      series.push({
+        name: 'Regression Trendline',
+        type: 'line',
+        data: regressionLine,
+        lineStyle: {
+          color: '#E74C3C',
+          width: 2,
+          type: 'solid'
+        },
+        symbol: 'none',
+        smooth: false
+      });
+    }
+
+    // Add subject mileage line if it's within the chart range
+    if (subjectMileage >= chartMinX && subjectMileage <= chartMaxX) {
+      series.push({
+        name: `Subject Mileage: ${subjectMileage.toLocaleString()}`,
+        type: 'line',
+        data: [[subjectMileage, chartMinY], [subjectMileage, chartMaxY]],
+        lineStyle: {
+          color: '#27AE60',
+          width: 2,
+          type: 'dashed'
+        },
+        symbol: 'none'
+      });
+    }
+
+    const option = {
+      title: {
+        text: title,
+        left: 'center',
+        top: 20,
+        textStyle: {
+          fontSize: 20,
+          fontWeight: 'bold',
+          color: '#333'
+        }
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: function(params) {
+          if (params.seriesName === 'Market Listings' && preAccidentListings[params.dataIndex]) {
+            const listing = preAccidentListings[params.dataIndex];
+            return `${listing.year || 'N/A'} ${listing.make || ''} ${listing.model || ''} ${listing.trim || ''}<br/>
+                    Mileage: ${listing.miles ? listing.miles.toLocaleString() : 'N/A'}<br/>
+                    Price: ${listing.price ? listing.price.toLocaleString() : 'N/A'}<br/>
+                    ${listing.dealer_name ? 'Dealer: ' + listing.dealer_name : ''}`;
+          }
+          return '';
+        }
+      },
+      legend: {
+        data: series.map(s => s.name),
+        right: 20,
+        top: 40,
+        orient: 'vertical',
+        itemGap: 15
+      },
+      grid: {
+        left: 80,
+        right: 80,
+        top: 100,
+        bottom: 80
+      },
+      xAxis: {
+        type: 'value',
+        name: 'Mileage',
+        nameLocation: 'middle',
+        nameGap: 30,
+        min: chartMinX,
+        max: chartMaxX,
+        axisLine: {
+          lineStyle: {
+            color: '#666'
+          }
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#e6e6e6',
+            type: 'solid'
+          }
+        },
+        axisLabel: {
+          formatter: '{value}'
+        }
+      },
+      yAxis: {
+        type: 'value',
+        name: 'Price ($)',
+        nameLocation: 'middle',
+        nameGap: 50,
+        min: chartMinY,
+        max: chartMaxY,
+        axisLine: {
+          lineStyle: {
+            color: '#666'
+          }
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            color: '#e6e6e6',
+            type: 'solid'
+          }
+        },
+        axisLabel: {
+          formatter: '{value}'
+        }
+      },
+      series: series
+    };
+
+    myChart.setOption(option);
+
+    // Handle resize
+    const handleResize = () => {
+      myChart.resize();
+    };
+    
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      myChart.dispose();
+    };
+  }, [data, subjectMileage, title]);
+
+
+   // Capture canvas as image after render
+    // useEffect(() => {
+    //   const timeout = setTimeout(() => {
+    //     if (chartRef.current?.canvas && onImageReady) {
+    //       const imageData = chartRef.current.canvas.toDataURL("image/png");
+    //       onImageReady(imageData);
+    //     }
+    //   }, 1500);
+  
+    //   return () => clearTimeout(timeout);
+    // }, [onImageReady]);
+    useEffect(() => {
+//   const timeout = setTimeout(() => {
+    if (chartRef.current) {
+      const chartInstance = echarts.getInstanceByDom(chartRef.current);
+      if (chartInstance && onImageReady) {
+        const imageData = chartInstance.getDataURL({
+          type: 'png',
+          pixelRatio: 2, // Higher quality
+          backgroundColor: '#fff'
+        });
+        onImageReady(imageData);
+      }
+    }
+//   }, 500);
+
+//   return () => clearTimeout(timeout);
+}, [data, subjectMileage, title]);
+
+  return (
+    <div className="w-[800px] h-[400px] bg-white border border-gray-200 rounded-lg shadow-sm">
+      <div ref={chartRef} className="w-full h-full" />
+    </div>
+  );
+};
+
+export default PreAccidentMarketChart;
+
+

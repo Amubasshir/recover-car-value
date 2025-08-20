@@ -64,6 +64,7 @@ export async function POST(req: Request) {
       accident: "false",
       isAccident: 0,
     });
+
     if (cleanListingsData?.num_found < 1) {
       return NextResponse.json(
         { error: "No data found. Please try with valid information." },
@@ -92,48 +93,61 @@ export async function POST(req: Request) {
       isAccident: 1,
     });
 
-    console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", cleanListingsData, damagedListingsData);
     // Input validation
-    if (!damagedListingsData?.listings?.length) {
-      return NextResponse.json(
-        { error: "Damaged data retrieving failed!" },
-        { status: 400 }
-      );
+    if (!damagedListingsData?.cars?.length) {
+        return NextResponse.json(
+            { error: "Damaged data retrieving failed!" },
+            { status: 400 }
+        );
     }
-
-
+    
+    
     // Process listings and calculate values
     // const topCleanListings = selectAndCleanListings(
-    //   cleanListingsData.listings,
-    //   "clean",
-    //   5
+    //     cleanListingsData.listings,
+    //     "clean",
+    //     5
     // );
     // const bottomDamagedListings = selectAndCleanListings(
-    //   damagedListingsData.listings,
-    //   "damaged",
+    //     damagedListingsData.listings,
+    //     "damaged",
     //   5
     // );
+    const topCleanListings = selectAndCleanListings(
+        cleanListingsData?.cars?.slice(0, 10),
+        "clean",
+        5
+    );
+    const bottomDamagedListings = selectAndCleanListings(
+        damagedListingsData?.cars?.slice(0, 10),
+        "damaged",
+      5
+    );
 
     // Calculate averages
-    // const avgCleanPrice = calculateSum(
-    //   topCleanListings.map((listing) => listing.price)
-    // );
-    // const avgDamagedPrice = calculateSum(
-    //   bottomDamagedListings.map((listing) => listing.price)
-    // );
     const avgCleanPrice = calculateSum(
-      cleanListingsData?.cars?.map((listing) => listing?.price)
+        topCleanListings.map((listing) => listing.price)
     );
     const avgDamagedPrice = calculateSum(
-      damagedListingsData?.cars?.map((listing) => listing?.price)
+        bottomDamagedListings.map((listing) => listing.price)
     );
+    // const avgCleanPrice = calculateSum(
+        //   cleanListingsData?.cars?.map((listing) => listing?.price)
+        // );
+        // const avgDamagedPrice = calculateSum(
+            //   damagedListingsData?.cars?.map((listing) => listing?.price)
+            // );
+            
+            // Calculate diminished value
+            const diminishedValue = calculateDiminishedPercentValue(
+                Number(avgCleanPrice),
+                Number(avgDamagedPrice)
+            );
+            
+            console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", topCleanListings, bottomDamagedListings);
 
-    // Calculate diminished value
-    const diminishedValue = calculateDiminishedPercentValue(
-      Number(avgCleanPrice),
-      Number(avgDamagedPrice)
-    );
 
+            [{"year":"2019","make":"Toyota","model":"Tundra","trim":"","accident_mileage":"29383","accident_zip":null,"accident_date":"1981-02-01","average_clean_price_top5":"179124","average_damaged_price_bottom5":"179124","estimated_diminished_value":"26868.6","created_at":"2025-08-19 19:04:48.719722+00","heading":"2019 Toyota Tundra","dealer_name":""}]
     // Build response
     const result = {
       year: Number(year),
@@ -147,10 +161,10 @@ export async function POST(req: Request) {
       average_clean_price_top5: avgCleanPrice,
       average_damaged_price_bottom5: avgDamagedPrice,
       estimated_diminished_value: diminishedValue.diminishedValue,
-    //   top_clean_listings: topCleanListings,
-    //   bottom_damaged_listings: bottomDamagedListings,
-      top_clean_listings: cleanListingsData?.cars,
-      bottom_damaged_listings: damagedListingsData?.cars,
+      top_clean_listings: topCleanListings,
+      bottom_damaged_listings: bottomDamagedListings,
+    //   top_clean_listings: cleanListingsData?.cars,
+    //   bottom_damaged_listings: damagedListingsData?.cars,
       client_info,
       qualify_answers,
     };
@@ -228,22 +242,22 @@ function selectAndCleanListings(
 
   // Clean and transform the data
   return selectedListings.map((car) => ({
-    year: car.build.year,
-    make: car.build.make,
-    model: car.build.model,
-    trim: car.build.trim,
+    year: car.model_year,
+    make: car.make,
+    model: car.model_name,
+    trim: car.trim,
     price: car.price,
-    miles: car.miles,
+    miles: car.mileage,
     vin: car.vin,
-    exterior_color: car.exterior_color,
-    drivetrain: car.build.drivetrain,
-    transmission: car.build.transmission,
-    title_status: car.title_status,
-    dealer_name: car.dealer?.name,
-    dealer_city: car.dealer?.city,
-    dealer_state: car.dealer?.state,
-    dealer_zip: car.dealer?.zip,
-    first_seen_at_source_date: car?.first_seen_at_source_date,
+    // exterior_color: car.exterior_color,
+    // drivetrain: car.build.drivetrain,
+    // transmission: car.build.transmission,
+    // title_status: car.title_status,
+    dealer_name: car.seller_name,
+    // dealer_city: car.dealer?.city,
+    // dealer_state: car.dealer?.state,
+    dealer_zip: car.seller_location,
+    // first_seen_at_source_date: car?.first_seen_at_source_date,
   }));
 }
 

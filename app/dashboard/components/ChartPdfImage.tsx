@@ -21,6 +21,7 @@ import {
 } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import { Card } from '@/components/ui/card';
+import PreAccidentMarketChart from "@/app/chart/page";
 
 // Register Chart.js components
 ChartJS.register(
@@ -62,36 +63,43 @@ const priceRange = getFirstAndLastPrice(topCleanListings);
 
   // Static regression line as specified
   const staticRegression = priceRange;
-  console.log({staticRegression})
+//   console.log({staticRegression})
 
   const [topChartImage, setTopChartImage] = useState<string | null>(null);
   const [bottomChartImage, setBottomChartImage] = useState<string | null>(null);
+
 
   return (
     <div className="">
       <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}>
         <div style={{ width: "800px", height: "400px" }}>
-        <FairMarketValueChart
+            <PreAccidentMarketChart
           data={topCleanListings}
-          title="Pre-Accident - Mileage vs. Price"
-          staticRegression={staticRegression}
+          title="Pre-Accident Market Listings"
+        //   staticRegression={staticRegression}
           subjectMileage={26000}
           onImageReady={setTopChartImage}
           />
           </div>
         
         <div style={{ width: "800px", height: "400px" }}>
-        <FairMarketValueChart
+        {/* <FairMarketValueChart
           data={bottomDamagedListings}
           title="Bottom Damaged Listings - Mileage vs. Price"
           staticRegression={staticRegression}
+          subjectMileage={26000}
+          onImageReady={setBottomChartImage}
+          /> */}
+        <PreAccidentMarketChart
+          data={bottomDamagedListings}
+          title="Post-Accident Market Listings"
           subjectMileage={26000}
           onImageReady={setBottomChartImage}
           />
           </div>
             
         {/* Display generated images for testing */}
-        {topChartImage && (
+        {/* {topChartImage && (
           <div className="mt-8">
             <h3 className="text-lg font-semibold mb-4">Top Chart Image Generated:</h3>
             <img src={topChartImage} alt="Top Chart" className="border rounded" />
@@ -103,8 +111,10 @@ const priceRange = getFirstAndLastPrice(topCleanListings);
             <h3 className="text-lg font-semibold mb-4">Bottom Chart Image Generated:</h3>
             <img src={bottomChartImage} alt="Bottom Chart" className="border rounded" />
           </div>
-        )}
+        )} */}
       </div>
+
+      {/* <img src={topChartImage || null} alt="" /> */}
 
         {/* PDF download link */}
       <PDFDownloadLink
