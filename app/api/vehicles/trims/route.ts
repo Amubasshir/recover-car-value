@@ -36,6 +36,8 @@ export async function GET(request: Request) {
   url.searchParams.append("car_type", "used");
   url.searchParams.append("facets", `${field}|0|1000`);
 
+  console.log({baseUrl})
+
   if (year) url.searchParams.append("year", year);
   if (make) url.searchParams.append("make", make);
   if (model) url.searchParams.append("model", model);

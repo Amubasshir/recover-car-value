@@ -6,7 +6,7 @@ import * as echarts from 'echarts';
 const PreAccidentMarketChart = ({ 
   data = [], 
   subjectMileage = 35000,
-  title = "Pre-Accident Market Listings",
+title = "Pre-Accident Market Listings",
   onImageReady
 }) => {
   const chartRef = useRef(null);
@@ -127,6 +127,7 @@ const PreAccidentMarketChart = ({
         ];
       }
     }
+
 
     // Prepare series data
     const series = [
@@ -288,7 +289,7 @@ const PreAccidentMarketChart = ({
     //   return () => clearTimeout(timeout);
     // }, [onImageReady]);
     useEffect(() => {
-//   const timeout = setTimeout(() => {
+  const timeout = setTimeout(() => {
     if (chartRef.current) {
       const chartInstance = echarts.getInstanceByDom(chartRef.current);
       if (chartInstance && onImageReady) {
@@ -300,13 +301,14 @@ const PreAccidentMarketChart = ({
         onImageReady(imageData);
       }
     }
-//   }, 500);
+  }, 1000);
 
-//   return () => clearTimeout(timeout);
-}, [data, subjectMileage, title]);
+  return () => clearTimeout(timeout);
+// }, [data, subjectMileage, title]);
+}, []);
 
   return (
-    <div className="w-[800px] h-[400px] bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="w-full h-[600px] bg-white border border-gray-200 rounded-lg shadow-sm">
       <div ref={chartRef} className="w-full h-full" />
     </div>
   );

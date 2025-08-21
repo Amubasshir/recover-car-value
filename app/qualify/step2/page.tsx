@@ -78,7 +78,7 @@ export default function QualifyStep2() {
       fetchOptions("trim", {
         year: vehicleData.year,
         make: vehicleData.make,
-        model: vehicleData.model,
+        model: vehicleData.model    
       });
       // Reset dependent field
       setVehicleData((prev) => ({ ...prev, trim: "" }));
