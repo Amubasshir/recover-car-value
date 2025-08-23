@@ -100,6 +100,8 @@ export async function POST(req: Request) {
             { status: 400 }
         );
     }
+
+    //  console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", cleanListingsData, damagedListingsData);
     
     
     // Process listings and calculate values
@@ -144,7 +146,7 @@ export async function POST(req: Request) {
                 Number(avgDamagedPrice)
             );
             
-            console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", topCleanListings, bottomDamagedListings);
+            // console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", topCleanListings, bottomDamagedListings);
 
 
             [{"year":"2019","make":"Toyota","model":"Tundra","trim":"","accident_mileage":"29383","accident_zip":null,"accident_date":"1981-02-01","average_clean_price_top5":"179124","average_damaged_price_bottom5":"179124","estimated_diminished_value":"26868.6","created_at":"2025-08-19 19:04:48.719722+00","heading":"2019 Toyota Tundra","dealer_name":""}]

@@ -56,7 +56,7 @@ export default function QualifyStep2() {
   // Fetch makes when year changes
   useEffect(() => {
     if (vehicleData.year) {
-      fetchOptions("make", { year: vehicleData.year });
+      fetchOptions("makes", { year: vehicleData.year });
       setVehicleData((prev) => ({ ...prev, make: "", model: "", trim: "" }));
       setModels([]);
       setTrims([]);
@@ -66,7 +66,7 @@ export default function QualifyStep2() {
   // Fetch models when make changes
   useEffect(() => {
     if (vehicleData.make) {
-      fetchOptions("model", { year: vehicleData.year, make: vehicleData.make });
+      fetchOptions("models", { year: vehicleData.year, make: vehicleData.make });
       setVehicleData((prev) => ({ ...prev, model: "", trim: "" }));
       setTrims([]);
     }
@@ -75,7 +75,7 @@ export default function QualifyStep2() {
   // Fetch trims when model changes
   useEffect(() => {
     if (vehicleData.model) {
-      fetchOptions("trim", {
+      fetchOptions("trims", {
         year: vehicleData.year,
         make: vehicleData.make,
         model: vehicleData.model    
@@ -90,6 +90,7 @@ export default function QualifyStep2() {
     try {
       const params = new URLSearchParams({ field, ...filters });
       const response = await fetch(`/api/vehicles/trims?${params}`);
+    //   const response = await fetch(`/api/vehicles?${params}`);
 
       const result = await response.json();
 
@@ -99,7 +100,7 @@ export default function QualifyStep2() {
         case "year":
           setYears(result.data);
           break;
-        case "make":
+        case "makes":
           if (result.data.length === 0) {
             toast.error("No makes found for the selected year");
             setMakes(result.data);
@@ -107,10 +108,10 @@ export default function QualifyStep2() {
           }
           setMakes(result.data);
           break;
-        case "model":
+        case "models":
           setModels(result.data);
           break;
-        case "trim":
+        case "trims":
           setTrims(result.data);
           break;
       }
@@ -172,7 +173,7 @@ export default function QualifyStep2() {
     // setIsLoading(true);
     if (activeTab === "license") {
       try {
-        const response = await fetch("/api/vehicle/lookup", {
+        const response = await fetch("/api/vehicles/lookup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

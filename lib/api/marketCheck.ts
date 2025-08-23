@@ -132,6 +132,7 @@ export async function fetchListings({
   if (!api_key) {
     throw new Error("MarketCheck API key not configured");
   }
+// https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&Year=2022&isAccidental=1&min_mileage=10000&max_mileage=50000&limit=10&sort=price&order=desc
 
   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php";
 //   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?make=Tesla&model=Model%20Y&year_from=2020&year_to=2026&is_accidental=1";
@@ -141,7 +142,12 @@ export async function fetchListings({
   url.searchParams.append("make", make as string);
   url.searchParams.append("model", model as string);
   url.searchParams.append("year", year as string);
-  url.searchParams.append("is_accident", String(isAccident));
+  url.searchParams.append("isAccidental", String(isAccident));
+  url.searchParams.append("min_mileage", String(min_miles));
+  url.searchParams.append("max_mileage", String(max_miles));
+  url.searchParams.append("limit", "5");
+  url.searchParams.append("sort", "price");
+  url.searchParams.append("order", "desc");
 
   console.log({url: url.toString()});
 

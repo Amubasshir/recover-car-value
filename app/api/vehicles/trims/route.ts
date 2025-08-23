@@ -17,6 +17,7 @@ export async function GET(request: Request) {
   const make = searchParams.get("make");
   const model = searchParams.get("model");
 
+  console.log({field})
 
   if (!field) {
     return NextResponse.json(
@@ -28,22 +29,24 @@ export async function GET(request: Request) {
     );
   }
 
-  const baseUrl = "https://api.marketcheck.com/v2/search/car/active";
+//   const baseUrl = "https://api.marketcheck.com/v2/search/car/active";
+  const baseUrl = `https://rcv.btkdeals.com/api/vehicles${field ? `/${field}` : ""}`;
   const url = new URL(baseUrl);
-  url.searchParams.append("api_key", API_KEY);
-  url.searchParams.append("facet_sort", "index");
-  url.searchParams.append("rows", "0");
-  url.searchParams.append("car_type", "used");
-  url.searchParams.append("facets", `${field}|0|1000`);
+//   url.searchParams.append("api_key", API_KEY);
+//   url.searchParams.append("facet_sort", "index");
+//   url.searchParams.append("rows", "0");
+//   url.searchParams.append("car_type", "used");
+//   url.searchParams.append("facets", `${field}|0|1000`);
 
   console.log({baseUrl})
-
   if (year) url.searchParams.append("year", year);
   if (make) url.searchParams.append("make", make);
   if (model) url.searchParams.append("model", model);
 
   try {
     const response = await fetch(url.toString());
+
+    console.log({response})
 
     if (!response.ok) {
       console.error(
@@ -59,11 +62,11 @@ export async function GET(request: Request) {
 
     const data = await response.json();
 
+ console.log(field,{data})
+    // const listings = data?.facets[field] || [];
+    // let extractedData = [...new Set(listings?.map((facet) => facet?.item))];
 
-    const listings = data?.facets[field] || [];
-    let extractedData = [...new Set(listings?.map((facet) => facet?.item))];
-
-    return NextResponse.json({ data: extractedData });
+    return NextResponse.json({ data });
   } catch (error) {
     console.error("Error in GET request handler:", error);
     return NextResponse.json(
