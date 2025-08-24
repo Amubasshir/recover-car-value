@@ -151,6 +151,7 @@ export default function Dashboard() {
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openLoader, setOpenLoader] = useState(false);
   const itemsPerPage = 5;
 
   // Calculate total pages
@@ -160,6 +161,7 @@ export default function Dashboard() {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
+      setOpenLoader(true);
 
       // You need to pass your supabase instance here
       // Assuming you have it available as a prop or imported
@@ -180,6 +182,10 @@ export default function Dashboard() {
       }
 
       setLoading(false);
+
+    setTimeout(() => {
+        setOpenLoader(false);
+    }, 5000);
     };
 
     loadData();
@@ -203,6 +209,13 @@ export default function Dashboard() {
 
   return (
     <div className="flex min-h-screen bg-background">
+    {openLoader && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="rounded-lg bg-white p-6 shadow-lg flex flex-col items-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary mb-4"></div>
+            </div>
+        </div>
+    )}
       {/* Sidebar */}
       <div className="hidden w-64 flex-col border-r bg-muted/40 md:flex">
         <div className="flex h-14 items-center border-b px-4 font-semibold">
