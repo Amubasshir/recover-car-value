@@ -284,6 +284,7 @@ export default function Dashboard() {
                   <TableBody>
                     {currentItems.map((item) => (
                       <TableRow key={item?.id}>
+                        {console.log({item})}
                         <TableCell className="font-medium">
                           {item?.id}
                         </TableCell>
