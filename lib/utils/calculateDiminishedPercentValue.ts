@@ -75,7 +75,7 @@ export function calculateDiminishedPercentValue(
     isFallbackUsed: true,
     // diminishedValue: fallbackValue,
     // diminishedValue: Math.floor(fallbackValue) + 0.00,
-    diminishedValue: Math.floor(diminishedValue) + 0.00,
+    diminishedValue: diminishedValue,
     diminishedPercentage: "15.00%"
   };
 }
