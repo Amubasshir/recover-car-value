@@ -704,12 +704,12 @@ export const PDFDocument = ({
                 )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
-              <Text style={styles.cell}>{listing?.year}</Text>
+              <Text style={styles.cell}>{listing?.model_year}</Text>
               <Text style={styles.makeModelCell}>
-                {listing?.make + ", " + listing?.model}
+                {listing?.make + ", " + listing?.model_name}
               </Text>
               <Text style={styles.cell}>
-                {listing?.miles?.toLocaleString()}
+                {listing?.mileage?.toLocaleString()}
               </Text>
               <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>
@@ -768,12 +768,12 @@ export const PDFDocument = ({
                 )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
-              <Text style={styles.cell}>{listing?.year}</Text>
+              <Text style={styles.cell}>{listing?.model_year}</Text>
               <Text style={styles.makeModelCell}>
-                {listing?.make + ", " + listing?.model}
+                {listing?.make + ", " + listing?.model_name}
               </Text>
               <Text style={styles.cell}>
-                {listing?.miles?.toLocaleString()}
+                {listing?.mileage?.toLocaleString()}
               </Text>
               <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>

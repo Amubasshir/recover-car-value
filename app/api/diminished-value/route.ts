@@ -136,6 +136,7 @@ export async function POST(req: Request) {
     const avgCleanPrice = calculateSum(
           cleanListingsData?.cars?.map((listing) => listing?.price)
         );
+
         const avgDamagedPrice = calculateSum(
               damagedListingsData?.cars?.map((listing) => listing?.price)
             );
@@ -145,15 +146,16 @@ export async function POST(req: Request) {
             //     Number(avgCleanPrice),
             //     Number(avgDamagedPrice)
             // );
-            const diminishedValue = calculateDiminishedPercentValue(
-                cleanListingsData.cars,
-                damagedListingsData.cars
-            );
+            // const diminishedValue = calculateDiminishedPercentValue(
+            //     cleanListingsData.cars,
+            //     damagedListingsData.cars
+            // );
+            const diminishedValue = avgCleanPrice - avgDamagedPrice;
             
             // console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", topCleanListings, bottomDamagedListings);
 
 
-            [{"year":"2019","make":"Toyota","model":"Tundra","trim":"","accident_mileage":"29383","accident_zip":null,"accident_date":"1981-02-01","average_clean_price_top5":"179124","average_damaged_price_bottom5":"179124","estimated_diminished_value":"26868.6","created_at":"2025-08-19 19:04:48.719722+00","heading":"2019 Toyota Tundra","dealer_name":""}]
+            // [{"year":"2019","make":"Toyota","model":"Tundra","trim":"","accident_mileage":"29383","accident_zip":null,"accident_date":"1981-02-01","average_clean_price_top5":"179124","average_damaged_price_bottom5":"179124","estimated_diminished_value":"26868.6","created_at":"2025-08-19 19:04:48.719722+00","heading":"2019 Toyota Tundra","dealer_name":""}]
     // Build response
     const result = {
       year: Number(year),
@@ -166,7 +168,8 @@ export async function POST(req: Request) {
       dealer_name: "",
       average_clean_price_top5: avgCleanPrice?.toFixed(0),
       average_damaged_price_bottom5: avgDamagedPrice?.toFixed(0),
-      estimated_diminished_value: diminishedValue.diminishedValue?.toFixed(0),
+    //   estimated_diminished_value: diminishedValue.diminishedValue?.toFixed(0),
+      estimated_diminished_value: diminishedValue?.toFixed(0),
     //   top_clean_listings: topCleanListings,
     //   bottom_damaged_listings: bottomDamagedListings,
       top_clean_listings: cleanListingsData?.cars,
