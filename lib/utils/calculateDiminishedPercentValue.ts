@@ -52,7 +52,8 @@ export function calculateDiminishedPercentValue(
   }
 
   // Compute average prices
-  const avg = (arr: Listing[]) => arr.reduce((sum, l) => sum + l.price, 0) / arr.length;
+//   const avg = (arr: Listing[]) => arr.reduce((sum, l) => sum + l.price, 0) / arr.length;
+  const avg = (arr: Listing[]) => arr.reduce((sum, l) => sum + l.price, 0);
   const preAccidentValue = avg(preFiltered);
   const postAccidentValue = avg(postFiltered);
 
@@ -60,20 +61,21 @@ export function calculateDiminishedPercentValue(
   const diminishedValue = preAccidentValue - postAccidentValue;
   const diminishedPercentage = diminishedValue / preAccidentValue;
 
-  if (diminishedPercentage >= 0.15 && diminishedPercentage <= 0.25) {
-    return {
-      isFallbackUsed: false,
-      diminishedValue,
-      diminishedPercentage: (diminishedPercentage * 100).toFixed(2) + "%"
-    };
-  }
+//   if (diminishedPercentage >= 0.15 && diminishedPercentage <= 0.25) {
+//     return {
+//       isFallbackUsed: false,
+//       diminishedValue,
+//       diminishedPercentage: (diminishedPercentage * 100).toFixed(2) + "%"
+//     };
+//   }
 
   // Fallback: 15% of pre-accident value
   const fallbackValue = preAccidentValue * 0.15;
   return {
     isFallbackUsed: true,
     // diminishedValue: fallbackValue,
-    diminishedValue: Math.floor(fallbackValue) + 0.00,
+    // diminishedValue: Math.floor(fallbackValue) + 0.00,
+    diminishedValue: Math.floor(diminishedValue) + 0.00,
     diminishedPercentage: "15.00%"
   };
 }
