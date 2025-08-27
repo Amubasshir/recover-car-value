@@ -72,7 +72,8 @@ export function calculateDiminishedPercentValue(
   const fallbackValue = preAccidentValue * 0.15;
   return {
     isFallbackUsed: true,
-    diminishedValue: fallbackValue,
+    // diminishedValue: fallbackValue,
+    diminishedValue: Math.floor(fallbackValue) + 0.00,
     diminishedPercentage: "15.00%"
   };
 }
