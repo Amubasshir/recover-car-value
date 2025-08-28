@@ -711,7 +711,7 @@ export const PDFDocument = ({
               <Text style={styles.cell}>
                 {listing?.mileage?.toLocaleString()}
               </Text>
-              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
+              <Text style={styles.cell}>{listing?.seller_location}</Text>
               <Text style={styles.cell}>
                 ${listing?.price?.toLocaleString()}
               </Text>
@@ -775,7 +775,7 @@ export const PDFDocument = ({
               <Text style={styles.cell}>
                 {listing?.mileage?.toLocaleString()}
               </Text>
-              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
+              <Text style={styles.cell}>{listing?.seller_location}</Text>
               <Text style={styles.cell}>
                 ${listing?.price?.toLocaleString()}
               </Text>
