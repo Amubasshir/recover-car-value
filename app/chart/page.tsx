@@ -5,71 +5,15 @@ import * as echarts from 'echarts';
 
 const PreAccidentMarketChart = ({ 
   data = [], 
-  subjectMileage = 35000,
-title = "Pre-Accident Market Listings",
+  subjectMileage,
+  title = "Pre-Accident Market Listings",
   onImageReady
 }) => {
   const chartRef = useRef(null);
   
 
   // Use provided data or fall back to default example data
-  const preAccidentListings = data.length > 0 ? data : [
-    {
-      vin: "1HGCM82633A123456",
-      make: "Honda",
-      trim: "EX",
-      year: 2020,
-      miles: 25000,
-      model: "Accord",
-      price: 21000,
-      dealer_zip: "90001",
-      dealer_name: "Los Angeles Honda"
-    },
-    {
-      vin: "5XYZUDLBXG1234567",
-      make: "Hyundai",
-      trim: "Limited",
-      year: 2021,
-      miles: 30000,
-      model: "Tucson",
-      price: 20000,
-      dealer_zip: "90210",
-      dealer_name: "Beverly Hills Hyundai"
-    },
-    {
-      vin: "1FM5K8D84G1234567",
-      make: "Ford",
-      trim: "XLT",
-      year: 2020,
-      miles: 35000,
-      model: "Explorer",
-      price: 20000,
-      dealer_zip: "60601",
-      dealer_name: "Chicago Ford"
-    },
-    {
-      vin: "5TDDKRFH8G1234567",
-      make: "Toyota",
-      trim: "LE",
-      year: 2019,
-      miles: 40000,
-      model: "Camry",
-      price: 19000,
-      dealer_zip: "10001",
-      dealer_name: "Manhattan Toyota"
-    },
-    {
-      vin: "2HGFC2F56L1234567",
-      make: "Honda",
-      trim: "Sport",
-      year: 2022,
-      miles: 45000,
-      model: "Civic",
-      price: 21000,
-      dealer_zip: "33139",
-      dealer_name: "Miami Honda"
-    }
-  ];
+  const preAccidentListings = data.length > 0 ? data : [];
 
 
    
@@ -82,6 +26,7 @@ title = "Pre-Accident Market Listings",
     const chartDom = chartRef.current;
     const myChart = echarts.init(chartDom);
 
+    console.log({preAccidentListings})
     // Prepare data points
     const dataPoints = preAccidentListings.map(item => [item.miles, item.price]);
     
@@ -97,6 +42,9 @@ title = "Pre-Accident Market Listings",
     // Add padding to ranges
     const mileagePadding = (maxMileage - minMileage) * 0.1 || 5000;
     const pricePadding = (maxPrice - minPrice) * 0.1 || 1000;
+    // const mileagePadding = (maxMileage + minMileage) / 2;
+    // const pricePadding = (maxPrice + minPrice) / 2;
+
     
     const chartMinX = Math.max(0, minMileage - mileagePadding);
     const chartMaxX = maxMileage + mileagePadding;
@@ -105,6 +53,7 @@ title = "Pre-Accident Market Listings",
     
     // Calculate regression line (only if we have more than 1 data point)
     let regressionLine = [];
+   
     let slope = 0;
     let intercept = 0;
     
@@ -143,9 +92,9 @@ title = "Pre-Accident Market Listings",
         symbolRotate: 45
       }
     ];
-
     // Add regression line if we have enough data
     if (regressionLine.length > 0) {
+        console.log({regressionLine})
       series.push({
         name: 'Regression Trendline',
         type: 'line',

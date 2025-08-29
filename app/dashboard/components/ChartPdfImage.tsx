@@ -42,7 +42,7 @@ function filterAndSortByPriceAndMiles(data) {
   return data
     .map(item => ({
       price: item.price,
-      miles: typeof item.miles === 'number' ? item.miles : typeof item.miles === 'string' ? Number(item?.accident_mileage) : Math.floor(Math.random() * 5000 + 1000)
+      miles: typeof item.mileage === 'number' ? item.mileage : typeof item.mileage === 'string' ? Number(item?.accident_mileage) : Math.floor(Math.random() * 5000 + 1000)
     }))
     .sort((a, b) => b.price - a.price);
 }
@@ -55,20 +55,22 @@ function getFirstAndLastPrice(listings) {
 };
 
 const Index = ({item}) => {
-    
+    console.log({pre: item?.top_clean_listings, post: item?.bottom_damaged_listings})
     const topCleanListings = filterAndSortByPriceAndMiles(item?.top_clean_listings || []);
     const bottomDamagedListings = filterAndSortByPriceAndMiles(item?.bottom_damaged_listings || []);
     
-    const sortedTop = topCleanListings?.sort((a, b) => b.miles - a.miles);
-    const sortedBottom = bottomDamagedListings?.sort((a, b) => b.miles - a.miles);
+    const sortedTop = topCleanListings?.sort((a, b) => b.mileage - a.mileage);
+    const sortedBottom = bottomDamagedListings?.sort((a, b) => b.mileage - a.mileage);
 
 // Find middle index
 const middleIndex = Math.floor(sortedTop?.length / 2);
 const middleIndexBottom = Math.floor(sortedBottom?.length / 2);
 
 // Get only the middle miles
-const middleMilesTop = sortedTop[middleIndex]?.miles;
-const middleMilesBottom = sortedBottom[middleIndexBottom]?.miles;
+const middleMilesTop = sortedTop[middleIndex]?.mileage;
+
+console.log({middleMilesTop})
+const middleMilesBottom = sortedBottom[middleIndexBottom]?.mileage;
 
 const priceRange = getFirstAndLastPrice(topCleanListings);
 
@@ -82,8 +84,8 @@ const priceRange = getFirstAndLastPrice(topCleanListings);
 
   return (
     <div className="">
-      <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}>
-      {/* <div className="max-w-6xl mx-auto space-y-8" style={{ }}> */}
+      {/* <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}> */}
+      <div className="max-w-6xl mx-auto space-y-8" style={{ }}>
         <div style={{ width: "1000px", height: "600px" }}>
             <PreAccidentMarketChart
           data={topCleanListings}
@@ -177,7 +179,7 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
   const chartRef = useRef<ChartJS>(null);
 
   // Determine axis ranges from data
-  const allMileages = data.map(d => d.miles);
+  const allMileages = data.map(d => d.mileage);
   const allPrices = data.map(d => d.price);
   
   const minMileage = Math.min(...allMileages) - 1000;
@@ -213,7 +215,7 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
     datasets: [
       {
         label: 'Market Listings',
-        data: data.map(d => ({ x: d.miles, y: d.price })),
+        data: data.map(d => ({ x: d.mileage, y: d.price })),
         backgroundColor: 'hsl(var(--chart-point))',
         borderColor: 'hsl(var(--chart-point))',
         pointRadius: 6,
