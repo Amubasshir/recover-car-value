@@ -1,27 +1,26 @@
-
 "use client";
 
 import { PDFDownloadLink } from "@react-pdf/renderer";
 
-import { PDFDocument } from "./PDFDocument";
 import { Download } from "lucide-react";
+import { PDFDocument } from "./PDFDocument";
 
-import React, { useRef, useEffect, useState } from 'react';
+import PreAccidentMarketChart from "@/app/chart/page";
+import { Card } from "@/components/ui/card";
 import {
-  Chart as ChartJS,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
+  LineController,
   LineElement,
+  PointElement,
+  ScatterController,
   Title,
   Tooltip,
-  Legend,
-  ScatterController,
-  LineController,
-} from 'chart.js';
-import { Chart } from 'react-chartjs-2';
-import { Card } from '@/components/ui/card';
-import PreAccidentMarketChart from "@/app/chart/page";
+} from "chart.js";
+import React, { useEffect, useRef, useState } from "react";
+import { Chart } from "react-chartjs-2";
 
 // Register Chart.js components
 ChartJS.register(
@@ -33,85 +32,104 @@ ChartJS.register(
   Tooltip,
   Legend,
   ScatterController,
-  LineController,
+  LineController
 );
 
-
-
-function filterAndSortByPriceAndMiles(data) {
+function filterAndSortByPriceAndMiles(
+  data: any[]
+): { price: number; miles: number }[] {
   return data
-    .map(item => ({
+    .map((item) => ({
       price: item.price,
-      miles: typeof item.mileage === 'number' ? item.mileage : typeof item.mileage === 'string' ? Number(item?.accident_mileage) : Math.floor(Math.random() * 5000 + 1000)
+      miles:
+        typeof item.miles === "number"
+          ? item.miles
+          : typeof item.miles === "string"
+          ? Number(String(item.miles).replace(/,/g, "")) || 0
+          : typeof item.mileage === "number"
+          ? item.mileage
+          : typeof item.mileage === "string"
+          ? Number(String(item.mileage).replace(/,/g, "")) || 0
+          : Math.floor(Math.random() * 5000 + 1000),
     }))
     .sort((a, b) => b.price - a.price);
 }
 
-function getFirstAndLastPrice(listings) {
+function getFirstAndLastPrice(listings: { price: number }[]): [number, number] {
   if (!Array.isArray(listings) || listings.length === 0) {
     return [0, 0];
   }
-  return [listings[0].price || 0, listings[listings.length - 1].price || 0]
-};
+  return [listings[0].price || 0, listings[listings.length - 1].price || 0];
+}
 
-const Index = ({item}) => {
-    console.log({pre: item?.top_clean_listings, post: item?.bottom_damaged_listings})
-    const topCleanListings = filterAndSortByPriceAndMiles(item?.top_clean_listings || []);
-    const bottomDamagedListings = filterAndSortByPriceAndMiles(item?.bottom_damaged_listings || []);
-    
-    const sortedTop = topCleanListings?.sort((a, b) => b.mileage - a.mileage);
-    const sortedBottom = bottomDamagedListings?.sort((a, b) => b.mileage - a.mileage);
+const Index = ({ item }: { item: any }) => {
+  console.log({
+    pre: item?.top_clean_listings,
+    post: item?.bottom_damaged_listings,
+  });
+  const topCleanListings = filterAndSortByPriceAndMiles(
+    item?.top_clean_listings || []
+  );
+  const bottomDamagedListings = filterAndSortByPriceAndMiles(
+    item?.bottom_damaged_listings || []
+  );
 
-// Find middle index
-const middleIndex = Math.floor(sortedTop?.length / 2);
-const middleIndexBottom = Math.floor(sortedBottom?.length / 2);
+  const sortedTop = topCleanListings?.sort(
+    (a: { miles: number }, b: { miles: number }) => b.miles - a.miles
+  );
+  const sortedBottom = bottomDamagedListings?.sort(
+    (a: { miles: number }, b: { miles: number }) => b.miles - a.miles
+  );
 
-// Get only the middle miles
-const middleMilesTop = sortedTop[middleIndex]?.mileage;
+  // Find middle index
+  const middleIndex = Math.floor(sortedTop?.length / 2);
+  const middleIndexBottom = Math.floor(sortedBottom?.length / 2);
 
-console.log({middleMilesTop})
-const middleMilesBottom = sortedBottom[middleIndexBottom]?.mileage;
+  // Get only the middle miles
+  const middleMilesTop = sortedTop[middleIndex]?.miles;
 
-const priceRange = getFirstAndLastPrice(topCleanListings);
+  console.log({ middleMilesTop });
+  const middleMilesBottom = sortedBottom[middleIndexBottom]?.miles;
+
+  const priceRange = getFirstAndLastPrice(topCleanListings);
 
   // Static regression line as specified
   const staticRegression = priceRange;
-//   console.log({staticRegression})
+  //   console.log({staticRegression})
 
   const [topChartImage, setTopChartImage] = useState<string | null>(null);
   const [bottomChartImage, setBottomChartImage] = useState<string | null>(null);
 
-
   return (
     <div className="">
-      <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}>
-      {/* <div className="max-w-6xl mx-auto space-y-8" style={{ }}> */}
+      {/* <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}> */}
+      <div className="max-w-6xl mx-auto space-y-8" style={{}}>
         <div style={{ width: "1000px", height: "600px" }}>
-            <PreAccidentMarketChart
-          data={topCleanListings}
-          title="Pre-Accident Market Listings"
-        //   staticRegression={staticRegression}
-          subjectMileage={middleMilesTop}
-          onImageReady={setTopChartImage}
+          <PreAccidentMarketChart
+            data={topCleanListings}
+            title="Pre-Accident Market Listings"
+            //   staticRegression={staticRegression}
+            subjectMileage={middleMilesTop}
+            onImageReady={setTopChartImage}
           />
-          </div>
-        
+        </div>
+
         <div style={{ width: "1000px", height: "600px" }}>
-        {/* <FairMarketValueChart
+          {/* <FairMarketValueChart
           data={bottomDamagedListings}
           title="Bottom Damaged Listings - Mileage vs. Price"
           staticRegression={staticRegression}
           subjectMileage={26000}
           onImageReady={setBottomChartImage}
           /> */}
-        <PreAccidentMarketChart
-          data={bottomDamagedListings}
-          title="Post-Accident Market Listings"
-          subjectMileage={middleMilesBottom}
-          onImageReady={setBottomChartImage}
+          <PreAccidentMarketChart
+            data={bottomDamagedListings}
+            title="Post-Accident Market Listings"
+            subjectMileage={middleMilesBottom}
+            onImageReady={setBottomChartImage}
           />
-          </div>
-            
+        </div>
+
         {/* Display generated images for testing */}
         {/* {topChartImage && (
           <div className="mt-8">
@@ -130,13 +148,13 @@ const priceRange = getFirstAndLastPrice(topCleanListings);
 
       {/* <img src={topChartImage || null} alt="" /> */}
 
-        {/* PDF download link */}
+      {/* PDF download link */}
       <PDFDownloadLink
         document={
           <PDFDocument
             report={item}
-            topListChartImage={topChartImage}
-            bottomListChartImage={bottomChartImage}
+            topListChartImage={topChartImage ?? undefined}
+            bottomListChartImage={bottomChartImage ?? undefined}
           />
         }
         fileName="diminished-value-report.pdf"
@@ -154,7 +172,6 @@ const priceRange = getFirstAndLastPrice(topCleanListings);
 };
 
 export default Index;
-
 
 interface DataPoint {
   price: number;
@@ -179,9 +196,9 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
   const chartRef = useRef<ChartJS>(null);
 
   // Determine axis ranges from data
-  const allMileages = data.map(d => d.mileage);
-  const allPrices = data.map(d => d.price);
-  
+  const allMileages = data.map((d) => d.miles);
+  const allPrices = data.map((d) => d.price);
+
   const minMileage = Math.min(...allMileages) - 1000;
   const maxMileage = Math.max(...allMileages) + 1000;
   const minPrice = Math.min(...allPrices) - 1000;
@@ -190,13 +207,13 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
   // Create regression line data points
   const regressionData = [
     { x: minMileage, y: staticRegression[0] },
-    { x: maxMileage, y: staticRegression[1] }
+    { x: maxMileage, y: staticRegression[1] },
   ];
 
   // Subject vehicle line data
   const subjectLineData = [
     { x: subjectMileage, y: minPrice },
-    { x: subjectMileage, y: maxPrice }
+    { x: subjectMileage, y: maxPrice },
   ];
 
   // Capture canvas as image after render
@@ -214,36 +231,36 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
   const chartData = {
     datasets: [
       {
-        label: 'Market Listings',
-        data: data.map(d => ({ x: d.mileage, y: d.price })),
-        backgroundColor: 'hsl(var(--chart-point))',
-        borderColor: 'hsl(var(--chart-point))',
+        label: "Market Listings",
+        data: data.map((d) => ({ x: d.miles, y: d.price })),
+        backgroundColor: "hsl(var(--chart-point))",
+        borderColor: "hsl(var(--chart-point))",
         pointRadius: 6,
         pointHoverRadius: 8,
-        pointStyle: 'crossRot',
+        pointStyle: "crossRot",
         pointBorderWidth: 2,
         showLine: false,
-        type: 'scatter' as const,
+        type: "scatter" as const,
       },
       {
-        label: 'Linear Regression Response',
+        label: "Linear Regression Response",
         data: regressionData,
-        borderColor: 'hsl(var(--chart-regression))',
-        backgroundColor: 'transparent',
+        borderColor: "hsl(var(--chart-regression))",
+        backgroundColor: "transparent",
         borderWidth: 2,
         pointRadius: 0,
         tension: 0,
-        type: 'line' as const,
+        type: "line" as const,
       },
       {
-        label: 'Subject Vehicle Mileage',
+        label: "Subject Vehicle Mileage",
         data: subjectLineData,
-        borderColor: 'hsl(var(--chart-subject-line))',
-        backgroundColor: 'transparent',
+        borderColor: "hsl(var(--chart-subject-line))",
+        backgroundColor: "transparent",
         borderWidth: 2,
         borderDash: [10, 5],
         pointRadius: 0,
-        type: 'line' as const,
+        type: "line" as const,
       },
     ],
   };
@@ -263,9 +280,9 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
         text: title,
         font: {
           size: 16,
-          weight: 'normal' as const,
+          weight: "normal" as const,
         },
-        color: 'hsl(var(--chart-axis))',
+        color: "hsl(var(--chart-axis))",
         padding: {
           top: 10,
           bottom: 20,
@@ -273,34 +290,34 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
       },
       legend: {
         display: true,
-        position: 'right' as const,
-        align: 'start' as const,
+        position: "right" as const,
+        align: "start" as const,
         labels: {
           usePointStyle: true,
-          pointStyle: 'line',
+          pointStyle: "line",
           font: {
             size: 12,
           },
-          color: 'hsl(var(--chart-axis))',
+          color: "hsl(var(--chart-axis))",
           padding: 15,
-          generateLabels: (chart) => {
+          generateLabels: (chart: any) => {
             const datasets = chart.data.datasets;
-            return datasets.map((dataset, i) => ({
+            return datasets.map((dataset: any, i: number) => ({
               text: dataset.label,
               fillStyle: dataset.backgroundColor,
               strokeStyle: dataset.borderColor,
               lineWidth: dataset.borderWidth || 1,
               lineDash: dataset.borderDash || [],
-              pointStyle: i === 0 ? 'crossRot' : 'line',
+              pointStyle: i === 0 ? "crossRot" : "line",
               datasetIndex: i,
             }));
           },
         },
       },
       tooltip: {
-        filter: (tooltipItem) => tooltipItem.datasetIndex === 0,
+        filter: (tooltipItem: any) => tooltipItem.datasetIndex === 0,
         callbacks: {
-          label: (context) => {
+          label: (context: any) => {
             return `Price: $${context.parsed.y.toLocaleString()}, Mileage: ${context.parsed.x.toLocaleString()}`;
           },
         },
@@ -308,54 +325,54 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
     },
     scales: {
       x: {
-        type: 'linear' as const,
-        position: 'bottom' as const,
+        type: "linear" as const,
+        position: "bottom" as const,
         title: {
           display: true,
-          text: 'Mileage',
+          text: "Mileage",
           font: {
             size: 14,
           },
-          color: 'hsl(var(--chart-axis))',
+          color: "hsl(var(--chart-axis))",
         },
         min: minMileage,
         max: maxMileage,
         ticks: {
-          color: 'hsl(var(--chart-axis))',
+          color: "hsl(var(--chart-axis))",
           font: {
             size: 11,
           },
           stepSize: 1000,
         },
         grid: {
-          color: 'hsl(var(--chart-grid) / 0.3)',
+          color: "hsl(var(--chart-grid) / 0.3)",
           lineWidth: 1,
         },
       },
       y: {
-        type: 'linear' as const,
+        type: "linear" as const,
         title: {
           display: true,
-          text: 'Price ($)',
+          text: "Price ($)",
           font: {
             size: 14,
           },
-          color: 'hsl(var(--chart-axis))',
+          color: "hsl(var(--chart-axis))",
         },
         min: minPrice,
         max: maxPrice,
         ticks: {
-          color: 'hsl(var(--chart-axis))',
+          color: "hsl(var(--chart-axis))",
           font: {
             size: 11,
           },
           stepSize: 1000,
-          callback: function(value) {
-            return typeof value === 'number' ? value.toLocaleString() : value;
+          callback: function (value: any) {
+            return typeof value === "number" ? value.toLocaleString() : value;
           },
         },
         grid: {
-          color: 'hsl(var(--chart-grid) / 0.3)',
+          color: "hsl(var(--chart-grid) / 0.3)",
           lineWidth: 1,
         },
       },
@@ -382,4 +399,3 @@ const FairMarketValueChart: React.FC<FairMarketValueChartProps> = ({
     </Card>
   );
 };
-

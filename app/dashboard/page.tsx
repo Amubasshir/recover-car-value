@@ -185,7 +185,7 @@ export default function Dashboard() {
 
     setTimeout(() => {
         setOpenLoader(false);
-    }, 5000);
+    }, 6000);
     };
 
     loadData();
