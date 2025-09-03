@@ -64,6 +64,7 @@ function getFirstAndLastPrice(listings: { price: number }[]): [number, number] {
 
 const Index = ({ item }: { item: any }) => {
   console.log({
+    item,
     pre: item?.top_clean_listings,
     post: item?.bottom_damaged_listings,
   });
@@ -109,7 +110,8 @@ const Index = ({ item }: { item: any }) => {
             data={topCleanListings}
             title="Pre-Accident Market Listings"
             //   staticRegression={staticRegression}
-            subjectMileage={middleMilesTop}
+            // subjectMileage={middleMilesTop}
+            subjectMileage={Number(item?.accident_mileage || 0)}
             onImageReady={setTopChartImage}
           />
         </div>
@@ -125,7 +127,8 @@ const Index = ({ item }: { item: any }) => {
           <PreAccidentMarketChart
             data={bottomDamagedListings}
             title="Post-Accident Market Listings"
-            subjectMileage={middleMilesBottom}
+            // subjectMileage={middleMilesBottom}
+            subjectMileage={Number(item?.accident_mileage || 0)}
             onImageReady={setBottomChartImage}
           />
         </div>
