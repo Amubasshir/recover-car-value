@@ -1,5 +1,3 @@
-
-
 interface VehicleDetails {
   year: number;
   make: string;
@@ -8,7 +6,6 @@ interface VehicleDetails {
   mileage: number;
   zip: string;
 }
-
 
 interface ListingParamsExpanded {
   api_key: string | null;
@@ -130,36 +127,36 @@ export async function fetchListings({
   isAccident,
 }: ListingParamsExpanded) {
   if (!api_key) {
-    throw new Error("MarketCheck API key not configured");
+    throw new Error('MarketCheck API key not configured');
   }
-// https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&Year=2022&isAccidental=1&min_mileage=10000&max_mileage=50000&limit=10&sort=price&order=desc
+  // https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&Year=2022&isAccidental=1&min_mileage=10000&max_mileage=50000&limit=10&sort=price&order=desc
 
-  const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php";
-//   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?make=Tesla&model=Model%20Y&year_from=2020&year_to=2026&is_accidental=1";
-//   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&YearFrom=2022&YearTo=2022&isAccidental=1";
+  const baseUrl = 'https://rcv.btkdeals.com/api/fetchSimilarCars.php';
+  //   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?make=Tesla&model=Model%20Y&year_from=2020&year_to=2026&is_accidental=1";
+  //   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&YearFrom=2022&YearTo=2022&isAccidental=1";
   const url = new URL(baseUrl);
-  
-  url.searchParams.append("make", make as string);
-  url.searchParams.append("model", model as string);
-  url.searchParams.append("year", year as string);
-  url.searchParams.append("isAccidental", String(isAccident));
-  url.searchParams.append("min_mileage", String(min_miles));
-  url.searchParams.append("max_mileage", String(max_miles));
-  url.searchParams.append("limit", "5");
-  url.searchParams.append("sort", "price");
-  url.searchParams.append("order", String(sort_order));
 
-  console.log({url: url.toString()});
+  url.searchParams.append('make', make as string);
+  url.searchParams.append('model', model as string);
+  url.searchParams.append('year', year as string);
+  url.searchParams.append('is_accidental', String(isAccident));
+  url.searchParams.append('min_mileage', String(min_miles));
+  url.searchParams.append('max_mileage', String(max_miles));
+  url.searchParams.append('limit', '5');
+  url.searchParams.append('sort', 'price');
+  url.searchParams.append('order', String(sort_order));
+
+  console.log({ url: url.toString() });
 
   try {
     const response = await fetch(url.toString());
-    
+
     // // Check if response is OK (status 200-299)
     // if (!response.ok) {
     //   const errorText = await response.json();
     // //   throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     // }
-    
+
     // // Check content type to ensure it's JSON
     // const contentType = response.headers.get('content-type');
     // if (!contentType || !contentType.includes('application/json')) {
@@ -167,34 +164,32 @@ export async function fetchListings({
     //   console.error('Received non-JSON response:', body.substring(0, 200));
     //   throw new Error('Server returned non-JSON response');
     // }
-    
+
     const data = await response.json();
     // console.log({data});
-    
-    if (!data) throw new Error("Failed to fetch vehicle listings");
-    
+
+    if (!data) throw new Error('Failed to fetch vehicle listings');
+
     return data;
-    
   } catch (error) {
-    console.error("MarketCheck API error:", error);
+    console.error('MarketCheck API error:', error);
     throw error;
   }
 }
 
-
 export async function fetchVinHistory({
   vin,
-  order = "desc",
+  order = 'desc',
   page = 1,
 }: {
   vin: string;
-  order?: "asc" | "desc";
+  order?: 'asc' | 'desc';
   page?: number;
 }) {
   const apiKey = process.env.MARKETCHECK_API_KEY;
 
   if (!apiKey) {
-    throw new Error("MarketCheck API key not configured");
+    throw new Error('MarketCheck API key not configured');
   }
 
   // Construct API URL
@@ -202,9 +197,9 @@ export async function fetchVinHistory({
 
   // Create URL with parameters
   const url = new URL(baseUrl);
-  url.searchParams.append("api_key", apiKey);
-  url.searchParams.append("sort_order", order);
-  url.searchParams.append("page", (page || "").toString());
+  url.searchParams.append('api_key', apiKey);
+  url.searchParams.append('sort_order', order);
+  url.searchParams.append('page', (page || '').toString());
 
   try {
     const response = await fetch(url.toString());
@@ -212,7 +207,7 @@ export async function fetchVinHistory({
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("MarketCheck API error:", error);
+    console.error('MarketCheck API error:', error);
     throw error;
   }
 }
@@ -223,7 +218,7 @@ export async function fetchCleanListings(
 ) {
   return fetchListings({
     vehicleDetails,
-    history: "clean",
+    history: 'clean',
     radius,
     rows: 10,
   });
@@ -235,7 +230,7 @@ export async function fetchDamagedListings(
 ) {
   return fetchListings({
     vehicleDetails,
-    titleStatus: "salvage,rebuild",
+    titleStatus: 'salvage,rebuild',
     radius,
     rows: 10,
   });
