@@ -82,19 +82,19 @@ const Index = ({ item }: { item: any }) => {
       (a: { miles: number }, b: { miles: number }) => b.miles - a.miles
     );
 
-  const topPrices = topCleanListings?.map((a) => a.price);
-  const topMileage = topCleanListings?.map((a) => a.miles);
-  const bottomPrices = bottomDamagedListings?.map((a) => a.price);
-  const bottomMileage = bottomDamagedListings?.map((a) => a.miles);
+//   const topPrices = topCleanListings?.map((a) => a.price);
+//   const topMileage = topCleanListings?.map((a) => a.miles);
+//   const bottomPrices = bottomDamagedListings?.map((a) => a.price);
+//   const bottomMileage = bottomDamagedListings?.map((a) => a.miles);
 
-  console.log("hi I am from pdf chart", {topPrices, topMileage, bottomPrices, bottomMileage})
-  const regressionTop = new SimpleLinearRegression(topMileage, topPrices);
-  const regressionBottom = new SimpleLinearRegression(bottomMileage, bottomPrices);
+//   console.log("hi I am from pdf chart", {topPrices, topMileage, bottomPrices, bottomMileage})
+//   const regressionTop = new SimpleLinearRegression(topMileage, topPrices);
+//   const regressionBottom = new SimpleLinearRegression(bottomMileage, bottomPrices);
 
 
-  const topRegLine = regressionTop.predict(Number(item?.accident_mileage));
-  const bottomRegLine = regressionBottom.predict(Number(item?.accident_mileage));
-  console.log("i am regrassion log", regressionBottom, regressionTop, bottomRegLine, topRegLine)
+//   const topRegLine = regressionTop.predict(Number(item?.accident_mileage));
+//   const bottomRegLine = regressionBottom.predict(Number(item?.accident_mileage));
+//   console.log("i am regrassion log", regressionBottom, regressionTop, bottomRegLine, topRegLine)
 
 
   // Find middle index
@@ -118,8 +118,8 @@ const Index = ({ item }: { item: any }) => {
 
   return (
     <div className="">
-      <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}>
-      {/* <div className="max-w-6xl mx-auto space-y-8" style={{}}> */}
+      {/* <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}> */}
+      <div className="max-w-6xl mx-auto space-y-8" style={{}}>
         <div style={{ width: "1000px", height: "600px" }}>
           <PreAccidentMarketChart
             data={topCleanListings}

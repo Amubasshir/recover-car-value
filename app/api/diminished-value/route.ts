@@ -107,22 +107,11 @@ export async function POST(req: Request) {
     
       const topPrices = cleanListingsData?.cars?.map((a) => a.price);
       const topMileage = cleanListingsData?.cars?.map((a) => a.mileage);
-      const bottomPrices = damagedListingsData?.cars?.map((a) => a.price);
-      const bottomMileage = damagedListingsData?.cars?.map((a) => a.mileage);
-    
-      console.log("hi I am from pdf chart", {topPrices, topMileage, bottomPrices, bottomMileage})
-      const regressionTop = new SimpleLinearRegression(topMileage, topPrices);
-      const regressionBottom = new SimpleLinearRegression(bottomMileage, bottomPrices);
-    
-    
-      const preValue = regressionTop.predict(Number(mileage));
-      const bottomRegLine = regressionBottom.predict(Number(mileage));
+      const regressionTop = new SimpleLinearRegression(topMileage, topPrices);    
       
-      
-      // Generate a random percentage between 0.15 (15%) and 0.25 (25%)
-      const randomPercentage = Math.random() * (0.25 - 0.15) + 0.15;
-      
-     const postValue = preValue * (1 - randomPercentage);
+      const preValue = regressionTop.predict(Number(mileage));      
+      const randomPercentage = Math.random() * (0.25 - 0.15) + 0.15;  
+      const postValue = preValue * (1 - randomPercentage);
     //   console.log("i am regrassion log",{preValue}, {postValue}, { dimi: (preValue - postValue).toFixed(2)});
 
 
@@ -183,6 +172,8 @@ export async function POST(req: Request) {
 
             // [{"year":"2019","make":"Toyota","model":"Tundra","trim":"","accident_mileage":"29383","accident_zip":null,"accident_date":"1981-02-01","average_clean_price_top5":"179124","average_damaged_price_bottom5":"179124","estimated_diminished_value":"26868.6","created_at":"2025-08-19 19:04:48.719722+00","heading":"2019 Toyota Tundra","dealer_name":""}]
     // Build response
+
+    const diminished = (preValue - postValue)?.toFixed(0);
     const result = {
       year: Number(year),
       make,
@@ -195,7 +186,7 @@ export async function POST(req: Request) {
       average_clean_price_top5: preValue?.toFixed(0),
       average_damaged_price_bottom5: postValue?.toFixed(0),
     //   estimated_diminished_value: diminishedValue.diminishedValue?.toFixed(0),
-      estimated_diminished_value: (preValue - postValue)?.toFixed(0),
+      estimated_diminished_value: diminished,
     //   top_clean_listings: topCleanListings,
     //   bottom_damaged_listings: bottomDamagedListings,
       top_clean_listings: cleanListingsData?.cars,
