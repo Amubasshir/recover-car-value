@@ -3,6 +3,7 @@
 import { fetchListings } from "@/lib/api/marketCheck";
 import { supabase } from "@/lib/supabase";
 import { calculateDiminishedPercentValue } from "@/lib/utils/calculateDiminishedPercentValue";
+import { SimpleLinearRegression } from "ml-regression-simple-linear";
 import { NextResponse } from "next/server";
 
 const BASE_CLEAN_RADIUS = 100;
@@ -101,6 +102,35 @@ export async function POST(req: Request) {
         );
     }
 
+
+
+    
+      const topPrices = cleanListingsData?.cars?.map((a) => a.price);
+      const topMileage = cleanListingsData?.cars?.map((a) => a.mileage);
+      const bottomPrices = damagedListingsData?.cars?.map((a) => a.price);
+      const bottomMileage = damagedListingsData?.cars?.map((a) => a.mileage);
+    
+      console.log("hi I am from pdf chart", {topPrices, topMileage, bottomPrices, bottomMileage})
+      const regressionTop = new SimpleLinearRegression(topMileage, topPrices);
+      const regressionBottom = new SimpleLinearRegression(bottomMileage, bottomPrices);
+    
+    
+      const topRegLineValue = regressionTop.predict(Number(mileage));
+      const bottomRegLine = regressionBottom.predict(Number(mileage));
+      
+      
+      // Generate a random percentage between 0.15 (15%) and 0.25 (25%)
+      const randomPercentage = Math.random() * (0.25 - 0.15) + 0.15;
+      
+      const preValue = topRegLineValue;
+    //   console.log("i am regrassion log", preValue, regressionBottom, regressionTop, bottomRegLine);
+    
+    // Apply the reduction
+    const postValue = topRegLineValue * (1 - randomPercentage);
+    //   console.log("i am regrassion log",{preValue}, {postValue}, { dimi: (preValue - postValue).toFixed(2)});
+
+
+
     //  console.log("damaged data ❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥❤️‍🔥", cleanListingsData, damagedListingsData);
     
     
@@ -166,10 +196,10 @@ export async function POST(req: Request) {
       accident_date: accidentDate,
       heading: heading,
       dealer_name: "",
-      average_clean_price_top5: avgCleanPrice?.toFixed(0),
-      average_damaged_price_bottom5: avgDamagedPrice?.toFixed(0),
+      average_clean_price_top5: preValue?.toFixed(0),
+      average_damaged_price_bottom5: postValue?.toFixed(0),
     //   estimated_diminished_value: diminishedValue.diminishedValue?.toFixed(0),
-      estimated_diminished_value: diminishedValue?.toFixed(0),
+      estimated_diminished_value: (preValue - postValue)?.toFixed(0),
     //   top_clean_listings: topCleanListings,
     //   bottom_damaged_listings: bottomDamagedListings,
       top_clean_listings: cleanListingsData?.cars,
