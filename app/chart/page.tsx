@@ -86,8 +86,8 @@ const PreAccidentMarketChart = ({
 
         // Create regression line data points
         regressionLine = [
-          [chartMinX, slope * chartMinX + intercept],
-          [chartMaxX, slope * chartMaxX + intercept],
+          [Math.floor(chartMinX), slope * Math.floor(chartMinX) + intercept],
+          [Math.floor(chartMaxX), slope * Math.floor(chartMaxX) + intercept],
         ];
       }
     }
