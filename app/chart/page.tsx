@@ -55,7 +55,7 @@ const PreAccidentMarketChart = ({
 
     // const chartMinX = Math.max(0, minMileage - mileagePadding);
     // const chartMaxX = maxMileage + mileagePadding;
-    const chartMinX = Math.max(0, minMileage - mileagePadding) > 5000 ?Math.max(0, minMileage - mileagePadding) - 10000 : Math.max(0, minMileage - mileagePadding) ;
+    const chartMinX = Math.max(0, minMileage - mileagePadding) > 5000 ?Math.max(0, minMileage - mileagePadding) - 5000 : Math.max(0, minMileage - mileagePadding) ;
     const chartMaxX = (maxMileage + mileagePadding) + 5000;
     const chartMinY = Math.max(0, minPrice - pricePadding);
     const chartMaxY = maxPrice + pricePadding;
