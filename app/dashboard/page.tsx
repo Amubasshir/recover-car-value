@@ -292,10 +292,10 @@ export default function Dashboard() {
                         <TableCell>{item?.client_info?.email}</TableCell>
                         <TableCell>
                           $
+                          {item?.totalDiminishedValue ?
+                            Number(item?.estimated_diminished_value)?.toFixed(2) : 0.00}
                           {/* {item?.totalDiminishedValue ||
-                            item?.estimated_diminished_value?.toFixed(2)} */}
-                          {item?.totalDiminishedValue ||
-                            item?.estimated_diminished_value}
+                            item?.estimated_diminished_value} */}
                         </TableCell>
                         <TableCell className="text-right">
                           {/* <PDFDownloadLink

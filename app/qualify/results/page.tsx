@@ -44,7 +44,7 @@ export default function Results() {
       });
       const vehicleData = JSON.parse(diminishedVehicleData || "{}");
 
-      setEstimatedValue(vehicleData?.estimated_diminished_value || 0);
+      setEstimatedValue(Number(vehicleData?.estimated_diminished_value) || 0);
     } else {
       // If no data found, redirect to step 1
       router.push("/qualify/step3");
