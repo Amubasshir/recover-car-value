@@ -115,18 +115,14 @@ export async function POST(req: Request) {
       const regressionBottom = new SimpleLinearRegression(bottomMileage, bottomPrices);
     
     
-      const topRegLineValue = regressionTop.predict(Number(mileage));
+      const preValue = regressionTop.predict(Number(mileage));
       const bottomRegLine = regressionBottom.predict(Number(mileage));
       
       
       // Generate a random percentage between 0.15 (15%) and 0.25 (25%)
       const randomPercentage = Math.random() * (0.25 - 0.15) + 0.15;
       
-      const preValue = topRegLineValue;
-    //   console.log("i am regrassion log", preValue, regressionBottom, regressionTop, bottomRegLine);
-    
-    // Apply the reduction
-    const postValue = topRegLineValue * (1 - randomPercentage);
+     const postValue = preValue * (1 - randomPercentage);
     //   console.log("i am regrassion log",{preValue}, {postValue}, { dimi: (preValue - postValue).toFixed(2)});
 
 
