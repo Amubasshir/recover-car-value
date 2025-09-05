@@ -38,6 +38,8 @@ const PreAccidentMarketChart = ({
     const mileages = dataPoints.map((point) => point[0]);
     const prices = dataPoints.map((point) => point[1]);
 
+    // const minMileage = Math.min(...mileages) > 10000 ? Math.min(...mileages) - 10000 : Math.min(...mileages);
+    // const maxMileage = Math.max(...mileages) + 10000;
     const minMileage = Math.min(...mileages);
     const maxMileage = Math.max(...mileages);
     const minPrice = Math.min(...prices);
@@ -51,8 +53,10 @@ const PreAccidentMarketChart = ({
     // const mileagePadding = (maxMileage + minMileage) / 2;
     // const pricePadding = (maxPrice + minPrice) / 2;
 
-    const chartMinX = Math.max(0, minMileage - mileagePadding);
-    const chartMaxX = maxMileage + mileagePadding;
+    // const chartMinX = Math.max(0, minMileage - mileagePadding);
+    // const chartMaxX = maxMileage + mileagePadding;
+    const chartMinX = Math.max(0, minMileage - mileagePadding) > 5000 ?Math.max(0, minMileage - mileagePadding) - 10000 : Math.max(0, minMileage - mileagePadding) ;
+    const chartMaxX = (maxMileage + mileagePadding) + 5000;
     const chartMinY = Math.max(0, minPrice - pricePadding);
     const chartMaxY = maxPrice + pricePadding;
 
@@ -119,6 +123,7 @@ const PreAccidentMarketChart = ({
       });
     }
 
+    // console.log({subjectMileage, chartMinX,})
     // Add subject mileage line if it's within the chart range
     if (
       typeof subjectMileage === "number" &&
