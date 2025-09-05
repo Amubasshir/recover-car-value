@@ -803,13 +803,15 @@ export const PDFDocument = ({
         <View style={styles.summary}>
           <Text style={styles.summaryText}>
             Fair Market Value with No Accident: $
-            {report?.average_clean_price_top5?.toFixed(2)?.toLocaleString()}
+            {/* {report?.average_clean_price_top5?.toFixed(2)?.toLocaleString()} */}
+            {report?.average_clean_price_top5}
           </Text>
           <Text style={styles.summaryText}>
             Fair Market Value with Accident: $
-            {report?.average_damaged_price_bottom5
+            {/* {report?.average_damaged_price_bottom5
               ?.toFixed(2)
-              ?.toLocaleString()}
+              ?.toLocaleString()} */}
+            {report?.average_damaged_price_bottom5}
           </Text>
           <Text
             style={[
@@ -822,8 +824,9 @@ export const PDFDocument = ({
               },
             ]}
           >
+            {/* {report?.estimated_diminished_value?.toFixed(2)?.toLocaleString()} */}
             Calculated Diminished Value: $
-            {report?.estimated_diminished_value?.toFixed(2)?.toLocaleString()}
+            {report?.estimated_diminished_value}
           </Text>
         </View>
 
