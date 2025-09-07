@@ -84,10 +84,15 @@ const PreAccidentMarketChart = ({
         slope = (n * sumXY - sumX * sumY) / denominator;
         intercept = (sumY - slope * sumX) / n;
 
-        // Create regression line data points
-        regressionLine = [
+        console.log([
           [Math.floor(chartMinX), slope * Math.floor(chartMinX) + intercept],
           [Math.floor(chartMaxX), slope * Math.floor(chartMaxX) + intercept],
+        ])
+
+        // Create regression line data points
+        regressionLine = [
+          [Math.floor(chartMinX), Math.floor(slope * chartMinX + intercept)],
+          [Math.floor(chartMaxX), Math.floor(slope * chartMaxX + intercept)],
         ];
       }
     }
@@ -201,8 +206,8 @@ const PreAccidentMarketChart = ({
         name: "Mileage",
         nameLocation: "middle",
         nameGap: 30,
-        min: chartMinX,
-        max: chartMaxX,
+        min: Math.floor(chartMinX),
+        max: Math.floor(chartMaxX),
         axisLine: {
           lineStyle: {
             color: "#666",
@@ -224,8 +229,8 @@ const PreAccidentMarketChart = ({
         name: "Price ($)",
         nameLocation: "middle",
         nameGap: 50,
-        min: chartMinY,
-        max: chartMaxY,
+        min: Math.floor(chartMinY),
+        max: Math.floor(chartMaxY),
         axisLine: {
           lineStyle: {
             color: "#666",
