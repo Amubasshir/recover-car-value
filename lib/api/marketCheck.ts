@@ -142,7 +142,7 @@ export async function fetchListings({
   url.searchParams.append('is_accidental', String(isAccident));
   url.searchParams.append('min_mileage', String(min_miles));
   url.searchParams.append('max_mileage', String(max_miles));
-  url.searchParams.append('limit', '5');
+  url.searchParams.append('limit', '10');
   url.searchParams.append('sort', 'price');
   url.searchParams.append('order', String(sort_order));
 
