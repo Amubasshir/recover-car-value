@@ -118,8 +118,8 @@ const Index = ({ item }: { item: any }) => {
 
   return (
     <div className="">
-      {/* <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}> */}
-      <div className="max-w-6xl mx-auto space-y-8" style={{}}>
+      <div className="max-w-6xl mx-auto space-y-8" style={{ position: "absolute", top: "-9999px", left: "-9999px", visibility: "hidden" }}>
+      {/* <div className="max-w-6xl mx-auto space-y-8" style={{}}> */}
         <div style={{ width: "1000px", height: "600px" }}>
           <PreAccidentMarketChart
             data={topCleanListings}
