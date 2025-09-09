@@ -69,10 +69,10 @@ export default function Results() {
             </CardDescription>
             <div className="text-3xl md:text-4xl font-bold text-success-600 mt-6 animate-pulse-subtle flex  md:flex-row justify-center items-center gap-1.5 md:gap-3">
               {/* <span>${(estimatedValue * 0.6)?.toFixed(2)}</span> */}
-              <span>${(estimatedValue * 0.6)}</span>
+              <span>${(estimatedValue * 0.6)?.toFixed(0)}</span>
               <span> - </span>
               {/* <span>${estimatedValue?.toFixed(2)}</span> */}
-              <span>${estimatedValue}</span>
+              <span>${(estimatedValue)?.toFixed(0)}</span>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 px-4">
