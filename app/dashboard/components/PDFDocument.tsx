@@ -21,92 +21,149 @@ Font.register({
   src: `/fonts/Garet-Book.ttf`,
 });
 
+// const styles2 = StyleSheet.create({
+//   page: {
+//     flexDirection: 'column',
+//     backgroundColor: '#FFFFFF',
+//     padding: 40,
+//     fontSize: 11,
+//     fontFamily: 'Helvetica',
+//     lineHeight: 1.4,
+//   },
+//   title: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     marginBottom: 20,
+//     color: '#000000',
+//   },
+//   subtitle: {
+//     fontSize: 16,
+//     fontWeight: 'bold',
+//     marginTop: 30,
+//     marginBottom: 15,
+//     color: '#000000',
+//   },
+//   sectionTitle: {
+//     fontSize: 12,
+//     fontWeight: 'bold',
+//     marginTop: 20,
+//     marginBottom: 8,
+//     color: '#000000',
+//   },
+//   methodologyText: {
+//     fontSize: 11,
+//     lineHeight: 1.5,
+//     marginBottom: 10,
+//     color: '#000000',
+//     textAlign: 'justify',
+//   },
+//   bulletPoint: {
+//     fontSize: 11,
+//     marginLeft: 20,
+//     marginBottom: 5,
+//     lineHeight: 1.4,
+//   },
+//   numberedItem: {
+//     fontSize: 11,
+//     fontWeight: 'bold',
+//     marginTop: 15,
+//     marginBottom: 8,
+//   },
+//   divider: {
+//     borderBottomWidth: 1,
+//     borderBottomColor: '#CCCCCC',
+//     marginTop: 20,
+//     marginBottom: 20,
+//   },
+//   legalSection: {
+//     marginTop: 30,
+//   },
+//   caseTitle: {
+//     fontSize: 11,
+//     fontWeight: 'bold',
+//     fontStyle: 'italic',
+//     marginBottom: 5,
+//   },
+//   caseText: {
+//     fontSize: 11,
+//     marginLeft: 20,
+//     marginBottom: 10,
+//     lineHeight: 1.4,
+//   },
+//   conclusion: {
+//     marginTop: 30,
+//     paddingTop: 15,
+//     borderTopWidth: 1,
+//     borderTopColor: '#CCCCCC',
+//   },
+//   conclusionTitle: {
+//     fontSize: 12,
+//     fontWeight: 'bold',
+//     marginBottom: 8,
+//   },
+//   bold: {
+//     fontWeight: 'bold',
+//   },
+//   italic: {
+//     fontStyle: 'italic',
+//   }
+// });
+
 const styles2 = StyleSheet.create({
   page: {
     flexDirection: 'column',
     backgroundColor: '#FFFFFF',
-    padding: 40,
+    padding: 60,
     fontSize: 11,
     fontFamily: 'Helvetica',
     lineHeight: 1.4,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 30,
     color: '#000000',
-  },
-  subtitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginTop: 30,
-    marginBottom: 15,
-    color: '#000000',
-  },
-  sectionTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 8,
-    color: '#000000',
+    textAlign: 'left',
   },
   methodologyText: {
     fontSize: 11,
     lineHeight: 1.5,
-    marginBottom: 10,
-    color: '#000000',
-    textAlign: 'justify',
-  },
-  bulletPoint: {
-    fontSize: 11,
-    marginLeft: 20,
-    marginBottom: 5,
-    lineHeight: 1.4,
-  },
-  numberedItem: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    marginTop: 15,
-    marginBottom: 8,
-  },
-  divider: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
-    marginTop: 20,
     marginBottom: 20,
+    color: '#000000',
+    textAlign: 'left',
   },
-  legalSection: {
-    marginTop: 30,
-  },
-  caseTitle: {
+  bulletHeader: {
     fontSize: 11,
-    fontWeight: 'bold',
-    fontStyle: 'italic',
+    marginTop: 10,
     marginBottom: 5,
+    color: '#000000',
+    marginLeft: 0,
   },
-  caseText: {
-    fontSize: 11,
-    marginLeft: 20,
+  subBulletContainer: {
+    marginLeft: 30,
     marginBottom: 10,
+  },
+  subBulletPoint: {
+    fontSize: 11,
+    marginBottom: 3,
     lineHeight: 1.4,
+    color: '#000000',
   },
-  conclusion: {
-    marginTop: 30,
-    paddingTop: 15,
-    borderTopWidth: 1,
-    borderTopColor: '#CCCCCC',
+  footer: {
+    position: 'absolute',
+    bottom: 60,
+    left: 60,
+    right: 60,
   },
-  conclusionTitle: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    marginBottom: 8,
+  footerText: {
+    fontSize: 9,
+    color: '#000000',
+    textAlign: 'left',
+    lineHeight: 1.3,
   },
   bold: {
     fontWeight: 'bold',
   },
-  italic: {
-    fontStyle: 'italic',
-  }
 });
 
 
@@ -545,7 +602,7 @@ export const PDFDocument = ({
       </Page> */}
 
        {/* Page 1 */}
-      <Page size="A4" style={styles2.page}>
+      {/* <Page size="A4" style={styles2.page}>
         <Text style={styles2.title}>
           Understanding Inherent Diminished Value
         </Text>
@@ -614,10 +671,10 @@ export const PDFDocument = ({
         </View>
 
         <View style={styles2.divider} />
-      </Page>
+      </Page> */}
 
       {/* Page 2 */}
-      <Page size="A4" style={styles2.page}>
+      {/* <Page size="A4" style={styles2.page}>
         <Text style={styles2.subtitle}>
           Legal Validity
         </Text>
@@ -678,7 +735,63 @@ export const PDFDocument = ({
         </View>
 
         <View style={styles2.divider} />
-      </Page>
+      </Page> */}
+
+      {/* page 3 */}
+      <Page size="A4" style={styles2.page}>
+          <Text style={styles2.title}>
+            Fair Market Value Methodology (Court-Defensible)
+          </Text>
+
+          <Text style={styles2.introText}>
+            To calculate FMV, we use a structured, data-driven method grounded in <Text style={styles2.bold}>industry practices and statistical reliability</Text>:
+          </Text>
+
+          <Text style={styles2.bulletHeader}>
+            • Market Data Collection
+          </Text>
+          
+          <View style={styles2.subBulletContainer}>
+            <Text style={styles2.subBulletPoint}>
+              • Pulled publicly listed sales of comparable vehicles from trusted marketplaces (e.g., Cars.com, AutoTrader, CarFax, and dealer feeds).
+            </Text>
+            <Text style={styles2.subBulletPoint}>
+              • Filtered for year, make, model, and trim to ensure true comparability.
+            </Text>
+          </View>
+
+          <Text style={styles2.bulletHeader}>
+            • Linear Regression Analysis
+          </Text>
+          
+          <View style={styles2.subBulletContainer}>
+            <Text style={styles2.subBulletPoint}>
+              • Plotted price vs. mileage to establish a market-based depreciation curve.
+            </Text>
+            <Text style={styles2.subBulletPoint}>
+              • Applied linear regression to create a statistically valid trendline.
+            </Text>
+            <Text style={styles2.subBulletPoint}>
+              • Interpolated the subject vehicle's value based on actual mileage.
+            </Text>
+          </View>
+
+          <Text style={styles2.bulletHeader}>
+            • Outlier Filtering
+          </Text>
+          
+          <View style={styles2.subBulletContainer}>
+            <Text style={styles2.subBulletPoint}>
+              • Excluded listings beyond ±2 standard deviations from the mean to improve accuracy.
+            </Text>
+          </View>
+
+          <View style={styles2.footer}>
+            <Text style={styles2.footerText}>
+              This report was prepared based on real-time market data and accepted valuation methods. Sources include AutoTrader, Cars.com, CarGurus, eBay Motors, and dealer feeds.
+            </Text>
+          </View>
+        </Page>
 
       <Page size="A4" style={styles.page}>
         <Text style={styles.subtitle}>Pre-Accident Comparable Listings</Text>
