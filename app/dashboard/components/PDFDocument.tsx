@@ -21,93 +21,93 @@ Font.register({
   src: `/fonts/Garet-Book.ttf`,
 });
 
-// const styles2 = StyleSheet.create({
-//   page: {
-//     flexDirection: 'column',
-//     backgroundColor: '#FFFFFF',
-//     padding: 40,
-//     fontSize: 11,
-//     fontFamily: 'Helvetica',
-//     lineHeight: 1.4,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//     color: '#000000',
-//   },
-//   subtitle: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     marginTop: 30,
-//     marginBottom: 15,
-//     color: '#000000',
-//   },
-//   sectionTitle: {
-//     fontSize: 12,
-//     fontWeight: 'bold',
-//     marginTop: 20,
-//     marginBottom: 8,
-//     color: '#000000',
-//   },
-//   methodologyText: {
-//     fontSize: 11,
-//     lineHeight: 1.5,
-//     marginBottom: 10,
-//     color: '#000000',
-//     textAlign: 'justify',
-//   },
-//   bulletPoint: {
-//     fontSize: 11,
-//     marginLeft: 20,
-//     marginBottom: 5,
-//     lineHeight: 1.4,
-//   },
-//   numberedItem: {
-//     fontSize: 11,
-//     fontWeight: 'bold',
-//     marginTop: 15,
-//     marginBottom: 8,
-//   },
-//   divider: {
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#CCCCCC',
-//     marginTop: 20,
-//     marginBottom: 20,
-//   },
-//   legalSection: {
-//     marginTop: 30,
-//   },
-//   caseTitle: {
-//     fontSize: 11,
-//     fontWeight: 'bold',
-//     fontStyle: 'italic',
-//     marginBottom: 5,
-//   },
-//   caseText: {
-//     fontSize: 11,
-//     marginLeft: 20,
-//     marginBottom: 10,
-//     lineHeight: 1.4,
-//   },
-//   conclusion: {
-//     marginTop: 30,
-//     paddingTop: 15,
-//     borderTopWidth: 1,
-//     borderTopColor: '#CCCCCC',
-//   },
-//   conclusionTitle: {
-//     fontSize: 12,
-//     fontWeight: 'bold',
-//     marginBottom: 8,
-//   },
-//   bold: {
-//     fontWeight: 'bold',
-//   },
-//   italic: {
-//     fontStyle: 'italic',
-//   }
-// });
+const styles3 = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    backgroundColor: '#FFFFFF',
+    padding: 40,
+    fontSize: 11,
+    fontFamily: 'Helvetica',
+    lineHeight: 1.4,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#000000',
+  },
+  subtitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 30,
+    marginBottom: 15,
+    color: '#000000',
+  },
+  sectionTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 8,
+    color: '#000000',
+  },
+  methodologyText: {
+    fontSize: 11,
+    lineHeight: 1.5,
+    marginBottom: 10,
+    color: '#000000',
+    textAlign: 'justify',
+  },
+  bulletPoint: {
+    fontSize: 11,
+    marginLeft: 20,
+    marginBottom: 5,
+    lineHeight: 1.4,
+  },
+  numberedItem: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    marginTop: 15,
+    marginBottom: 8,
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  legalSection: {
+    marginTop: 30,
+  },
+  caseTitle: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    marginBottom: 5,
+  },
+  caseText: {
+    fontSize: 11,
+    marginLeft: 20,
+    marginBottom: 10,
+    lineHeight: 1.4,
+  },
+  conclusion: {
+    marginTop: 30,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#CCCCCC',
+  },
+  conclusionTitle: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+  italic: {
+    fontStyle: 'italic',
+  }
+});
 
 const styles2 = StyleSheet.create({
   page: {
@@ -673,70 +673,7 @@ export const PDFDocument = ({
         <View style={styles2.divider} />
       </Page> */}
 
-      {/* Page 2 */}
-      {/* <Page size="A4" style={styles2.page}>
-        <Text style={styles2.subtitle}>
-          Legal Validity
-        </Text>
-
-        <Text style={styles2.methodologyText}>
-          This methodology complies with the <Text style={styles2.bold}>Daubert standard</Text> (<Text style={styles2.italic}>Daubert v. Merrell Dow Pharm., Inc.</Text>, 509 U.S. 579 (1993)) requiring expert methods to be:
-        </Text>
-
-        <View style={{ marginLeft: 20 }}>
-          <Text style={styles2.bulletPoint}>
-            • <Text style={styles2.italic}>Testable</Text>
-          </Text>
-          <Text style={styles2.bulletPoint}>
-            • <Text style={styles2.italic}>Peer-reviewed</Text>
-          </Text>
-          <Text style={styles2.bulletPoint}>
-            • <Text style={styles2.italic}>Reliable</Text>
-          </Text>
-          <Text style={styles2.bulletPoint}>
-            • <Text style={styles2.italic}>Accepted in the field</Text>
-          </Text>
-        </View>
-
-        <Text style={styles2.sectionTitle}>
-          Case Law Support
-        </Text>
-
-        <Text style={styles2.caseTitle}>
-          McHale v. State Farm
-        </Text>
-        <Text style={styles2.caseText}>
-          (M.D. Fla. 2017): Inherent diminished value upheld via market regression model.
-        </Text>
-
-        <Text style={styles2.caseTitle}>
-          Douglas v. Allstate
-        </Text>
-        <Text style={styles2.caseText}>
-          (E.D. Mo. 2009): Regression analysis based on listings deemed admissible under <Text style={styles2.italic}>Daubert</Text>.
-        </Text>
-
-        <Text style={styles2.caseTitle}>
-          Chaudhary v. USAA
-        </Text>
-        <Text style={styles2.caseText}>
-          (S.D. Tex. 2022): Listing-based valuation accepted as reliable and independently verifiable.
-        </Text>
-
-        <View style={styles2.divider} />
-
-        <View style={styles2.conclusion}>
-          <Text style={styles2.conclusionTitle}>
-            Conclusion:
-          </Text>
-          <Text style={styles2.methodologyText}>
-            This valuation method is <Text style={styles2.bold}>transparent, repeatable, and accepted by courts and insurers</Text> for determining fair market value and inherent diminished value.
-          </Text>
-        </View>
-
-        <View style={styles2.divider} />
-      </Page> */}
-
+      
       {/* page 3 */}
       <Page size="A4" style={styles2.page}>
           <Text style={styles2.title}>
@@ -792,6 +729,72 @@ export const PDFDocument = ({
             </Text>
           </View>
         </Page>
+
+
+        {/* Page 2 */}
+      <Page size="A4" style={styles3.page}>
+        <Text style={styles3.subtitle}>
+          Legal Validity
+        </Text>
+
+        <Text style={styles3.methodologyText}>
+          This methodology complies with the <Text style={styles3.bold}>Daubert standard</Text> (<Text style={styles3.italic}>Daubert v. Merrell Dow Pharm., Inc.</Text>, 509 U.S. 579 (1993)) requiring expert methods to be:
+        </Text>
+
+        <View style={{ marginLeft: 20 }}>
+          <Text style={styles3.bulletPoint}>
+            • <Text style={styles3.italic}>Testable</Text>
+          </Text>
+          <Text style={styles3.bulletPoint}>
+            • <Text style={styles3.italic}>Peer-reviewed</Text>
+          </Text>
+          <Text style={styles3.bulletPoint}>
+            • <Text style={styles3.italic}>Reliable</Text>
+          </Text>
+          <Text style={styles3.bulletPoint}>
+            • <Text style={styles3.italic}>Accepted in the field</Text>
+          </Text>
+        </View>
+
+        <Text style={styles3.sectionTitle}>
+          Case Law Support
+        </Text>
+
+        <Text style={styles3.caseTitle}>
+          McHale v. State Farm
+        </Text>
+        <Text style={styles3.caseText}>
+          (M.D. Fla. 2017): Inherent diminished value upheld via market regression model.
+        </Text>
+
+        <Text style={styles3.caseTitle}>
+          Douglas v. Allstate
+        </Text>
+        <Text style={styles3.caseText}>
+          (E.D. Mo. 2009): Regression analysis based on listings deemed admissible under <Text style={styles3.italic}>Daubert</Text>.
+        </Text>
+
+        <Text style={styles3.caseTitle}>
+          Chaudhary v. USAA
+        </Text>
+        <Text style={styles3.caseText}>
+          (S.D. Tex. 2022): Listing-based valuation accepted as reliable and independently verifiable.
+        </Text>
+
+        <View style={styles3.divider} />
+
+        <View style={styles3.conclusion}>
+          <Text style={styles3.conclusionTitle}>
+            Conclusion:
+          </Text>
+          <Text style={styles3.methodologyText}>
+            This valuation method is <Text style={styles3.bold}>transparent, repeatable, and accepted by courts and insurers</Text> for determining fair market value and inherent diminished value.
+          </Text>
+        </View>
+
+        <View style={styles3.divider} />
+      </Page>
+
 
       <Page size="A4" style={styles.page}>
         <Text style={styles.subtitle}>Pre-Accident Comparable Listings</Text>
