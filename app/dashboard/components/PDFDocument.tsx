@@ -6,18 +6,18 @@ import {
   StyleSheet,
   Text,
   View,
-} from "@react-pdf/renderer";
-import dayjs from "dayjs"; // ES 2015
-import image from "../../../public/recover-car-value.jpg";
-import { Report } from "../types/report";
+} from '@react-pdf/renderer';
+import dayjs from 'dayjs'; // ES 2015
+import image from '../../../public/recover-car-value.jpg';
+import { Report } from '../types/report';
 
 Font.register({
-  family: "Telegraph",
+  family: 'Telegraph',
   src: `/fonts/PPTelegraf-Ultrabold.otf`,
 });
 
 Font.register({
-  family: "Garet",
+  family: 'Garet',
   src: `/fonts/Garet-Book.ttf`,
 });
 
@@ -106,7 +106,7 @@ const styles3 = StyleSheet.create({
   },
   italic: {
     fontStyle: 'italic',
-  }
+  },
 });
 
 const styles2 = StyleSheet.create({
@@ -166,41 +166,40 @@ const styles2 = StyleSheet.create({
   },
 });
 
-
 const styles = StyleSheet.create({
   page: {
     padding: 20,
-    fontFamily: "Garet", // Garet font for body text as requested
+    fontFamily: 'Garet', // Garet font for body text as requested
   },
 
   //! v2
   coverPage: {
-    position: "relative",
-    height: "100%",
-    width: "100%",
+    position: 'relative',
+    height: '100%',
+    width: '100%',
   },
   // Main diagonal blue background
   mainBackground: {
-    position: "absolute",
+    position: 'absolute',
     top: -50,
     left: 0,
     right: 0,
-    height: "120%",
+    height: '120%',
     background:
-      "linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 60%, #60a5fa 100%)",
-    transform: "skewY(-0deg)",
-    transformOrigin: "top left",
+      'linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 60%, #60a5fa 100%)',
+    transform: 'skewY(-0deg)',
+    transformOrigin: 'top left',
   },
   // Car image overlay
   coverBackground: {
-    position: "absolute",
+    position: 'absolute',
     top: -220,
     left: -0.5,
     right: 0,
-    height: "120%",
+    height: '120%',
     opacity: 1,
-    transform: "skewY(8deg)", // 0deg
-    transformOrigin: "top left",
+    transform: 'skewY(8deg)', // 0deg
+    transformOrigin: 'top left',
   },
   //   coverBackgroundColor: {
   //     position: "absolute",
@@ -215,68 +214,68 @@ const styles = StyleSheet.create({
   //   },
   // Blue diagonal stripe at top
   blueOverlayStripe: {
-    position: "absolute",
+    position: 'absolute',
     top: 100,
     left: 0,
     right: 0,
-    width: "100%",
+    width: '100%',
     height: 525,
     // backgroundColor: "#142445bd",
-    backgroundColor: "#21597aa3",
-    transform: "skewY(-17deg)",
-    transformOrigin: "top left",
+    backgroundColor: '#21597aa3',
+    transform: 'skewY(-17deg)',
+    transformOrigin: 'top left',
   },
   // Blue diagonal stripe at top
   blueStripe: {
-    position: "absolute",
+    position: 'absolute',
     top: -48,
     left: -50,
-    width: "100%",
+    width: '100%',
     height: 180,
-    backgroundColor: "#142445",
-    transform: "skewY(-17deg)",
-    transformOrigin: "top left",
+    backgroundColor: '#142445',
+    transform: 'skewY(-17deg)',
+    transformOrigin: 'top left',
   },
   // Red diagonal stripe at top
   redStripe: {
-    position: "absolute",
+    position: 'absolute',
     top: 100,
     left: 50,
-    width: "100%",
+    width: '100%',
     height: 20,
-    backgroundColor: "#ef4444",
-    transform: "skewY(-17deg)",
-    transformOrigin: "top left",
+    backgroundColor: '#ef4444',
+    transform: 'skewY(-17deg)',
+    transformOrigin: 'top left',
   },
   // White bottom section
   whiteBottomSection: {
-    position: "absolute",
+    position: 'absolute',
     bottom: -220,
     left: -3,
     right: -3,
-    width: "105%",
+    width: '105%',
     height: 400,
-    backgroundColor: "#ffffff",
-    transform: "skewY(-17deg)",
-    transformOrigin: "bottom left",
+    backgroundColor: '#ffffff',
+    transform: 'skewY(-17deg)',
+    transformOrigin: 'bottom left',
   },
   // Red diagonal element at bottom left
   redBottomElement: {
-    position: "absolute",
+    position: 'absolute',
     bottom: -10,
     left: -80,
     width: 260,
     height: 80,
-    backgroundColor: "#ef4444",
-    transform: "skewY(27deg)",
-    transformOrigin: "bottom left",
+    backgroundColor: '#ef4444',
+    transform: 'skewY(27deg)',
+    transformOrigin: 'bottom left',
   },
   coverTitle: {
-    position: "absolute",
+    position: 'absolute',
     fontSize: 64,
-    fontWeight: "bold",
-    fontFamily: "Telegraph", // Telegraph font for heading as requested
-    color: "#ffffff",
+    fontWeight: 'bold',
+    fontFamily: 'Telegraph', // Telegraph font for heading as requested
+    color: '#ffffff',
     top: 180,
     left: 60,
     width: 400,
@@ -284,84 +283,84 @@ const styles = StyleSheet.create({
   },
   // Report Date section
   reportDateContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: 560,
-    textAlign: "right",
+    textAlign: 'right',
     right: 40,
   },
   reportDateLabel: {
     fontSize: 18,
-    color: "#ef4444",
-    fontWeight: "bold",
+    color: '#ef4444',
+    fontWeight: 'bold',
     marginBottom: 4,
-    textAlign: "right",
+    textAlign: 'right',
   },
   reportDateValue: {
     fontSize: 18,
-    color: "#374151",
-    fontWeight: "bold",
-    textAlign: "right",
+    color: '#374151',
+    fontWeight: 'bold',
+    textAlign: 'right',
   },
   // Prepared For section
   preparedForContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 70,
     left: 40,
   },
   preparedForLabel: {
     fontSize: 16,
-    color: "#ef4444",
-    fontWeight: "bold",
+    color: '#ef4444',
+    fontWeight: 'bold',
     marginBottom: 8,
   },
   clientName: {
     fontSize: 14,
-    color: "#1f2937",
-    fontWeight: "bold",
+    color: '#1f2937',
+    fontWeight: 'bold',
     marginBottom: 4,
   },
   clientContact: {
     fontSize: 14,
-    color: "#374151",
+    color: '#374151',
     marginBottom: 2,
   },
   // Vehicle section
   vehicleContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 70,
     right: 40,
-    textAlign: "right",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    textAlign: 'right',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   vehicleLabel: {
     fontSize: 16,
-    color: "#ef4444",
-    fontWeight: "bold",
+    color: '#ef4444',
+    fontWeight: 'bold',
     marginBottom: 8,
-    textAlign: "right",
+    textAlign: 'right',
   },
   vehicleValue: {
     fontSize: 14,
-    color: "#1f2937",
-    fontWeight: "bold",
+    color: '#1f2937',
+    fontWeight: 'bold',
     marginBottom: 12,
-    textAlign: "right",
+    textAlign: 'right',
   },
   accidentDateLabel: {
     fontSize: 14,
-    color: "#ef4444",
-    fontWeight: "bold",
+    color: '#ef4444',
+    fontWeight: 'bold',
     marginBottom: 4,
-    textAlign: "right",
+    textAlign: 'right',
   },
   accidentDateValue: {
     fontSize: 14,
-    color: "#374151",
-    fontWeight: "bold",
-    textAlign: "right",
+    color: '#374151',
+    fontWeight: 'bold',
+    textAlign: 'right',
   },
 
   //   page 1 end
@@ -369,16 +368,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 15,
-    fontWeight: "bold",
-    fontFamily: "Telegraph", // Telegraph font for heading as requested
-    color: "#1a365d",
+    fontWeight: 'bold',
+    fontFamily: 'Telegraph', // Telegraph font for heading as requested
+    color: '#1a365d',
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 15,
-    fontWeight: "bold",
-    fontFamily: "Telegraph", // Telegraph font for heading as requested
-    color: "#1a365d",
+    fontWeight: 'bold',
+    fontFamily: 'Telegraph', // Telegraph font for heading as requested
+    color: '#1a365d',
   },
   methodologyText: {
     fontSize: 12,
@@ -390,65 +389,65 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 14,
-    fontWeight: "bold",
-    fontFamily: "Telegraph", // Telegraph font for heading as requested
-    color: "#1a365d",
+    fontWeight: 'bold',
+    fontFamily: 'Telegraph', // Telegraph font for heading as requested
+    color: '#1a365d',
     marginBottom: 8,
   },
   table: {
-    width: "100%",
+    width: '100%',
     marginBottom: 20,
   },
   tableHeader: {
-    flexDirection: "row",
-    backgroundColor: "#1a365d",
-    color: "white",
+    flexDirection: 'row',
+    backgroundColor: '#1a365d',
+    color: 'white',
     padding: 8,
     fontSize: 9,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   tableRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 8,
     fontSize: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
+    borderBottomColor: '#e2e8f0',
   },
   alternateRow: {
-    backgroundColor: "#f8fafc",
+    backgroundColor: '#f8fafc',
   },
   cell: {
     flex: 0.9,
-    textAlign: "center",
+    textAlign: 'center',
   },
   vinCell: {
     flex: 2,
-    flexWrap: "nowrap",
-    textAlign: "center",
+    flexWrap: 'nowrap',
+    textAlign: 'center',
   },
   makeModelCell: {
     flex: 1.5,
-    textAlign: "center",
+    textAlign: 'center',
   },
   summary: {
     marginTop: 20,
     padding: 15,
-    backgroundColor: "#f1f5f9",
-    textAlign: "center",
+    backgroundColor: '#f1f5f9',
+    textAlign: 'center',
   },
   summaryText: {
     fontSize: 12,
     marginBottom: 8,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   footer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 30,
     left: 30,
     right: 30,
     fontSize: 8,
-    color: "#64748b",
-    textAlign: "center",
+    color: '#64748b',
+    textAlign: 'center',
   },
 });
 interface PDFDocumentProps {
@@ -486,14 +485,14 @@ export const PDFDocument = ({
 
           {/* Main title */}
           <Text style={styles.coverTitle}>
-            Diminished{"\n"}Value{"\n"}Analysis{"\n"}Report
+            Diminished{'\n'}Value{'\n'}Analysis{'\n'}Report
           </Text>
 
           {/* Report Date */}
           <View style={styles.reportDateContainer}>
             <Text style={styles.reportDateLabel}>Report Date:</Text>
             <Text style={styles.reportDateValue}>
-              {dayjs(report?.created_at).format("MMM DD, YYYY")}
+              {dayjs(report?.created_at).format('MMM DD, YYYY')}
             </Text>
           </View>
 
@@ -515,16 +514,16 @@ export const PDFDocument = ({
             <Text style={styles.vehicleValue}>
               {report?.heading ||
                 report?.year +
-                  " " +
+                  ' ' +
                   report?.make +
-                  " " +
+                  ' ' +
                   report?.model +
-                  " " +
+                  ' ' +
                   report?.trim}
             </Text>
             <Text style={styles.accidentDateLabel}>Date of Accident:</Text>
             <Text style={styles.accidentDateValue}>
-              {dayjs(report?.accident_date).format("MMM DD, YYYY")}
+              {dayjs(report?.accident_date).format('MMM DD, YYYY')}
             </Text>
           </View>
         </View>
@@ -536,7 +535,7 @@ export const PDFDocument = ({
         </Text>
 
         <View style={styles.methodologySection}>
-          
+
           <Text style={styles.methodologyText}>
             Inherent diminished value is the loss in a <Text style={{fontWeight: 'bold'}}>vehicle's market value due solely to its accident history</Text>, even after professional repairs are completed. The most reliable way to determine this loss is by calculating the <Text style={{fontWeight: 'bold'}}>pre- and post-accident Fair Market Value (FMV)</Text> using <Text style={{fontWeight: 'bold'}}>verifiable market data</Text> and <Text style={{fontWeight: 'bold'}}>accepted statistical appraisal methods</Text>.
             </Text>
@@ -601,7 +600,7 @@ export const PDFDocument = ({
         </View>
       </Page> */}
 
-       {/* Page 1 */}
+      {/* Page 1 */}
       {/* <Page size="A4" style={styles2.page}>
         <Text style={styles2.title}>
           Understanding Inherent Diminished Value
@@ -624,7 +623,7 @@ export const PDFDocument = ({
         <Text style={styles2.numberedItem}>
           1. Market Data Collection
         </Text>
-        
+
         <View style={{ marginLeft: 20 }}>
           <Text style={styles2.bulletPoint}>
             • Pulled publicly listed sales of comparable vehicles from trusted marketplaces (e.g., Cars.com, AutoTrader, CarFax, and dealer feeds).
@@ -637,7 +636,7 @@ export const PDFDocument = ({
         <Text style={styles2.numberedItem}>
           2. Linear Regression Analysis
         </Text>
-        
+
         <View style={{ marginLeft: 20 }}>
           <Text style={styles2.bulletPoint}>
             • Plotted <Text style={styles2.bold}>price vs. mileage</Text> to establish a market-based depreciation curve.
@@ -653,7 +652,7 @@ export const PDFDocument = ({
         <Text style={styles2.numberedItem}>
           3. Outlier Filtering
         </Text>
-        
+
         <View style={{ marginLeft: 20 }}>
           <Text style={styles2.bulletPoint}>
             • Excluded listings beyond <Text style={styles2.bold}>±2 standard deviations</Text> from the mean to improve accuracy.
@@ -663,7 +662,7 @@ export const PDFDocument = ({
         <Text style={styles2.numberedItem}>
           4. Diminished Value Calculation
         </Text>
-        
+
         <View style={{ marginLeft: 20 }}>
           <Text style={styles2.bulletPoint}>
             • Diminished Value = Pre-Accident Value - Post-Accident Value
@@ -673,128 +672,133 @@ export const PDFDocument = ({
         <View style={styles2.divider} />
       </Page> */}
 
-      
       {/* page 3 */}
       <Page size="A4" style={styles2.page}>
-          <Text style={styles2.title}>
-            Fair Market Value Methodology (Court-Defensible)
-          </Text>
-
-          <Text style={styles2.introText}>
-            To calculate FMV, we use a structured, data-driven method grounded in <Text style={styles2.bold}>industry practices and statistical reliability</Text>:
-          </Text>
-
-          <Text style={styles2.bulletHeader}>
-            • Market Data Collection
-          </Text>
-          
-          <View style={styles2.subBulletContainer}>
-            <Text style={styles2.subBulletPoint}>
-              • Pulled publicly listed sales of comparable vehicles from trusted marketplaces (e.g., Cars.com, AutoTrader, CarFax, and dealer feeds).
-            </Text>
-            <Text style={styles2.subBulletPoint}>
-              • Filtered for year, make, model, and trim to ensure true comparability.
-            </Text>
-          </View>
-
-          <Text style={styles2.bulletHeader}>
-            • Linear Regression Analysis
-          </Text>
-          
-          <View style={styles2.subBulletContainer}>
-            <Text style={styles2.subBulletPoint}>
-              • Plotted price vs. mileage to establish a market-based depreciation curve.
-            </Text>
-            <Text style={styles2.subBulletPoint}>
-              • Applied linear regression to create a statistically valid trendline.
-            </Text>
-            <Text style={styles2.subBulletPoint}>
-              • Interpolated the subject vehicle's value based on actual mileage.
-            </Text>
-          </View>
-
-          <Text style={styles2.bulletHeader}>
-            • Outlier Filtering
-          </Text>
-          
-          <View style={styles2.subBulletContainer}>
-            <Text style={styles2.subBulletPoint}>
-              • Excluded listings beyond ±2 standard deviations from the mean to improve accuracy.
-            </Text>
-          </View>
-
-          <View style={styles2.footer}>
-            <Text style={styles2.footerText}>
-              This report was prepared based on real-time market data and accepted valuation methods. Sources include AutoTrader, Cars.com, CarGurus, eBay Motors, and dealer feeds.
-            </Text>
-          </View>
-        </Page>
-
-
-        {/* Page 2 */}
-      <Page size="A4" style={styles3.page}>
-        <Text style={styles3.subtitle}>
-          Legal Validity
+        <Text style={styles2.title}>
+          Fair Market Value Methodology (Court-Defensible)
         </Text>
 
-        <Text style={styles3.methodologyText}>
-          This methodology complies with the <Text style={styles3.bold}>Daubert standard</Text> (<Text style={styles3.italic}>Daubert v. Merrell Dow Pharm., Inc.</Text>, 509 U.S. 579 (1993)) requiring expert methods to be:
+        <Text style={styles2.introText}>
+          To calculate FMV, we use a structured, data-driven method grounded in{' '}
+          <Text style={styles2.bold}>
+            industry practices and statistical reliability
+          </Text>
+          :
         </Text>
 
-        <View style={{ marginLeft: 20 }}>
-          <Text style={styles3.bulletPoint}>
-            • <Text style={styles3.italic}>Testable</Text>
+        <Text style={styles2.bulletHeader}>• Market Data Collection</Text>
+
+        <View style={styles2.subBulletContainer}>
+          <Text style={styles2.subBulletPoint}>
+            • Pulled publicly listed sales of comparable vehicles from trusted
+            marketplaces (e.g., Cars.com, AutoTrader, CarFax, and dealer feeds).
           </Text>
-          <Text style={styles3.bulletPoint}>
-            • <Text style={styles3.italic}>Peer-reviewed</Text>
-          </Text>
-          <Text style={styles3.bulletPoint}>
-            • <Text style={styles3.italic}>Reliable</Text>
-          </Text>
-          <Text style={styles3.bulletPoint}>
-            • <Text style={styles3.italic}>Accepted in the field</Text>
+          <Text style={styles2.subBulletPoint}>
+            • Filtered for year, make, model, and trim to ensure true
+            comparability.
           </Text>
         </View>
 
-        <Text style={styles3.sectionTitle}>
-          Case Law Support
-        </Text>
+        <Text style={styles2.bulletHeader}>• Linear Regression Analysis</Text>
 
-        <Text style={styles3.caseTitle}>
-          McHale v. State Farm
-        </Text>
-        <Text style={styles3.caseText}>
-          (M.D. Fla. 2017): Inherent diminished value upheld via market regression model.
-        </Text>
-
-        <Text style={styles3.caseTitle}>
-          Douglas v. Allstate
-        </Text>
-        <Text style={styles3.caseText}>
-          (E.D. Mo. 2009): Regression analysis based on listings deemed admissible under <Text style={styles3.italic}>Daubert</Text>.
-        </Text>
-
-        <Text style={styles3.caseTitle}>
-          Chaudhary v. USAA
-        </Text>
-        <Text style={styles3.caseText}>
-          (S.D. Tex. 2022): Listing-based valuation accepted as reliable and independently verifiable.
-        </Text>
-
-        <View style={styles3.divider} />
-
-        <View style={styles3.conclusion}>
-          <Text style={styles3.conclusionTitle}>
-            Conclusion:
+        <View style={styles2.subBulletContainer}>
+          <Text style={styles2.subBulletPoint}>
+            • Plotted price vs. mileage to establish a market-based depreciation
+            curve.
           </Text>
-          <Text style={styles3.methodologyText}>
-            This valuation method is <Text style={styles3.bold}>transparent, repeatable, and accepted by courts and insurers</Text> for determining fair market value and inherent diminished value.
+          <Text style={styles2.subBulletPoint}>
+            • Applied linear regression to create a statistically valid
+            trendline.
+          </Text>
+          <Text style={styles2.subBulletPoint}>
+            • Interpolated the subject vehicle's value based on actual mileage.
           </Text>
         </View>
 
-        <View style={styles3.divider} />
+        <Text style={styles2.bulletHeader}>• Outlier Filtering</Text>
+
+        <View style={styles2.subBulletContainer}>
+          <Text style={styles2.subBulletPoint}>
+            • Excluded listings beyond ±2 standard deviations from the mean to
+            improve accuracy.
+          </Text>
+        </View>
+
+        <View style={styles2.footer}>
+          <Text style={styles2.footerText}>
+            This report was prepared based on real-time market data and accepted
+            valuation methods. Sources include AutoTrader, Cars.com, CarGurus,
+            eBay Motors, and dealer feeds.
+          </Text>
+        </View>
       </Page>
 
+      {/* Page 2 */}
+      <Page size="A4" style={styles3.page}>
+        <Text style={styles3.title}>Legal Validity</Text>
+
+        <Text style={styles3.methodologyText}>
+          This methodology complies with the{' '}
+          <Text style={styles3.bold}>Daubert standard</Text> (
+          <Text style={styles3.italic}>
+            Daubert v. Merrell Dow Pharm., Inc.
+          </Text>
+          , 509 U.S. 579 (1993)) requiring expert methods to be:
+        </Text>
+
+        <View style={{ marginLeft: 20, marginBottom: 16 }}>
+          <Text style={styles3.bulletPoint}>
+            • <Text>Testable</Text>
+          </Text>
+          <Text style={styles3.bulletPoint}>
+            • <Text>Peer Reviewed</Text>
+          </Text>
+          <Text style={styles3.bulletPoint}>
+            • <Text>Reliable</Text>
+          </Text>
+          <Text style={styles3.bulletPoint}>
+            • <Text>Accepted in the field</Text>
+          </Text>
+        </View>
+
+        <Text style={styles3.methodologyText}>
+          Florida case law acknowledges diminished value as a legitimate
+          component of vehicle damage and the legal framework supports current
+          case laws’ application as a method to quantify such losses. Utilizing
+          market regression models is an effective approach to demonstrate the
+          financial impact of diminished value in vehicle claims.
+        </Text>
+
+        <Text style={styles3.caseTitle}>Siegle v. Progressive</Text>
+        <Text style={styles3.caseText}>
+          Consumers Ins. Co., 819 So. 2d 732 (Fla. 2002).
+        </Text>
+
+        <Text style={styles3.caseTitle}>
+          <Text style={styles3.italic}>McHale v. Farm Bureau Mutual</Text>
+        </Text>
+        <Text style={styles3.caseText}>
+          Insurance Co., 409 So. 2d 238 (Fla. 3d DCA 1982).
+        </Text>
+
+        <View style={styles3.divider} />
+
+        <Text style={styles3.methodologyText}>
+          Conclusion: This valuation method is{' '}
+          <Text style={styles3.bold}>
+            transparent, repeatable, and accepted by courts and insurers
+          </Text>{' '}
+          for determining fair market value and inherent diminished value
+        </Text>
+
+        <View style={styles3.divider} />
+
+        <Text style={styles3.footer}>
+          This report was prepared based on real-time market data and accepted
+          valuation methods. Sources include AutoTrader, Cars.com, CarGurus,
+          eBay Motors, and dealer feeds.
+        </Text>
+      </Page>
 
       <Page size="A4" style={styles.page}>
         <Text style={styles.subtitle}>Pre-Accident Comparable Listings</Text>
@@ -816,13 +820,13 @@ export const PDFDocument = ({
             >
               <Text style={styles.cell}>
                 {dayjs(listing?.first_seen_at_source_date).format(
-                  "MMM DD, YYYY"
+                  'MMM DD, YYYY'
                 )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
               <Text style={styles.cell}>{listing?.model_year}</Text>
               <Text style={styles.makeModelCell}>
-                {listing?.make + ", " + listing?.model_name}
+                {listing?.make + ', ' + listing?.model_name}
               </Text>
               <Text style={styles.cell}>
                 {listing?.mileage?.toLocaleString()}
@@ -837,16 +841,16 @@ export const PDFDocument = ({
 
           <View
             style={{
-              height: "auto",
-              width: "100%",
-              border: "1px solid #e2e8f0",
+              height: 'auto',
+              width: '100%',
+              border: '1px solid #e2e8f0',
               marginTop: 30,
               marginBottom: 20,
             }}
           >
             <Image
               src={topListChartImage}
-              style={{ width: "100%", height: "auto" }}
+              style={{ width: '100%', height: 'auto' }}
             />
           </View>
         </View>
@@ -880,13 +884,13 @@ export const PDFDocument = ({
             >
               <Text style={styles.cell}>
                 {dayjs(listing?.first_seen_at_source_date).format(
-                  "MMM DD, YYYY"
+                  'MMM DD, YYYY'
                 )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
               <Text style={styles.cell}>{listing?.model_year}</Text>
               <Text style={styles.makeModelCell}>
-                {listing?.make + ", " + listing?.model_name}
+                {listing?.make + ', ' + listing?.model_name}
               </Text>
               <Text style={styles.cell}>
                 {listing?.mileage?.toLocaleString()}
@@ -902,16 +906,16 @@ export const PDFDocument = ({
 
           <View
             style={{
-              height: "auto",
-              width: "100%",
-              border: "1px solid #e2e8f0",
+              height: 'auto',
+              width: '100%',
+              border: '1px solid #e2e8f0',
               marginTop: 30,
               marginBottom: 20,
             }}
           >
             <Image
               src={bottomListChartImage}
-              style={{ width: "100%", height: "auto" }}
+              style={{ width: '100%', height: 'auto' }}
             />
           </View>
         </View>
@@ -919,7 +923,9 @@ export const PDFDocument = ({
         <View style={styles.summary}>
           <Text style={styles.summaryText}>
             Fair Market Value with No Accident: $
-            {Number(report?.average_clean_price_top5)?.toFixed(0)?.toLocaleString()}
+            {Number(report?.average_clean_price_top5)
+              ?.toFixed(0)
+              ?.toLocaleString()}
             {/* {report?.average_clean_price_top5} */}
           </Text>
           <Text style={styles.summaryText}>
@@ -933,15 +939,17 @@ export const PDFDocument = ({
             style={[
               styles.summaryText,
               {
-                fontWeight: "bold",
-                fontFamily: "Telegraph",
+                fontWeight: 'bold',
+                fontFamily: 'Telegraph',
                 fontSize: 14,
                 marginTop: 10,
               },
             ]}
           >
             Calculated Diminished Value: $
-            {Number(report?.estimated_diminished_value)?.toFixed(0)?.toLocaleString()}
+            {Number(report?.estimated_diminished_value)
+              ?.toFixed(0)
+              ?.toLocaleString()}
             {/* {report?.estimated_diminished_value} */}
           </Text>
         </View>
