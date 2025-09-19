@@ -37,9 +37,10 @@ export async function lookupLicensePlate({ licensePlate, state }: PlateToVinRequ
 
     
     const data = await response.json();
-    if (!data.success) {
-      throw new Error('Failed to lookup license plate');
-    }
+    console.log({data})
+    // if (!data.success) {
+    //   throw new Error('Failed to lookup license plate');
+    // }
 
     return {
       vin: data.vin.vin,

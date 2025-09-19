@@ -173,7 +173,7 @@ export default function QualifyStep2() {
     // setIsLoading(true);
     if (activeTab === "license") {
       try {
-        const response = await fetch("/api/vehicles/lookup", {
+        const response = await fetch("/api/vehicle/lookup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
