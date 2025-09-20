@@ -40,6 +40,7 @@ export default function QualifyStep3() {
 
   const [vehicleData, setVehicleData] = useState({});
   const [qualifiedAnswers, setQualifiedAnswers] = useState({});
+  const [selectedMethod, setSelectedMethod] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   // Add this after the formData state
@@ -52,10 +53,11 @@ export default function QualifyStep3() {
     // Check if user completed previous steps
     const qualifyAnswers = localStorage.getItem("qualifyAnswers");
     const vehicleData = localStorage.getItem("vehicleData");
+    const selectedMethodStorage = localStorage.getItem("selectedMethod");
 
     setVehicleData(JSON.parse(vehicleData || "{}"));
     setQualifiedAnswers(JSON.parse(qualifyAnswers || "{}"));
-
+    setSelectedMethod(selectedMethodStorage || "");
   }, [router]);
 
   // Replace the existing handleChange function
@@ -113,6 +115,7 @@ export default function QualifyStep3() {
             email: formData.email,
           },
           mileage: formData.mileage,
+          selectedMethod,
         }),
       });
 

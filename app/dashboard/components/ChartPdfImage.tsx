@@ -181,7 +181,7 @@ const Index = ({ item }: { item: any }) => {
         {({ loading }) => (
           <>
             <Download size={18} />
-            <span>{loading ? "Preparing..." : "Download PDF"}</span>
+            <span>{loading ? "Preparing..." : item?.selected_method === "total_loss" ? "Download Loss Report" : "Download PDF" }</span>
           </>
         )}
       </PDFDownloadLink>

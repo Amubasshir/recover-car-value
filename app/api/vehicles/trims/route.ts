@@ -27,7 +27,7 @@ export async function GET(request: Request) {
       },
       { status: 400 } // Bad Request
     );
-  }
+  } 
 
 //   const baseUrl = "https://api.marketcheck.com/v2/search/car/active";
   const baseUrl = `https://rcv.btkdeals.com/api/vehicles${field ? `/${field}` : ""}`;

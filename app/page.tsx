@@ -1,11 +1,23 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import carImg from '../public/images/cars.jpg';
+import { useRouter } from 'next/navigation';
 
 // Update the HeroSection component
-const HeroSection = () => (
+const HeroSection = () => {
+  const router = useRouter();
+
+  const handleCheckButton = (type: string) => {
+     localStorage.setItem("selectedMethod", type)
+       router.push('/qualify/step1');
+  };
+    
+    
+    return (
   <section className="w-full py-16 md:py-24 lg:py-24 bg-gradient-to-b from-primary-50 to-white overflow-hidden">
     <div className="container px-4 md:px-6 relative">
       <div className="absolute inset-0 bg-grid-primary-100/20 bg-[size:20px_20px] opacity-20"></div>
@@ -22,11 +34,16 @@ const HeroSection = () => (
             </p>
           </div>
           <div className="flex flex-col justify-center items-center md:items-right md:justify-start gap-3 min-[400px]:flex-row pt-2">
-            <Link href="/qualify/step1">
-              <Button size="lg" className="gap-2">
+            
+              <Button size="lg" className="gap-2" onClick={()=> handleCheckButton('qualify')}>
                 Click to see if you qualify <ArrowRight className="h-5 w-5" />
               </Button>
-            </Link>
+
+
+              <Button size="lg" className="gap-2 bg-yellow-500" onClick={()=> handleCheckButton('total_loss')}>
+                Click to see Total Loss <ArrowRight className="h-5 w-5" />
+              </Button>
+            
           </div>
           <div className="block md:hidden">
             <Image
@@ -51,7 +68,7 @@ const HeroSection = () => (
       <QuoteCard />
     </div>
   </section>
-);
+)};
 
 // Update the QuoteCard component
 const QuoteCard = () => (

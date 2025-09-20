@@ -36,6 +36,7 @@ export async function POST(req: Request) {
       heading,
       state,
       mileage,
+      selectedMethod,
     } = body;
 
     let min_miles = Number(mileage) - 10000;
@@ -180,7 +181,7 @@ export async function POST(req: Request) {
       model,
       trim,
       accident_mileage: accidentMileage,
-      accident_date: accidentDate,
+      accident_date: accidentDate, 
       heading: heading,
       dealer_name: "",
       average_clean_price_top5: preValue?.toFixed(0),
@@ -193,6 +194,7 @@ export async function POST(req: Request) {
       bottom_damaged_listings: damagedListingsData?.cars,
       client_info,
       qualify_answers,
+      selected_method: selectedMethod,
     };
 
     let queries = await supabase

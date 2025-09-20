@@ -484,9 +484,14 @@ export const PDFDocument = ({
           <View style={styles.redBottomElement} />
 
           {/* Main title */}
+          {report?.selected_method === "total_loss" ? <Text style={styles.coverTitle}>
+            Total Loss{'\n'}
+            Analysis{'\n'}
+            Report
+          </Text> :
           <Text style={styles.coverTitle}>
             Diminished{'\n'}Value{'\n'}Analysis{'\n'}Report
-          </Text>
+          </Text>}
 
           {/* Report Date */}
           <View style={styles.reportDateContainer}>
@@ -855,6 +860,28 @@ export const PDFDocument = ({
           </View>
         </View>
 
+
+        {report?.selected_method === "total_loss" && <View style={styles.summary}>
+          <Text
+            style={[
+              styles.summaryText,
+              {
+                fontWeight: 'bold',
+                fontFamily: 'Telegraph',
+                fontSize: 18,
+                marginTop: 10,
+                marginBottom: 5,
+              },
+            ]}
+          >
+            Fair Market Value: $
+            {Number(report?.average_clean_price_top5)
+              ?.toFixed(0)
+              ?.toLocaleString()}
+            {/* {report?.estimated_diminished_value} */}
+          </Text>
+        </View>}
+
         <View style={styles.footer}>
           <Text>
             This report was prepared based on real-time market data and accepted
@@ -864,7 +891,7 @@ export const PDFDocument = ({
         </View>
       </Page>
 
-      <Page size="A4" style={styles.page}>
+      {report?.selected_method !== "total_loss" && <Page size="A4" style={styles.page}>
         <Text style={styles.subtitle}>Post-Accident Comparable Listings</Text>
         <View style={styles.table}>
           <View style={styles.tableHeader}>
@@ -961,7 +988,7 @@ export const PDFDocument = ({
             eBay Motors, and dealer feeds.
           </Text>
         </View>
-      </Page>
+      </Page>}
     </Document>
   );
 };
