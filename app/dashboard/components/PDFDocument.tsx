@@ -861,6 +861,8 @@ export const PDFDocument = ({
         </View>
 
 
+        <View style={styles.footer}>
+
         {report?.selected_method === "total_loss" && <View style={styles.summary}>
           <Text
             style={[
@@ -869,8 +871,8 @@ export const PDFDocument = ({
                 fontWeight: 'bold',
                 fontFamily: 'Telegraph',
                 fontSize: 18,
-                marginTop: 10,
-                marginBottom: 5,
+                marginTop: 5,
+                marginBottom: 0,
               },
             ]}
           >
@@ -882,7 +884,7 @@ export const PDFDocument = ({
           </Text>
         </View>}
 
-        <View style={styles.footer}>
+
           <Text>
             This report was prepared based on real-time market data and accepted
             valuation methods. Sources include AutoTrader, Cars.com, CarGurus,
