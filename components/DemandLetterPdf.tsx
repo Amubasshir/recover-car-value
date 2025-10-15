@@ -39,7 +39,7 @@
 //   recipient: {
 //     marginTop: 60,
 //     marginBottom: 20,
-//     color: '#DC2626',
+//     color: '#000000',
 //   },
 //   subject: {
 //     marginTop: 15,
@@ -54,7 +54,7 @@
 //     marginBottom: 0.5,
 //   },
 //   redText: {
-//     color: '#DC2626',
+//     color: '#000000',
 //   },
 //   greeting: {
 //     marginTop: 20,
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
   },
   licenseInfo: {
     fontSize: 9,
-    color: '#dc2626', // red-600
+    color: '#000000', // red-600
     marginBottom: 20,
     fontWeight: 'bold',
   },
@@ -495,7 +495,7 @@ const styles = StyleSheet.create({
   },
   subject: {
     fontSize: 12,
-    // color: '#dc2626', // red-600
+    // color: '#000000', // red-600
     fontWeight: 'bold',
     marginBottom: 25,
     // textTransform: 'uppercase',
@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
     color: '#374151',
   },
   dynamicRed: {
-    color: '#dc2626', // red-600
+    color: '#000000', // red-600
     fontWeight: 'bold',
   },
   section: {
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
     // backgroundColor: '#f8fafc',
     // padding: 15,
     // borderLeftWidth: 3,
-    // borderLeftColor: '#dc2626',
+    // borderLeftColor: '#000000',
     marginBottom: 20,
   },
   claimField: {
@@ -573,7 +573,7 @@ const styles = StyleSheet.create({
   },
   claimValue: {
     fontSize: 10,
-    color: '#dc2626',
+    color: '#000000',
     fontWeight: 'bold',
     flex: 1,
   },
@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
 // Background Logo Component (you can replace with your actual logo)
 const BackgroundLogo = () => (
   <View style={styles.backgroundLogo}>
-    <Image style={{ fontSize: 80, textAlign: 'center', color: '#dc2626', opacity: 0.1 }} src={logo2.src} />
+    <Image style={{ fontSize: 80, textAlign: 'center', color: '#000000', opacity: 0.1 }} src={logo2.src} />
     {/* <Image
               src={bottomListChartImage}
               style={{ width: '100%', height: 'auto' }}
