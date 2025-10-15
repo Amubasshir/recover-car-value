@@ -1,6 +1,12 @@
 "use client";
 
-import DemandLetterPdf from "@/components/DemandLetterPdf";
+
+import dynamic from "next/dynamic";
+const DemandLetterPdf = dynamic(() => import("@/components/DemandLetterPdf"), {
+  ssr: false,
+});
+
+// import DemandLetterPdf from "@/components/DemandLetterPdf";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -468,9 +474,7 @@ export default function QualifyStep3() {
               Receive Instant Diminished Cash Value!
             </Button>
 
-             <br />
              <DemandLetterPdf currentFormData={formData} vehicleData={vehicleData} qualifiedAnswers={qualifiedAnswers} selectedMethod={selectedMethod} />
-             <br />
 
             <div className="space-y-2 bg-primary-50 p-3 rounded-xl border border-primary-100 shadow-sm">
               <div className="flex items-start space-x-3">
