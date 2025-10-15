@@ -1,5 +1,6 @@
 "use client";
 
+import DemandLetterPdf from "@/components/DemandLetterPdf";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -34,6 +36,7 @@ export default function QualifyStep3() {
     email: "",
     atFaultName: "",
     atFaultInsurance: "",
+    faultInsuranceAddress: "",
     repairClaimNumber: "", // Add new field
     state: "", // Add new field
   });
@@ -42,6 +45,8 @@ export default function QualifyStep3() {
   const [qualifiedAnswers, setQualifiedAnswers] = useState({});
   const [selectedMethod, setSelectedMethod] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+
 
   // Add this after the formData state
   const [errors, setErrors] = useState({
@@ -425,6 +430,22 @@ export default function QualifyStep3() {
                   htmlFor="repairClaimNumber"
                   className="text-sm font-medium text-gray-700"
                 >
+                  Fault Insurance Address
+                </Label>
+                <Textarea
+                  id="faultInsuranceAddress"
+                  name="faultInsuranceAddress"
+                  value={formData.faultInsuranceAddress}
+                  onChange={handleChange}
+                  placeholder="Enter Fault Insurance Address"
+                  className="rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary bg-gray-100"
+                />
+              </div>
+              <div className="space-y-2 mt-5">
+                <Label
+                  htmlFor="repairClaimNumber"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Claim Number for Repair
                 </Label>
                 <Input
@@ -446,6 +467,10 @@ export default function QualifyStep3() {
             >
               Receive Instant Diminished Cash Value!
             </Button>
+
+             <br />
+             <DemandLetterPdf currentFormData={formData} vehicleData={vehicleData} qualifiedAnswers={qualifiedAnswers} selectedMethod={selectedMethod} />
+             <br />
 
             <div className="space-y-2 bg-primary-50 p-3 rounded-xl border border-primary-100 shadow-sm">
               <div className="flex items-start space-x-3">
@@ -470,6 +495,8 @@ export default function QualifyStep3() {
           </CardFooter>
         </Card>
       </main>
+
+     
     </div>
   );
 }
