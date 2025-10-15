@@ -190,7 +190,7 @@ const CreateDemandLetterPdf = ({
     insuredName: claimData.insuredName || "(At-Fault Driver's Full Name)",
     claimNumber: claimData.claimNumber || "(Insurance Claim Number)",
     dateOfLoss: claimData.dateOfLoss || "(Date of Accident)",
-    vehicle: claimData.vehicle || "(Vehicle Year, Make, Model)",
+    vehicle: claimData.vehicleYMM || "(Vehicle Year, Make, Model)",
     dateOfAccident: claimData.dateOfAccident || "(Date of Accident)",
   };
 
@@ -262,7 +262,7 @@ const CreateDemandLetterPdf = ({
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Background of the Claim</Text>
             <Text>
-              On <Text style={styles.dynamicRed}>{data.dateOfAccident}</Text>, my client's vehicle, a <Text style={styles.dynamicRed}>{data.vehicle}</Text>, was involved in a collision caused by the negligence of your insured. The accident resulted in significant damage to my client's vehicle, requiring repairs, restoring the vehicle's functionality and appearance. However, despite these repairs, the vehicle's market value has been substantially reduced due to its accident history, as prospective buyers are unwilling to pay the same price for a vehicle with a documented collision record.
+              On <Text style={styles.dynamicRed}>{data.dateOfAccident}</Text>, my client's vehicle, a <Text style={styles.dynamicRed}>{data.vehicleYMM}</Text>, was involved in a collision caused by the negligence of your insured. The accident resulted in significant damage to my client's vehicle, requiring repairs, restoring the vehicle's functionality and appearance. However, despite these repairs, the vehicle's market value has been substantially reduced due to its accident history, as prospective buyers are unwilling to pay the same price for a vehicle with a documented collision record.
             </Text>
           </View>
         </View>

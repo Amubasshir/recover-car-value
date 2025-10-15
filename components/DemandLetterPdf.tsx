@@ -80,7 +80,8 @@ const DiminishedValueClaimForm = ({currentFormData, vehicleData, qualifiedAnswer
                       claimNumber: formData.claimNumber,
                       dateOfLoss: formData.dateOfLoss,
                       vehicle: formData.vehicle,
-                      dateOfAccident: formData.dateOfAccident
+                      dateOfAccident: formData.dateOfAccident,
+                      vehicleYMM: vehicleData?.year + ', ' + vehicleData?.make + ', ' + vehicleData?.model,
                     }}
                   />
                 }
