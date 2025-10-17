@@ -124,6 +124,10 @@ export default function QualifyStep3() {
             name: formData.firstName + " " + formData.lastName,
             phone: formData.phone,
             email: formData.email,
+            insuranceCompanyName: formData.atFaultInsurance,
+            insuranceCompanyAddress: formData.faultInsuranceAddress,
+            insuredName: formData.atFaultName,
+            claimNumber: formData.repairClaimNumber,
           },
           mileage: formData.mileage,
           selectedMethod,
@@ -156,6 +160,9 @@ export default function QualifyStep3() {
     }
 
   };
+
+
+  console.log("form Data", {formData})
 
   const isFormValid =
     formData.accidentDate &&
@@ -474,7 +481,7 @@ export default function QualifyStep3() {
               Receive Instant Diminished Cash Value!
             </Button>
 
-             <DemandLetterPdf currentFormData={formData} vehicleData={vehicleData} qualifiedAnswers={qualifiedAnswers} selectedMethod={selectedMethod} />
+             {/* <DemandLetterPdf currentFormData={formData} vehicleData={vehicleData} qualifiedAnswers={qualifiedAnswers} selectedMethod={selectedMethod} /> */}
 
             <div className="space-y-2 bg-primary-50 p-3 rounded-xl border border-primary-100 shadow-sm">
               <div className="flex items-start space-x-3">

@@ -116,6 +116,7 @@ import {
 } from "@/components/ui/table";
 import { supabase } from "@/lib/supabase";
 import ChartPdfImage from "./components/ChartPdfImage";
+import DemandLetterPdf from "@/components/DemandLetterPdf";
 
 // Add this function to fetch data from Supabase
 const fetchDiminishedValueData = async (
@@ -312,7 +313,12 @@ export default function Dashboard() {
                               </>
                             )}
                           </PDFDownloadLink> */}
+                          <div className="flex items-center gap-4">
+
                           <ChartPdfImage item={item} />
+                          {console.log("i am from item", {item})}
+                          <DemandLetterPdf item={item} />
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}

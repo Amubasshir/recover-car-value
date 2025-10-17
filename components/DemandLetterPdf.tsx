@@ -13,7 +13,7 @@ import { Button } from './ui/button';
 // Custom Button Component using Radix UI Slot
 
 
-const DiminishedValueClaimForm = ({currentFormData, vehicleData, qualifiedAnswers, selectedMethod}) => {
+const DemandLetterPdf = ({item}) => {
   const [formData, setFormData] = useState({
     clientFullName: '',
     insuredName: '',
@@ -26,24 +26,20 @@ const DiminishedValueClaimForm = ({currentFormData, vehicleData, qualifiedAnswer
   });
 
 
-    console.log({currentFormData, vehicleData, qualifiedAnswers, selectedMethod})
   useEffect(() => {
-    if(currentFormData && vehicleData && qualifiedAnswers && selectedMethod) {
+    if(item) {
         setFormData({
-            clientFullName: currentFormData?.firstName + " " + currentFormData?.lastName,
-    insuredName: currentFormData?.atFaultName,
-    claimNumber: currentFormData?.repairClaimNumber,
-    dateOfLoss: currentFormData?.accidentDate,
-    vehicle: vehicleData?.trim,
-    dateOfAccident: currentFormData?.accidentDate,
-    insuranceCompanyName: currentFormData?.atFaultInsurance,
-    insuranceCompanyAddress: currentFormData?.faultInsuranceAddress,
+            clientFullName: item?.client_info?.name,
+    insuredName: item?.client_info?.insuredName,
+    claimNumber: item?.client_info?.claimNumber,
+    dateOfLoss: item?.accident_date,
+    vehicle: item?.heading,
+    dateOfAccident: item?.accident_date,
+    insuranceCompanyName: item?.client_info?.insuranceCompanyName,
+    insuranceCompanyAddress: item?.client_info?.insuranceCompanyAddress,
         })
     }
-    // if(Object.keys(data).length > 0) {
-    //     setFormData({...data})
-    // }
-  }, [currentFormData, vehicleData, qualifiedAnswers, selectedMethod]);
+  }, [item]);
 
   const handleInputChange = (field) => (e) => {
     setFormData(prev => ({
@@ -63,6 +59,7 @@ const DiminishedValueClaimForm = ({currentFormData, vehicleData, qualifiedAnswer
     { label: "Insurance Company Address", key: 'insuranceCompanyAddress' },
   ];
 
+  console.log("i am",item?.year + ', ' + item?.make + ', ' + item?.model)
   return (
     <>
             
@@ -81,15 +78,16 @@ const DiminishedValueClaimForm = ({currentFormData, vehicleData, qualifiedAnswer
                       dateOfLoss: formData.dateOfLoss,
                       vehicle: formData.vehicle,
                       dateOfAccident: formData.dateOfAccident,
-                      vehicleYMM: vehicleData?.year + ', ' + vehicleData?.make + ', ' + vehicleData?.model,
+                      vehicleYMM: item?.year + ', ' + item?.make + ', ' + item?.model,
                     }}
+                    item={item}
                   />
                 }
                 fileName="diminished-value-claim.pdf"
               >
                 {({ loading }) => (
-                  <Button disabled={loading} style={{backgroundColor:"blue"}}>
-                    {loading ? 'Generating PDF...' : 'Demand Letter'}
+                  <Button disabled={loading} style={{backgroundColor:"blue"}} className='rounded-md'>
+                    {loading ? 'Generating PDF...' : 'Demand Letter PDF'}
                   </Button>
                 )}
               </PDFDownloadLink>
@@ -97,5 +95,5 @@ const DiminishedValueClaimForm = ({currentFormData, vehicleData, qualifiedAnswer
   );
 };
 
-export default DiminishedValueClaimForm;
+export default DemandLetterPdf;
 
