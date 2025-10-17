@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textTransform: "uppercase",
   },
-  footer: {
+   footer: {
     position: "absolute",
     bottom: 0,
     left: 0,
@@ -118,35 +118,79 @@ const styles = StyleSheet.create({
   footerLayer: {
     flexDirection: "row",
     justifyContent: "space-around",
+    alignItems: "center",
     backgroundColor: "#F59E0B",
     padding: 6,
-    position: 'relative',
   },
   footerItem: {
-      flexDirection: "row",
-      alignItems: "center",
-      fontSize: 9,
-      color: "#FFFFFF",
-      position: 'relative',
-      zIndex: 10,
-    },
-    footerText: {
-        marginLeft: 5,
-        position: 'relative',
-        color: '#ffffff',
-        zIndex: 11,
-    },
-    footerRightOverlay: {
-      backgroundColor: '#000000',
-      position: 'absolute',
-      top: 0,
-      right: '-5%',
-      height: '100%',
-      width: "40%",
-    //   border: '7px solid #ffffff',
-      transform: 'skewX(-45deg)',
-      zIndex: -1,
-    },
+    flexDirection: "row",
+    alignItems: "center",
+    fontSize: 9,
+    color: "#FFFFFF",
+  },
+  footerText: {
+    marginLeft: 5,
+    color: "#FFFFFF",
+  },
+  footerRightOverlayWhiteLeft: {
+    position: "absolute",
+    top: 0,
+    right: "33.3%",
+    height: "100%",
+    width: "10px",
+    backgroundColor: "#ffffff",
+    transform: 'skewX(-25deg)',
+  },
+  footerRightOverlay: {
+    position: "absolute",
+    top: 0,
+    right: -10,
+    height: "100%",
+    width: "35%",
+    backgroundColor: "#000000",
+    transform: 'skewX(-25deg)',
+    borderLeft: '2px solid',
+    borderColor: "#ffffff"
+    // opacity: 0.25, // optional shading
+  },
+//   footer: {
+//     position: "absolute",
+//     bottom: 0,
+//     left: 0,
+//     right: 0,
+//   },
+//   footerLayer: {
+//     flexDirection: "row",
+//     justifyContent: "space-around",
+//     backgroundColor: "#F59E0B",
+//     padding: 6,
+//     position: 'relative',
+//   },
+//   footerItem: {
+//       flexDirection: "row",
+//       alignItems: "center",
+//       fontSize: 9,
+//       color: "#FFFFFF",
+//       position: 'relative',
+//       zIndex: 10,
+//     },
+//     footerText: {
+//         marginLeft: 5,
+//         position: 'relative',
+//         color: '#ffffff',
+//         zIndex: 11,
+//     },
+//     footerRightOverlay: {
+//       backgroundColor: '#000000',
+//       position: 'absolute',
+//       top: 0,
+//       right: '-5%',
+//       height: '100%',
+//       width: "40%",
+//     //   border: '7px solid #ffffff',
+//       transform: 'skewX(-45deg)',
+//       zIndex: -1,
+//     },
     //   footer: {
         //     position: 'absolute',
   //     bottom: 30,
@@ -316,7 +360,7 @@ const CreateDemandLetterPdf = ({
           </Text>
         </View> */}
 
-        <View style={styles.footer}>
+        {/* <View style={styles.footer}>
           <View style={styles.footerLayer}>
             <View style={styles.footerItem}>
               <Text>📞</Text>
@@ -332,7 +376,27 @@ const CreateDemandLetterPdf = ({
             </View>
             <View style={styles.footerRightOverlay} />
           </View>
+        </View> */}
+
+        <View style={styles.footer}>
+            <View style={styles.footerLayer}>
+                <View style={styles.footerRightOverlayWhiteLeft} /> 
+                <View style={styles.footerRightOverlay} /> 
+                <View style={styles.footerItem}>
+                <Text>📞</Text>
+                <Text style={styles.footerText}>(202)-455-8110</Text>
+                </View>
+                <View style={styles.footerItem}>
+                <Text>✉</Text>
+                <Text style={styles.footerText}>office@prime-lawgroup.com</Text>
+                </View>
+                <View style={styles.footerItem}>
+                <Text>🌐</Text>
+                <Text style={styles.footerText}>www.prime-lawgroup.com</Text>
+                </View>
+            </View>
         </View>
+
       </Page>
     </Document>
   );
