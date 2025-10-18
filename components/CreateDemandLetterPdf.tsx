@@ -12,8 +12,11 @@ import {
   Image,
 } from "@react-pdf/renderer";
 
+
 import logo1 from "../public/images/logo-full-wp.jpg";
 import logo2 from "../public/images/logo-wp.jpg";
+import dayjs from "dayjs";
+import { Globe } from "lucide-react";
 
 // Register fonts (you'll need to provide font files or use default)
 Font.register({
@@ -266,6 +269,8 @@ const CreateDemandLetterPdf = ({
 
   return (
     <Document>
+
+        {/* Page 1 */}
       <Page size="A4" style={styles.page}>
         {/* Background Logo */}
         <BackgroundLogo />
@@ -308,7 +313,7 @@ const CreateDemandLetterPdf = ({
           </View>
           <View style={styles.claimField}>
             <Text style={styles.claimLabel}>Date of Loss:</Text>
-            <Text style={styles.claimValue}>{data.dateOfLoss}</Text>
+            <Text style={styles.claimValue}>{dayjs(data.dateOfLoss).format('MM/DD/YYYY')}</Text>
           </View>
           <View style={styles.claimField}>
             <Text style={styles.claimLabel}>Vehicle:</Text>
@@ -326,7 +331,7 @@ const CreateDemandLetterPdf = ({
               <Text style={styles.dynamicRed}>{data.clientName}</Text> in
               connection with a property damage claim arising from a motor
               vehicle accident on{" "}
-              <Text style={styles.dynamicRed}>{data.dateOfAccident}</Text>,
+              <Text style={styles.dynamicRed}>{dayjs(data.dateOfAccident).format('MM/DD/YYYY')}</Text>,
               caused by your insured. This letter serves as a formal demand for
               compensation for the diminished value of my client's vehicle,
               pursuant to Florida Statute § 626.9743, which holds the at-fault
@@ -339,7 +344,7 @@ const CreateDemandLetterPdf = ({
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Background of the Claim</Text>
             <Text>
-              On <Text style={styles.dynamicRed}>{data.dateOfAccident}</Text>,
+              On <Text style={styles.dynamicRed}>{dayjs(data.dateOfAccident).format('MM/DD/YYYY')}</Text>,
               my client's vehicle, a{" "}
               <Text style={styles.dynamicRed}>{data.vehicleYMM}</Text>, was
               involved in a collision caused by the negligence of your insured.
@@ -383,21 +388,186 @@ const CreateDemandLetterPdf = ({
                 <View style={styles.footerRightOverlayWhiteLeft} /> 
                 <View style={styles.footerRightOverlay} /> 
                 <View style={styles.footerItem}>
-                <Text>📞</Text>
+                <Text></Text>
                 <Text style={styles.footerText}>(202)-455-8110</Text>
                 </View>
                 <View style={styles.footerItem}>
-                <Text>✉</Text>
+                <Text></Text>
                 <Text style={styles.footerText}>office@prime-lawgroup.com</Text>
                 </View>
                 <View style={styles.footerItem}>
-                <Text>🌐</Text>
+                <Text> </Text>
                 <Text style={styles.footerText}>www.prime-lawgroup.com</Text>
                 </View>
             </View>
         </View>
 
       </Page>
+
+        {/* === PAGE 2 === */}
+  <Page size="A4" style={styles.page}>
+    <BackgroundLogo />
+
+    {/* Header */}
+    <View style={styles.header}>
+      <View>
+        <Image src={logo1.src} style={{ width: "auto", height: "60px" }} />
+      </View>
+      <View style={styles.headerRight}>
+        <Text style={styles.address}>{data.address}</Text>
+        <Text style={styles.licenseInfo}>{data.licenseInfo}</Text>
+      </View>
+    </View>
+
+    {/* Body */}
+    <View style={styles.body}>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Legal Basis for Diminished Value Claim</Text>
+        <Text>
+          Under Florida law, specifically Florida Statute § 626.9743, an insurer electing
+          to repair a vehicle must restore it to substantially the same appearance,
+          function, and value as before the loss. The Florida Department of Insurance’s
+          Informational Bulletin 84-270 further clarifies that the insurer’s responsibility
+          includes indemnifying the vehicle owner for any diminution in value, stating:
+          “The owner has not been properly indemnified unless there is no diminution in
+          value of the automobile as it was before the damage and as it is after repairs.”
+          Additionally, Florida’s standard jury instructions for property damage (Fla. Std.
+          Jury Instr. (Civ.) MI 8.2) provides that the measure of damages includes the
+          difference between the vehicle’s value immediately before and after the
+          incident, with due allowance for any reduction in value post-repair.
+        </Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text>
+          As your insured was at fault for the accident, my client is entitled to recover
+          the diminished value of their vehicle, reflecting the loss in market value caused
+          by the collision. This claim is filed within the four-year statute of limitations
+          for property damage claims under Florida Statute § 95.11(3)(a).
+        </Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Calculation of Diminished Value</Text>
+        <Text>
+          To determine the diminished value of my client’s vehicle, we have obtained a
+          Diminished Value Analysis Report. The report was prepared using real-time
+          market comps and accepted valuation methods to ensure accuracy. The
+          appraisal, supported by verifiable comparables (comps) of similar vehicles with
+          and without accident histories, as detailed in Attachment A, establishes the
+          following:
+        </Text>
+
+        <Text>{"\n"}Pre-Accident Market Value: (Pre-Accident Value), based on the vehicle’s year, make, model, mileage, condition, and market trends.</Text>
+        <Text>Post-Repair Market Value: (Post-Accident Value), reflecting the reduced resale value due to the accident history.</Text>
+        <Text>Diminished Value: (Diminished Value Amount), calculated as the difference between the pre-accident and post-repair market values.</Text>
+
+        <Text>
+          {"\n"}These included in the comps demonstrate the market’s perception of reduced
+          value for vehicles with collision records, consistent with industry standards and
+          Florida law. The report also accounts for factors such as location, the vehicle’s
+          age, mileage, and class, ensuring a comprehensive and accurate valuation.
+        </Text>
+      </View>
+    </View>
+
+    {/* Footer */}
+    <View style={styles.footer}>
+      <View style={styles.footerLayer}>
+        <View style={styles.footerRightOverlayWhiteLeft} />
+        <View style={styles.footerRightOverlay} />
+        <View style={styles.footerItem}>
+          <Text></Text>
+          <Text style={styles.footerText}>(202)-455-8110</Text>
+        </View>
+        <View style={styles.footerItem}>
+          <Text></Text>
+          <Text style={styles.footerText}>office@prime-lawgroup.com</Text>
+        </View>
+        <View style={styles.footerItem}>
+          <Text></Text>
+          <Text style={styles.footerText}>www.prime-lawgroup.com</Text>
+        </View>
+      </View>
+    </View>
+  </Page>
+
+  {/* === PAGE 3 === */}
+  <Page size="A4" style={styles.page}>
+    <BackgroundLogo />
+
+    {/* Header */}
+    <View style={styles.header}>
+      <View>
+        <Image src={logo1.src} style={{ width: "auto", height: "60px" }} />
+      </View>
+      <View style={styles.headerRight}>
+        <Text style={styles.address}>{data.address}</Text>
+        <Text style={styles.licenseInfo}>{data.licenseInfo}</Text>
+      </View>
+    </View>
+
+    {/* Body */}
+    <View style={styles.body}>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Demand for Compensation</Text>
+        <Text>
+          Based on the Diminished Value Analysis Report and supporting documentation, we
+          hereby demand compensation in the amount of (Diminished Value Amount) for the
+          diminished value of my client’s vehicle. This amount represents the economic
+          loss sustained due to the accident caused by your insured’s negligence.
+          Additionally, we reserve the right to seek compensation for any related losses,
+          such as towing, storage, or loss of use, should further evidence support such
+          claims.
+        </Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Supporting Documentation</Text>
+        <Text>
+          Enclosed with this demand letter are the following documents to substantiate the
+          claim:
+        </Text>
+        <Text>{"\n"}Exhibit A: Diminished Value Appraisal Report and Verifiable Comparables (Comps) of Similar Vehicles</Text>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Request for Prompt Response</Text>
+        <Text>
+          Please review this demand and the enclosed documentation promptly. We request a
+          response within 14 days from the date of this letter.{"\n\n"}
+          To facilitate a timely resolution, please contact me at
+          office@prime-lawgroup.com to discuss this claim. All communications should be
+          directed to my office to ensure compliance with Florida’s ethical standards for
+          attorney-client representation (Rule 4-4.2, Florida Rules of Professional
+          Conduct). We look forward to a fair and reasonable settlement to resolve this
+          matter amicably.
+        </Text>
+      </View>
+
+      <Text>{"\n\n"}Sincerely,{"\n"}Licensed in FL, MA, CA, CO & D.C.{"\n"}1100 15th St NW{"\n"}Washington, D.C. 20005</Text>
+    </View>
+
+    {/* Footer */}
+    <View style={styles.footer}>
+      <View style={styles.footerLayer}>
+        <View style={styles.footerRightOverlayWhiteLeft} />
+        <View style={styles.footerRightOverlay} />
+        <View style={styles.footerItem}>
+          <Text></Text>
+          <Text style={styles.footerText}>(202)-455-8110</Text>
+        </View>
+        <View style={styles.footerItem}>
+          <Text></Text>
+          <Text style={styles.footerText}>office@prime-lawgroup.com</Text>
+        </View>
+        <View style={styles.footerItem}>
+          <Text></Text>
+          <Text style={styles.footerText}>www.prime-lawgroup.com</Text>
+        </View>
+      </View>
+    </View>
+  </Page>
     </Document>
   );
 };
