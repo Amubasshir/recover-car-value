@@ -458,9 +458,9 @@ const CreateDemandLetterPdf = ({
           following:
         </Text>
 
-        <Text>{"\n"}Pre-Accident Market Value: (Pre-Accident Value), based on the vehicle’s year, make, model, mileage, condition, and market trends.</Text>
-        <Text>Post-Repair Market Value: (Post-Accident Value), reflecting the reduced resale value due to the accident history.</Text>
-        <Text>Diminished Value: (Diminished Value Amount), calculated as the difference between the pre-accident and post-repair market values.</Text>
+        <Text>{"\n"}Pre-Accident Market Value: {item?.average_clean_price_top5}, based on the vehicle’s year, make, model, mileage, condition, and market trends.</Text>
+        <Text>Post-Repair Market Value: {item?.average_damaged_price_bottom5}, reflecting the reduced resale value due to the accident history.</Text>
+        <Text>Diminished Value: {item?.estimated_diminished_value}, calculated as the difference between the pre-accident and post-repair market values.</Text>
 
         <Text>
           {"\n"}These included in the comps demonstrate the market’s perception of reduced
@@ -513,7 +513,7 @@ const CreateDemandLetterPdf = ({
         <Text style={styles.sectionTitle}>Demand for Compensation</Text>
         <Text>
           Based on the Diminished Value Analysis Report and supporting documentation, we
-          hereby demand compensation in the amount of (Diminished Value Amount) for the
+          hereby demand compensation in the amount of {item?.estimated_diminished_value} for the
           diminished value of my client’s vehicle. This amount represents the economic
           loss sustained due to the accident caused by your insured’s negligence.
           Additionally, we reserve the right to seek compensation for any related losses,
