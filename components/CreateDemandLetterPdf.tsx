@@ -323,7 +323,7 @@ const CreateDemandLetterPdf = ({
 
         {/* Body Content */}
         <View style={styles.body}>
-          <Text style={styles.sectionTitle}>Dear Claims Department,</Text>
+          <Text style={styles.dynamicRed}>Dear Claims Department,</Text>
 
           <View style={styles.section}>
             <Text>
@@ -342,7 +342,7 @@ const CreateDemandLetterPdf = ({
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Background of the Claim</Text>
+            <Text style={styles.dynamicRed}>Background of the Claim</Text>
             <Text>
               On <Text style={styles.dynamicRed}>{dayjs(data.dateOfAccident).format('MM/DD/YYYY')}</Text>,
               my client's vehicle, a{" "}
@@ -422,7 +422,7 @@ const CreateDemandLetterPdf = ({
     {/* Body */}
     <View style={styles.body}>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Legal Basis for Diminished Value Claim</Text>
+        <Text style={styles.dynamicRed}>Legal Basis for Diminished Value Claim</Text>
         <Text>
           Under Florida law, specifically Florida Statute § 626.9743, an insurer electing
           to repair a vehicle must restore it to substantially the same appearance,
@@ -448,19 +448,19 @@ const CreateDemandLetterPdf = ({
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Calculation of Diminished Value</Text>
+        <Text style={styles.dynamicRed}>Calculation of Diminished Value</Text>
         <Text>
           To determine the diminished value of my client’s vehicle, we have obtained a
           Diminished Value Analysis Report. The report was prepared using real-time
           market comps and accepted valuation methods to ensure accuracy. The
           appraisal, supported by verifiable comparables (comps) of similar vehicles with
-          and without accident histories, as detailed in Attachment A, establishes the
+          and without accident histories, as detailed in <Text style={styles.dynamicRed}>Attachment A,</Text> establishes the
           following:
         </Text>
 
-        <Text>{"\n"}Pre-Accident Market Value: {item?.average_clean_price_top5}, based on the vehicle’s year, make, model, mileage, condition, and market trends.</Text>
-        <Text>Post-Repair Market Value: {item?.average_damaged_price_bottom5}, reflecting the reduced resale value due to the accident history.</Text>
-        <Text>Diminished Value: {item?.estimated_diminished_value}, calculated as the difference between the pre-accident and post-repair market values.</Text>
+        <Text>{"\n"}• <Text style={styles.dynamicRed}>Pre-Accident Market Value:</Text> ${item?.average_clean_price_top5}, based on the vehicle’s year, make, model, mileage, condition, and market trends.</Text>
+        <Text>{"\n"}• <Text style={styles.dynamicRed}>Post-Repair Market Value:</Text> ${item?.average_damaged_price_bottom5}, reflecting the reduced resale value due to the accident history.</Text>
+        <Text>{"\n"}• <Text style={styles.dynamicRed}>Diminished Value:</Text> ${item?.estimated_diminished_value}, calculated as the difference between the pre-accident and post-repair market values.</Text>
 
         <Text>
           {"\n"}These included in the comps demonstrate the market’s perception of reduced
@@ -510,10 +510,10 @@ const CreateDemandLetterPdf = ({
     {/* Body */}
     <View style={styles.body}>
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Demand for Compensation</Text>
+        <Text style={styles.dynamicRed}>Demand for Compensation</Text>
         <Text>
           Based on the Diminished Value Analysis Report and supporting documentation, we
-          hereby demand compensation in the amount of {item?.estimated_diminished_value} for the
+          hereby demand compensation in the amount of ${item?.estimated_diminished_value} for the
           diminished value of my client’s vehicle. This amount represents the economic
           loss sustained due to the accident caused by your insured’s negligence.
           Additionally, we reserve the right to seek compensation for any related losses,
@@ -523,16 +523,16 @@ const CreateDemandLetterPdf = ({
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Supporting Documentation</Text>
+        <Text style={styles.dynamicRed}>Supporting Documentation</Text>
         <Text>
           Enclosed with this demand letter are the following documents to substantiate the
           claim:
         </Text>
-        <Text>{"\n"}Exhibit A: Diminished Value Appraisal Report and Verifiable Comparables (Comps) of Similar Vehicles</Text>
+        <Text>{"\n"}• <Text style={styles.dynamicRed}>Exhibit A:</Text> Diminished Value Appraisal Report and Verifiable Comparables (Comps) of Similar Vehicles</Text>
       </View>
 
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Request for Prompt Response</Text>
+        <Text style={styles.dynamicRed}>Request for Prompt Response</Text>
         <Text>
           Please review this demand and the enclosed documentation promptly. We request a
           response within 14 days from the date of this letter.{"\n\n"}
