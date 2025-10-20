@@ -17,6 +17,7 @@ import logo1 from "../public/images/logo-full-wp.jpg";
 import logo2 from "../public/images/logo-wp.jpg";
 import dayjs from "dayjs";
 import { Globe } from "lucide-react";
+import { formatPrice } from "@/lib/utils/formatPrice";
 
 // Register fonts (you'll need to provide font files or use default)
 Font.register({
@@ -458,9 +459,9 @@ const CreateDemandLetterPdf = ({
           following:
         </Text>
 
-        <Text>{"\n"}• <Text style={styles.dynamicRed}>Pre-Accident Market Value:</Text> ${item?.average_clean_price_top5}, based on the vehicle’s year, make, model, mileage, condition, and market trends.</Text>
-        <Text>{"\n"}• <Text style={styles.dynamicRed}>Post-Repair Market Value:</Text> ${item?.average_damaged_price_bottom5}, reflecting the reduced resale value due to the accident history.</Text>
-        <Text>{"\n"}• <Text style={styles.dynamicRed}>Diminished Value:</Text> ${item?.estimated_diminished_value}, calculated as the difference between the pre-accident and post-repair market values.</Text>
+        <Text>{"\n"}• <Text style={styles.dynamicRed}>Pre-Accident Market Value:</Text> <Text style={styles.dynamicRed}>${formatPrice(item?.average_clean_price_top5)}</Text>, based on the vehicle’s year, make, model, mileage, condition, and market trends.</Text>
+        <Text>{"\n"}• <Text style={styles.dynamicRed}>Post-Repair Market Value:</Text> <Text style={styles.dynamicRed}>${formatPrice(item?.average_damaged_price_bottom5)}</Text>, reflecting the reduced resale value due to the accident history.</Text>
+        <Text>{"\n"}• <Text style={styles.dynamicRed}>Diminished Value:</Text> <Text style={styles.dynamicRed}>${formatPrice(item?.estimated_diminished_value)}</Text>, calculated as the difference between the pre-accident and post-repair market values.</Text>
 
         <Text>
           {"\n"}These included in the comps demonstrate the market’s perception of reduced
@@ -513,7 +514,7 @@ const CreateDemandLetterPdf = ({
         <Text style={styles.dynamicRed}>Demand for Compensation</Text>
         <Text>
           Based on the Diminished Value Analysis Report and supporting documentation, we
-          hereby demand compensation in the amount of ${item?.estimated_diminished_value} for the
+          hereby demand compensation in the amount of <Text style={styles.dynamicRed}>${formatPrice(item?.estimated_diminished_value)}</Text> for the
           diminished value of my client’s vehicle. This amount represents the economic
           loss sustained due to the accident caused by your insured’s negligence.
           Additionally, we reserve the right to seek compensation for any related losses,
