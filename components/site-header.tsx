@@ -1,4 +1,5 @@
 import Link from "next/link";
+import logo from "../public/logo.png";
 
 export function SiteHeader() {
   return (
@@ -7,9 +8,9 @@ export function SiteHeader() {
         <div className="flex items-center">
           <Link href="/">
             <img
-              src="https://i.ibb.co/ccSw4bWf/shodwe-4-e1744727392385.png"
+              src={logo.src}
               alt="Recover Car Value"
-              className="h-10 md:h-14"
+              className="h-8 md:h-14"
             />
           </Link>
         </div>

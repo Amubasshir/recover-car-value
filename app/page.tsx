@@ -33,7 +33,7 @@ const HeroSection = () => {
               recover the money lost - even if it happened years ago."
             </p>
           </div>
-          <div className="flex flex-col justify-center items-center md:items-right md:justify-start gap-3 min-[400px]:flex-row pt-2">
+          <div className="flex flex-col justify-center items-center md:items-right md:justify-start gap-3 min-[400px] md:flex-row pt-2">
             
               <Button size="lg" className="gap-2" onClick={()=> handleCheckButton('qualify')}>
                 Click to see if you qualify <ArrowRight className="h-5 w-5" />
