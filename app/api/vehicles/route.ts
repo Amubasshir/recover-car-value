@@ -81,7 +81,7 @@
 
 import { NextResponse } from "next/server";
 
-const API_KEY = process.env.MARKETCHECK_API_KEY;
+const API_KEY = process.env.VEHICLE_API_KEY;
 
 export async function GET(request: Request) {
 //   if (!API_KEY) {
@@ -128,7 +128,7 @@ export async function GET(request: Request) {
 
     if (!response.ok) {
       console.error(
-        `MarketCheck API error: ${response.status} ${response.statusText}`
+        `Vehicle API error: ${response.status} ${response.statusText}`
       );
       return NextResponse.json(
         {

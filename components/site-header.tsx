@@ -4,7 +4,7 @@ import logo from "../public/logo.png";
 export function SiteHeader() {
   return (
     <header className="border-b bg-white sticky top-0 z-50 shadow-sm">
-      <div className="container flex h-20 items-center justify-between px-4 md:px-6">
+      {/* <div className="container flex h-20 items-center justify-between px-4 md:px-6">
         <div className="flex items-center">
           <Link href="/">
             <img
@@ -19,7 +19,7 @@ export function SiteHeader() {
           <span className="">⭐⭐⭐⭐⭐ </span>
           <span className="!text-black"> Trusted Law Firm</span>
         </div>
-      </div>
+      </div> */}
     </header>
   );
 }

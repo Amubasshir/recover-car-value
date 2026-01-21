@@ -34,9 +34,9 @@ interface RequestBody {
 }
 
 // Constants
-const MARKETCHECK_API_KEY = process.env.MARKETCHECK_API_KEY
-if (!MARKETCHECK_API_KEY) {
-  console.error("MARKETCHECK_API_KEY environment variable is required")
+const VEHICLE_API_KEY = process.env.VEHICLE_API_KEY
+if (!VEHICLE_API_KEY) {
+  console.error("VEHICLE_API_KEY environment variable is required")
 }
 
 const MARKETCHECK_BASE = "https://api.marketcheck.com/v2/search/car/active"
@@ -162,15 +162,15 @@ async function marketcheckSearch(
   trim: string | undefined,
   maxNeeded: number,
 ): Promise<any[]> {
-  if (!MARKETCHECK_API_KEY) {
-    throw new Error("MARKETCHECK_API_KEY environment variable is required")
+  if (!VEHICLE_API_KEY) {
+    throw new Error("VEHICLE_API_KEY environment variable is required")
   }
 
   const rowsPerPage = Math.min(50, maxNeeded)
   const results: any[] = []
 
   const params = new URLSearchParams({
-    api_key: MARKETCHECK_API_KEY,
+    api_key: VEHICLE_API_KEY,
     year: year.toString(),
     make,
     model,
@@ -188,7 +188,7 @@ async function marketcheckSearch(
     try {
       const delay = retryCount === 0 ? 2000 : Math.min(5000 * Math.pow(2, retryCount - 1), 15000)
       if (retryCount > 0) {
-        console.log(`[v0] Retrying MarketCheck API call (attempt ${retryCount + 1}) after ${delay}ms delay`)
+        console.log(`[v0] Retrying Vehicle API call (attempt ${retryCount + 1}) after ${delay}ms delay`)
         await new Promise((resolve) => setTimeout(resolve, delay))
       }
 
@@ -205,7 +205,7 @@ async function marketcheckSearch(
       }
 
       if (!response.ok) {
-        throw new Error(`MarketCheck API error: ${response.status}`)
+        throw new Error(`Vehicle API error: ${response.status}`)
       }
 
       const data = await response.json()
@@ -219,7 +219,7 @@ async function marketcheckSearch(
       results.push(...listings)
       success = true
     } catch (error) {
-      console.error(`[v0] MarketCheck API error (attempt ${retryCount + 1}):`, error)
+      console.error(`[v0] Vehicle API error (attempt ${retryCount + 1}):`, error)
       retryCount++
 
       if (retryCount > maxRetries) {

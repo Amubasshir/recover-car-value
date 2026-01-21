@@ -1,16 +1,6 @@
 import { NextResponse } from "next/server";
 
-const API_KEY = process.env.MARKETCHECK_API_KEY;
-
 export async function GET(request: Request) {
-  if (!API_KEY) {
-    return NextResponse.json(
-      { error: "Server configuration error. Please contact support." },
-      { status: 500 }
-    );
-  }
-
-
   const { searchParams } = new URL(request.url);
   const field = searchParams.get("field");
   const year = searchParams.get("year");
@@ -29,14 +19,9 @@ export async function GET(request: Request) {
     );
   } 
 
-//   const baseUrl = "https://api.marketcheck.com/v2/search/car/active";
+  // Using RCV API (no API key required)
   const baseUrl = `https://rcv.btkdeals.com/api/vehicles${field ? `/${field}` : ""}`;
   const url = new URL(baseUrl);
-//   url.searchParams.append("api_key", API_KEY);
-//   url.searchParams.append("facet_sort", "index");
-//   url.searchParams.append("rows", "0");
-//   url.searchParams.append("car_type", "used");
-//   url.searchParams.append("facets", `${field}|0|1000`);
 
   console.log({baseUrl})
   if (year) url.searchParams.append("year", year);
@@ -44,13 +29,14 @@ export async function GET(request: Request) {
   if (model) url.searchParams.append("model", model);
 
   try {
+    console.log({url: url.toString()})
     const response = await fetch(url.toString());
 
     console.log({response})
 
     if (!response.ok) {
       console.error(
-        `MarketCheck API error: ${response.status} ${response.statusText}`
+        `RCV API error: ${response.status} ${response.statusText}`
       );
       return NextResponse.json(
         {

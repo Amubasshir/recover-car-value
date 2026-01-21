@@ -829,14 +829,14 @@ export const PDFDocument = ({
                 )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
-              <Text style={styles.cell}>{listing?.model_year}</Text>
+              <Text style={styles.cell}>{listing?.year}</Text>
               <Text style={styles.makeModelCell}>
-                {listing?.make + ', ' + listing?.model_name}
+                {listing?.make + ', ' + listing?.model}
               </Text>
               <Text style={styles.cell}>
                 {listing?.mileage?.toLocaleString()}
               </Text>
-              <Text style={styles.cell}>{listing?.seller_location}</Text>
+              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>
                 ${listing?.price?.toLocaleString()}
               </Text>
@@ -917,14 +917,14 @@ export const PDFDocument = ({
                 )}
               </Text>
               <Text style={styles.vinCell}>{listing?.vin}</Text>
-              <Text style={styles.cell}>{listing?.model_year}</Text>
+              <Text style={styles.cell}>{listing?.year}</Text>
               <Text style={styles.makeModelCell}>
-                {listing?.make + ', ' + listing?.model_name}
+                {listing?.make + ', ' + listing?.model}
               </Text>
               <Text style={styles.cell}>
                 {listing?.mileage?.toLocaleString()}
               </Text>
-              <Text style={styles.cell}>{listing?.seller_location}</Text>
+              <Text style={styles.cell}>{listing?.dealer_zip}</Text>
               <Text style={styles.cell}>
                 ${listing?.price?.toLocaleString()}
               </Text>

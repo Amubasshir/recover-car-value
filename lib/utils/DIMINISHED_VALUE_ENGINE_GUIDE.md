@@ -1,0 +1,496 @@
+/\*\*
+
+- DIMINISHED VALUE ENGINE - IMPLEMENTATION GUIDE
+-
+- Complete implementation of the Diminished Value calculation system
+- with all client requirements and quality assurance measures.
+  \*/
+
+/\*\*
+
+- OVERVIEW
+- ========
+-
+- The Diminished Value Engine calculates how much value a vehicle loses
+- after an accident, even after repair. The system:
+-
+- 1.  Finds comparable clean vehicles (no accident history)
+- 2.  Finds comparable damaged vehicles (with accident history)
+- 3.  Uses constrained regression to estimate values
+- 4.  Calculates the difference as diminished value
+- 5.  Validates results against expected range (15-25%)
+- \*/
+
+/\*\*
+
+- CORE COMPONENTS
+- ===============
+-
+- 1.  DATA CLEANSING (lib/utils/diminishedValueEngine.ts)
+- - removeDuplicates(): Remove duplicate listings by VIN
+- - removeInvalidPrices(): Remove $0 prices and invalid data
+- - removeOutliers(): Apply IQR method (1.5×IQR) to detect outliers
+- - cleanListings(): Complete pipeline
+-
+- 2.  CONSTRAINED REGRESSION (lib/utils/diminishedValueEngine.ts)
+- - calculateConstrainedRegression(): Enforce β₁ ≤ 0
+- - Ensures price decreases with mileage (no anomalies)
+- - Auto-trims anomalies if slope is positive
+- - Validates R² > 0.3 and min 3 comparables
+-
+- 3.  COMPARABLE MATCHING (lib/utils/diminishedValueEngine.ts)
+- - findComparableListings(): Strict matching with fallback
+- - Matches: year, make, model, trim
+- - Mileage tolerance: ±15,000 miles
+- - Relaxes trim if insufficient matches
+-
+- 4.  RADIUS EXPANSION (lib/utils/diminishedValueEngine.ts)
+- - expandRadiusForComparables(): Iteratively expand search
+- - Starts at base radius (100 miles)
+- - Increments by 50 miles each iteration
+- - Maximum radius: 500 miles
+-
+- 5.  VALUATION ENGINE (lib/utils/diminishedValueEngine.ts)
+- - calculatePreAccidentValue(): Estimate clean value
+- - calculatePostAccidentValue(): Estimate damaged value
+- - calculateDiminishedValue(): Main orchestrator
+-
+- 6.  QUALITY ASSURANCE (lib/utils/diminishedValueEngine.ts)
+- - generateQAReport(): Detailed audit trail
+- - Quality score calculation (0-100)
+- - Validation of all criteria
+-
+- 7.  API ENDPOINT (app/api/diminished-value/route.ts)
+- - POST /api/diminished-value
+- - Orchestrates entire workflow
+- - Returns comprehensive results
+- \*/
+
+/\*\*
+
+- IMPLEMENTATION DETAILS
+- ======================
+  \*/
+
+/\*\*
+
+- DATA CLEANSING PROCESS
+- ***
+-
+- Stage 1: Remove Duplicates
+- - Group listings by VIN
+- - Keep first occurrence, discard duplicates
+- - Handles data quality issues from multiple sources
+-
+- Stage 2: Remove Invalid Prices
+- - Filter price == 0
+- - Filter price == null or undefined
+- - Filter non-numeric prices
+- - Ensures regression validity
+-
+- Stage 3: IQR Outlier Detection
+- - Calculate Q1 (25th percentile)
+- - Calculate Q3 (75th percentile)
+- - Calculate IQR = Q3 - Q1
+- - Lower Bound = Q1 - 1.5 × IQR
+- - Upper Bound = Q3 + 1.5 × IQR
+- - Remove listings outside bounds
+- - Typically removes 15-25% of data
+-
+- Result: Clean dataset ready for regression
+- Typical Output:
+- - Original: 50 listings
+- - After duplicates: 48
+- - After invalid: 47
+- - After outliers: 42 (removed 5 extreme prices)
+- \*/
+
+/\*\*
+
+- CONSTRAINED LINEAR REGRESSION
+- ==============================
+-
+- Model: price = β₀ + β₁ × mileage
+-
+- Constraint: β₁ ≤ 0 (price must not increase with mileage)
+-
+- If β₁ > 0 (positive slope):
+- 1.  Identify anomalies using z-scores
+- 2.  Remove highest anomaly
+- 3.  Recalculate regression
+- 4.  Repeat up to 3 times
+- 5.  If still invalid, fail with error
+-
+- Validation Criteria:
+- ✓ Comps Used: ≥ 3 (minimum viable sample)
+- ✓ R²: > 0.3 (reasonable fit)
+- ✓ Slope: ≤ 0 (depreciation enforced)
+-
+- Output:
+- - Predicted Value = β₀ + β₁ × subject_mileage
+- - R² Score (coefficient of determination)
+- - Slope value (price per mile)
+- - Intercept value (base price at 0 miles)
+-
+- Example:
+- β₀ = $25,000 (intercept)
+- β₁ = -$0.50 (price per mile)
+- For subject with 50,000 miles:
+- Predicted = $25,000 + (-$0.50) × 50,000 = $25,000 - $25,000 = $0
+-
+- Actually:
+- Predicted = $25,000 - (0.50 × 50,000) = $25,000 - $25,000
+- Would be negative, so better example:
+- β₀ = $50,000, β₁ = -$0.20
+- Predicted = $50,000 - ($0.20 × 50,000) = $40,000
+- \*/
+
+/\*\*
+
+- COMPARABLE VEHICLE MATCHING
+- ============================
+-
+- STRICT MATCHING (Priority 1):
+- Must match: year, make, model, trim
+- Mileage: ±15,000 miles from subject
+- Geo: Nationwide (prefer closer to state)
+-
+- If ≥ 3 comparables found → use these
+- If < 3 comparables → proceed to fallback
+-
+- RELAXED MATCHING (Priority 2 - Fallback):
+- Must match: year, make, model
+- Trim: ignored (removes trim filter)
+- Mileage: ±15,000 miles
+-
+- Use these if strict matching insufficient
+-
+- MILEAGE TOLERANCE:
+- Standard: ±15,000 miles
+- Rationale: Captures similar depreciation rates
+- Example: Subject 50,000 miles → search 35,000-65,000
+-
+- GEOGRAPHIC PRIORITY:
+- 1.  Nationwide sourced (MarketCheck API)
+- 2.  Prefer listings closer to subject state
+- 3.  Consider regional market variations
+- \*/
+
+/\*\*
+
+- RADIUS EXPANSION STRATEGY
+- =========================
+-
+- CLEAN LISTINGS (No Accident History):
+- Attempt 1: radius = 100 miles, expect ≥5 comps
+- Attempt 2: radius = 150 miles (if <5 comps)
+- Attempt 3: radius = 200 miles (if <5 comps)
+- Attempt 4: radius = 250 miles (if <5 comps)
+- ...continues to 500 miles max
+-
+- DAMAGED LISTINGS (With Accident History):
+- Attempt 1: radius = 100 miles, trim = subject trim, expect ≥5 comps
+- Attempt 2: radius = 150 miles, trim = subject trim (if <5 comps)
+- Attempt 3+: radius expands, trim = "" (remove trim filter)
+- ...continues to 500 miles max
+-
+- FALLBACK if NO DAMAGED COMPS:
+- Use market penalty method (default 20% of pre-accident value)
+- Still calculates DV but with less confidence
+- Quality score reduced accordingly
+- \*/
+
+/\*\*
+
+- VALUATION WORKFLOW
+- ==================
+-
+- INPUT:
+- - Subject vehicle: year, make, model, trim, mileage
+- - Clean listings: vehicles with no accident history
+- - Damaged listings: vehicles with accident history
+-
+- STEP 1: Calculate Pre-Accident Value
+- Clean the data (remove duplicates, invalid, outliers)
+- Find matching comparables
+- Perform constrained regression
+- Predict value at subject mileage
+-
+- STEP 2: Calculate Post-Accident Value
+- Clean the data (same process)
+- Find matching comparables with accident history
+- Perform constrained regression
+- Predict value at subject mileage
+-
+- STEP 3: Calculate Diminished Value
+- DV = Pre-Accident Value - Post-Accident Value
+- DV% = (DV / Pre-Accident Value) × 100
+-
+- STEP 4: Validate Against Expected Range
+- Lower bound: 15% of pre-accident value
+- Upper bound: 25% of pre-accident value
+- Flag if outside range for review
+-
+- STEP 5: Calculate Quality Score
+- Base score: 100 points
+- Deductions for:
+-     - Invalid regression (β₁ > 0): -15 pts each
+-     - Low R² (≤0.3): -10 pts each
+-     - Insufficient comps (<3): -20 pts each
+-     - Outside DV range: -5 pts
+- Final: max(0, min(100, score))
+- Score ≥75: Approved
+- Score 50-74: Caution
+- Score <50: Rejected
+-
+- OUTPUT:
+- - Pre-accident value
+- - Post-accident value
+- - Diminished value (absolute $)
+- - Diminished percentage (%)
+- - Quality score
+- - DV range validation
+- - Detailed QA report
+- - Comparable listings used
+- \*/
+
+/\*\*
+
+- API ENDPOINT USAGE
+- ==================
+-
+- Endpoint: POST /api/diminished-value
+-
+- Request Body:
+- {
+- "year": 2020,
+- "make": "Honda",
+- "model": "Civic",
+- "trim": "EX",
+- "mileage": 45000,
+- "zip": "90210",
+- "state": "CA",
+- "accidentDate": "2024-01-15",
+- "accidentMileage": 45000,
+- "accidentZip": "90210",
+- "repairCost": 8500,
+- "vin": "XXXXX",
+- "heading": "2020 Honda Civic EX",
+- "client_info": {...},
+- "qualify_answers": {...},
+- "selectedMethod": "standard"
+- }
+-
+- Response (Success):
+- {
+- "success": true,
+- "data": {
+-     "year": 2020,
+-     "make": "Honda",
+-     "model": "Civic",
+-     "trim": "EX",
+-     "accident_date": "2024-01-15",
+-     "accident_mileage": 45000,
+-     "average_clean_price_top5": 18500,
+-     "average_damaged_price_bottom5": 16950,
+-     "estimated_diminished_value": 1550,
+-     "diminished_value_percentage": "8.38",
+-     "quality_score": 82,
+-     "is_within_dv_range": false,
+-     "pre_accident_r_squared": "0.7234",
+-     "post_accident_r_squared": "0.6891",
+-     "pre_accident_slope": "-0.450000",
+-     "post_accident_slope": "-0.425000",
+-     "pre_accident_comps": 8,
+-     "post_accident_comps": 6,
+-     "clean_radius_used_miles": 100,
+-     "damaged_radius_used_miles": 150,
+-     "mileage_range_searched": "30000-60000",
+-     "top_clean_listings": [...],
+-     "bottom_damaged_listings": [...],
+-     "qa_report": "...[detailed QA report]..."
+- },
+- "valuation": {
+-     "preAccidentValue": 18500,
+-     "postAccidentValue": 16950,
+-     "diminishedValue": 1550,
+-     "diminishedPercentage": 8.38,
+-     "qualityScore": 82,
+-     "isWithinRange": false
+- }
+- }
+-
+- Response (Error):
+- {
+- "error": "No clean comparable listings found. Please try different parameters."
+- }
+- \*/
+
+/\*\*
+
+- QUALITY ASSURANCE REPORT
+- ========================
+-
+- The QA report includes:
+-
+- PRE-ACCIDENT VALUATION:
+- - Estimated value
+- - Number of comparables used
+- - Regression slope (β₁)
+- - R² score
+- - Validity status (✓ or ✗)
+- - Validation details
+-
+- POST-ACCIDENT VALUATION:
+- - Same as pre-accident
+-
+- DIMINISHED VALUE:
+- - Absolute dollar amount
+- - Percentage of pre-accident value
+- - Within expected range validation
+-
+- QUALITY ASSURANCE:
+- - Overall quality score (0-100)
+- - Status: APPROVED (≥75), CAUTION (50-74), REJECTED (<50)
+-
+- Example Report:
+- === DIMINISHED VALUE ENGINE - QA REPORT ===
+-
+- PRE-ACCIDENT VALUATION:
+-     Value: $18,500.00
+-     Comps Used: 8
+-     Slope (β₁): -0.450000
+-     R²: 0.7234
+-     Valid: ✓
+-     Details: Valid regression: R² = 0.723, slope = -0.450
+-
+- POST-ACCIDENT VALUATION:
+-     Value: $16,950.00
+-     Comps Used: 6
+-     Slope (β₁): -0.425000
+-     R²: 0.6891
+-     Valid: ✓
+-     Details: Valid regression: R² = 0.689, slope = -0.425
+-
+- DIMINISHED VALUE:
+-     Absolute: $1,550.00
+-     Percentage: 8.38%
+-     Within Range (15-25%): ✗
+-
+- QUALITY ASSURANCE:
+-     Overall Score: 80/100
+-     Status: ✓ APPROVED
+- \*/
+
+/\*\*
+
+- INTEGRATION POINTS
+- ==================
+-
+- Files to Import From:
+-
+- 1.  diminishedValueEngine.ts
+- - calculateDiminishedValue()
+- - cleanListings()
+- - calculateConstrainedRegression()
+- - findComparableListings()
+- - generateQAReport()
+- - Types: Vehicle, ComparableListing, ValuationResult, etc.
+-
+- 2.  route.ts
+- - POST /api/diminished-value endpoint
+- - Complete workflow orchestration
+- - Error handling
+- - Database persistence
+-
+- 3.  types/index.ts
+- - DiminishedValueAPIResponse
+- - ValuationMetrics
+- - RegressionDetails
+- \*/
+
+/\*\*
+
+- CONFIGURATION CONSTANTS
+- =======================
+-
+- These values control the engine behavior and can be adjusted:
+-
+- BASE_CLEAN_RADIUS: 100 miles (start searching here)
+- BASE_DAMAGED_RADIUS: 100 miles
+- RADIUS_INCREMENT: 50 miles (expand by this amount each attempt)
+- MAX_RADIUS: 500 miles (stop searching here)
+-
+- MIN_COMPS_REQUIRED: 3 (absolute minimum for regression)
+- MIN_COMPS_IDEAL: 5 (target number of comparables)
+-
+- MILEAGE_TOLERANCE: 15000 miles (±15k from subject)
+-
+- DV_LOWER_BOUND: 0.15 (15% of pre-accident value)
+- DV_UPPER_BOUND: 0.25 (25% of pre-accident value)
+-
+- To adjust, modify constants in:
+- app/api/diminished-value/route.ts
+- \*/
+
+/\*\*
+
+- ERROR HANDLING
+- ==============
+-
+- The system returns clear error messages:
+-
+- 1.  Missing Required Fields
+- "Missing required vehicle information"
+- Status: 400
+-
+- 2.  No Clean Listings Found
+- "No clean comparable listings found. Please try different parameters."
+- Status: 400
+- Action: Verify vehicle info, adjust mileage range
+-
+- 3.  Insufficient Data
+- "Insufficient data to calculate diminished value..."
+- Status: 400
+- Action: Expand search area, adjust trim requirement
+-
+- 4.  Database Error
+- "Failed to save valuation result"
+- Status: 500
+- Action: Check Supabase connection
+-
+- 5.  Calculation Error
+- Error message with details
+- Status: 500
+- Action: Check market data quality
+- \*/
+
+/\*\*
+
+- TESTING THE IMPLEMENTATION
+- ===========================
+-
+- Test Cases:
+-
+- 1.  Happy Path
+- - Vehicle with abundant clean and damaged comps
+- - Expected: Quality score ≥75, DV within 15-25%
+-
+- 2.  Limited Data
+- - Vehicle with few comparable listings
+- - Expected: System expands radius, maintains quality
+-
+- 3.  Outlier Prices
+- - Dataset with extreme prices (0 or very high)
+- - Expected: Cleaned appropriately, regression valid
+-
+- 4.  Positive Slope Correction
+- - Dataset initially showing price increase with mileage
+- - Expected: Anomalies trimmed, valid regression achieved
+-
+- 5.  No Damaged Listings
+- - No comparables with accident history available
+- - Expected: Fallback to market penalty (20%)
+- \*/
+
+export default {}; // Placeholder

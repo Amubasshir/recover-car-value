@@ -106,7 +106,7 @@ interface ListingParamsExpanded {
 // }
 
 export async function fetchListings({
-  api_key,
+
   year,
   model,
   make,
@@ -126,16 +126,21 @@ export async function fetchListings({
   price_range,
   isAccident,
 }: ListingParamsExpanded) {
-  if (!api_key) {
-    throw new Error('MarketCheck API key not configured');
+  const apiKey = process.env.VEHICLE_API_KEY;
+
+
+  if (!apiKey) {
+    throw new Error('Vehicle API key not configured');
   }
   // https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&Year=2022&isAccidental=1&min_mileage=10000&max_mileage=50000&limit=10&sort=price&order=desc
 
-  const baseUrl = 'https://rcv.btkdeals.com/api/fetchSimilarCars.php';
+//   const baseUrl = 'https://rcv.btkdeals.com/api/fetchSimilarCars.php';
+  const baseUrl = 'https://rcv.btkdeals.com/api/getSimilarCars.php';
   //   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?make=Tesla&model=Model%20Y&year_from=2020&year_to=2026&is_accidental=1";
   //   const baseUrl = "https://rcv.btkdeals.com/api/fetchSimilarCars.php?Make=Tesla&Model=Model%20Y&YearFrom=2022&YearTo=2022&isAccidental=1";
   const url = new URL(baseUrl);
 
+  url.searchParams.append('api_key', apiKey);
   url.searchParams.append('make', make as string);
   url.searchParams.append('model', model as string);
   url.searchParams.append('year', year as string);
@@ -172,7 +177,7 @@ export async function fetchListings({
 
     return data;
   } catch (error) {
-    console.error('MarketCheck API error:', error);
+    console.error('Vehicle API error:', error);
     throw error;
   }
 }
@@ -186,18 +191,19 @@ export async function fetchVinHistory({
   order?: 'asc' | 'desc';
   page?: number;
 }) {
-  const apiKey = process.env.MARKETCHECK_API_KEY;
+  const apiKey = process.env.VEHICLE_API_KEY;
 
   if (!apiKey) {
-    throw new Error('MarketCheck API key not configured');
+    throw new Error('Vehicle API key not configured');
   }
 
-  // Construct API URL
-  const baseUrl = `https://mc-api.marketcheck.com/v2/history/car/${vin}?`;
+  // Construct API URL - using RCV API endpoint for VIN history
+  const baseUrl = `https://rcv.btkdeals.com/api/vinHistory.php`;
 
   // Create URL with parameters
   const url = new URL(baseUrl);
   url.searchParams.append('api_key', apiKey);
+  url.searchParams.append('vin', vin);
   url.searchParams.append('sort_order', order);
   url.searchParams.append('page', (page || '').toString());
 
@@ -207,7 +213,7 @@ export async function fetchVinHistory({
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('MarketCheck API error:', error);
+    console.error('Vehicle API error:', error);
     throw error;
   }
 }

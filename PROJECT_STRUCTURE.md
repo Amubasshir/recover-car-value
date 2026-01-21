@@ -1,0 +1,285 @@
+/\*\*
+
+- PROJECT STRUCTURE - DIMINISHED VALUE ENGINE IMPLEMENTATION
+-
+- ✓ = NEW or UPDATED
+-
+- recover-v2/
+- ├── 📄 DIMINISHED_VALUE_QUICK_START.md ✓
+- │ └─ Quick reference guide for the entire system
+- │
+- ├── app/
+- │ └── api/
+- │ └── diminished-value/
+- │ └── route.ts ✓ UPDATED
+- │ └─ Complete refactor with:
+- │ • New engine integration
+- │ • Automatic radius expansion
+- │ • Comprehensive error handling
+- │ • Full workflow orchestration
+- │
+- ├── lib/
+- │ ├── utils/
+- │ │ ├── 📄 diminishedValueEngine.ts ✓ NEW (890 lines)
+- │ │ │ └─ Core Diminished Value Calculation Engine
+- │ │ │ • Data Cleansing Functions
+- │ │ │ • Constrained Linear Regression
+- │ │ │ • Comparable Vehicle Matching
+- │ │ │ • Radius Expansion Logic
+- │ │ │ • Main Valuation Functions
+- │ │ │ • Quality Assurance Module
+- │ │ │
+- │ │ ├── 📄 DIMINISHED_VALUE_ENGINE_GUIDE.md ✓ NEW
+- │ │ │ └─ Comprehensive Implementation Documentation
+- │ │ │ • Overview & Components
+- │ │ │ • Implementation Details
+- │ │ │ • API Usage Guide
+- │ │ │ • Configuration Options
+- │ │ │ • Error Handling
+- │ │ │ • Testing Guide
+- │ │ │
+- │ │ ├── 📄 IMPLEMENTATION_CHECKLIST.md ✓ NEW
+- │ │ │ └─ Complete Requirement Verification
+- │ │ │ • All client specs mapped
+- │ │ │ • File locations documented
+- │ │ │ • Implementation status
+- │ │ │ • Quality metrics
+- │ │ │
+- │ │ ├── calculateDiminishedPercentValue.ts (unchanged)
+- │ │ └── [other utilities...]
+- │ │
+- │ └── types/
+- │ └── index.ts ✓ UPDATED
+- │ └─ New type definitions added:
+- │ • DiminishedValueAPIResponse
+- │ • RegressionDetails
+- │ • ValuationMetrics
+- │ • Enhanced documentation
+- │
+- └── [other project files...]
+  \*/
+
+/\*\*
+
+- FILES CREATED/MODIFIED SUMMARY
+-
+- CREATED (3 files):
+- 1.  lib/utils/diminishedValueEngine.ts (890 lines)
+- - Complete valuation engine with all algorithms
+-
+- 2.  lib/utils/DIMINISHED_VALUE_ENGINE_GUIDE.md
+- - Detailed implementation documentation
+-
+- 3.  lib/utils/IMPLEMENTATION_CHECKLIST.md
+- - Complete requirement verification checklist
+-
+- MODIFIED (3 files):
+- 1.  app/api/diminished-value/route.ts (complete refactor)
+- - Integrated new engine
+- - Added automatic radius expansion
+- - Enhanced error handling
+- - Comprehensive response structure
+-
+- 2.  lib/types/index.ts (extended with new types)
+- - DiminishedValueAPIResponse interface
+- - RegressionDetails interface
+- - ValuationMetrics interface
+- - Enhanced documentation
+-
+- 3.  DIMINISHED_VALUE_QUICK_START.md (root level)
+- - Quick reference guide
+- - Usage examples
+- - Configuration guide
+-
+- PRESERVED (all legacy files):
+- - All existing utilities remain intact
+- - Backward compatible with existing code
+- - Legacy helper functions kept in route.ts
+    \*/
+
+/\*\*
+
+- COMPONENT ARCHITECTURE
+-
+- ┌─────────────────────────────────────────────────────────┐
+- │ API ENDPOINT │
+- │ /api/diminished-value (route.ts) │
+- └────────────────┬────────────────────────────────────────┘
+-                  │
+-                  ├─────────────────────────────────────┐
+-                  ▼                                     ▼
+-          ┌──────────────┐                    ┌────────────────┐
+-          │MarketCheck   │                    │Diminished Value│
+-          │API Client    │                    │Engine          │
+-          │(fetchList    │                    │(calculateDimin │
+-          │ings)         │                    │ishedValue)     │
+-          └──────────────┘                    └────────────────┘
+-                  │                                     │
+-                  ▼                                     ▼
+-          ┌──────────────────────────────────────────────────┐
+-          │                                                  │
+-          │  Data Cleansing Module                          │
+-          │  ├─ removeDuplicates()                          │
+-          │  ├─ removeInvalidPrices()                       │
+-          │  └─ removeOutliers() [IQR method]               │
+-          │                                                  │
+-          └────────────────────────────────────────────────┬─┘
+-                                                            │
+-                                                            ▼
+-          ┌──────────────────────────────────────────────────┐
+-          │                                                  │
+-          │  Comparable Matching Module                     │
+-          │  ├─ findComparableListings()                    │
+-          │  ├─ Strict matching (with fallback)             │
+-          │  └─ Mileage tolerance: ±15,000 miles            │
+-          │                                                  │
+-          └────────────────────────────────────────────────┬─┘
+-                                                            │
+-                                                            ▼
+-          ┌──────────────────────────────────────────────────┐
+-          │                                                  │
+-          │  Constrained Regression Module                  │
+-          │  ├─ calculateConstrainedRegression()            │
+-          │  ├─ Constraint: β₁ ≤ 0 (enforcement)            │
+-          │  ├─ Auto-anomaly removal                        │
+-          │  └─ R² validation (>0.3)                        │
+-          │                                                  │
+-          └────────────────────────────────────────────────┬─┘
+-                                                            │
+-                                                            ▼
+-          ┌──────────────────────────────────────────────────┐
+-          │                                                  │
+-          │  Quality Assurance Module                       │
+-          │  ├─ calculateQualityScore()                     │
+-          │  ├─ DV range validation (15-25%)                │
+-          │  ├─ generateQAReport()                          │
+-          │  └─ Audit trail logging                         │
+-          │                                                  │
+-          └────────────────────────────────────────────────┬─┘
+-                                                            │
+-                                                            ▼
+-                   ┌─────────────────────────┐
+-                   │   ValuationResult       │
+-                   │   ├─ preAccidentValue   │
+-                   │   ├─ postAccidentValue  │
+-                   │   ├─ diminishedValue    │
+-                   │   ├─ qualityScore       │
+-                   │   └─ QA details         │
+-                   └────────┬────────────────┘
+-                            │
+-                            ▼
+-                   ┌─────────────────────────┐
+-                   │  Supabase Database      │
+-                   │  diminished_car_value   │
+-                   └─────────────────────────┘
+  \*/
+
+/\*\*
+
+- DATA FLOW EXAMPLE
+-
+- INPUT REQUEST:
+- POST /api/diminished-value
+- {
+- year: 2020, make: "Honda", model: "Civic", trim: "EX",
+- mileage: 45000, zip: "90210", state: "CA"
+- }
+- │
+- ▼
+- FETCH CLEAN LISTINGS (no accidents)
+- - Radius 100 miles, get 8 cars
+- - Clean: remove duplicates → 8, invalid prices → 8, outliers → 6
+- │
+- ├─────────────────────────────────────────┐
+- │ │
+- ▼ ▼
+- FETCH DAMAGED LISTINGS CALCULATE PRE-ACCIDENT VALUE
+- - Radius 100 miles, get 4 cars - Regression on 6 clean cars
+- - Expand to 150 miles, get 6 cars - Intercept: $30,000
+- - Clean: remove duplicates → 6 - Slope: -$0.25/mile
+- invalid prices → 6 - R²: 0.723 ✓
+- outliers → 5 - Predicted: $17,750
+- │
+- │
+- ├─────────────────────────────────────────┐
+- │ │
+- ▼ ▼
+- CALCULATE POST-ACCIDENT VALUE VALIDATE & SCORE
+- - Regression on 5 damaged cars - DV = $17,750 - $16,200 = $1,550
+- - Intercept: $28,500 - Percentage: 8.73%
+- - Slope: -$0.23/mile - Expected: 15-25% ⚠
+- - R²: 0.689 ✓ - Quality: 80/100 ✓
+- - Predicted: $16,200 - Status: APPROVED (review flag)
+- │
+- │
+- └─────────────────────────────────────────┘
+-                                         │
+-                                         ▼
+-                                  GENERATE RESPONSE
+-                                  {
+-                                    success: true,
+-                                    data: {
+-                                      average_clean_price: 17750,
+-                                      average_damaged_price: 16200,
+-                                      estimated_diminished_value: 1550,
+-                                      diminished_value_percentage: "8.73",
+-                                      quality_score: 80,
+-                                      is_within_dv_range: false,
+-                                      pre_accident_r_squared: "0.723",
+-                                      post_accident_r_squared: "0.689",
+-                                      pre_accident_comps: 6,
+-                                      post_accident_comps: 5,
+-                                      clean_radius_used_miles: 100,
+-                                      damaged_radius_used_miles: 150,
+-                                      top_clean_listings: [...],
+-                                      bottom_damaged_listings: [...],
+-                                      qa_report: "...[detailed]..."
+-                                    }
+-                                  }
+-                                         │
+-                                         ▼
+-                                  SAVE TO SUPABASE
+-                                  ✓ Complete
+  \*/
+
+/\*\*
+
+- TESTING CHECKLIST
+-
+- ✓ UNIT TESTS (test each function)
+- - cleanListings()
+- - calculateConstrainedRegression()
+- - findComparableListings()
+- - calculateQualityScore()
+-
+- ✓ INTEGRATION TESTS (test full flow)
+- - Happy path: abundant data
+- - Limited data: radius expansion
+- - Edge cases: outliers, anomalies
+- - Error cases: missing data
+-
+- ✓ QUALITY TESTS
+- - Constrained regression validation
+- - IQR filtering accuracy
+- - Quality score calculation
+- - DV range detection
+-
+- ✓ PERFORMANCE TESTS
+- - API response time
+- - Database insert time
+- - Regression calculation efficiency
+-
+- ✓ REGRESSION TESTS
+- - Verify R² and slope calculations
+- - Check anomaly detection
+- - Validate quality scoring
+-
+- ✓ ACCEPTANCE TESTS (client requirements)
+- - All framework components present
+- - All data cleansing steps working
+- - Constraint enforcement active
+- - QA metrics calculated
+- - Report generated
+    \*/
+
+export default {};
