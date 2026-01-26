@@ -186,7 +186,14 @@ export default function QualifyStep2() {
 
         if (!response.ok) {
           const errorData = await response.json();
-          toast.error(errorData.error || "Failed to lookup license plate");
+          // If lookup fails, allow user to proceed manually
+          toast.error(
+            errorData.error || "Failed to lookup license plate. Please use 'Select Vehicle' tab to enter details manually.",
+            { duration: 5000 }
+          );
+          // Switch to Select Vehicle tab as fallback
+          setActiveTab("select");
+          return;
         }
 
         const vehicleInfo = (await response.json()) as VehicleInfo;
@@ -203,11 +210,13 @@ export default function QualifyStep2() {
         router.push("/qualify/step3");
 
       } catch (error) {
+        // If lookup fails, allow user to proceed manually
         toast.error(
-          error instanceof Error
-            ? error.message
-            : "Failed to lookup vehicle information"
+          "License plate lookup unavailable. Please use 'Select Vehicle' tab to enter details manually.",
+          { duration: 5000 }
         );
+        // Switch to Select Vehicle tab as fallback
+        setActiveTab("select");
       } finally {
         setIsLoading(false);
       }
