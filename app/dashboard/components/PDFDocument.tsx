@@ -662,59 +662,6 @@ export const PDFDocument = ({
       </Text>
     </Page>
 
-    {/* Page 2 - Fair Market Value Methodology Details */}
-    <Page size="A4" style={styles2.page}>
-      <Text style={styles2.title}>
-        Fair Market Value Methodology (Court-Defensible)
-      </Text>
-
-      <Text style={styles2.introText}>
-        To calculate FMV, we use a structured, data-driven method grounded in{' '}
-        <Text style={styles2.bold}>
-          industry practices and statistical reliability
-        </Text>
-        :
-      </Text>
-
-      <Text style={styles2.bulletHeader}>• Market Data Collection</Text>
-
-      <View style={styles2.subBulletContainer}>
-        <Text style={styles2.subBulletPoint}>
-          • Pulled publicly listed sales of comparable vehicles from trusted marketplaces (e.g., Cars.com, AutoTrader, CarFax, and dealer feeds).
-        </Text>
-        <Text style={styles2.subBulletPoint}>
-          • Filtered for year, make, model, and trim to ensure true comparability.
-        </Text>
-      </View>
-
-      <Text style={styles2.bulletHeader}>• Linear Regression Analysis</Text>
-
-      <View style={styles2.subBulletContainer}>
-        <Text style={styles2.subBulletPoint}>
-          • Plotted price vs. mileage to establish a market-based depreciation curve.
-        </Text>
-        <Text style={styles2.subBulletPoint}>
-          • Applied linear regression to create a statistically valid trendline.
-        </Text>
-        <Text style={styles2.subBulletPoint}>
-          • Interpolated the subject vehicle's value based on actual mileage.
-        </Text>
-      </View>
-
-      <Text style={styles2.bulletHeader}>• Outlier Filtering</Text>
-
-      <View style={styles2.subBulletContainer}>
-        <Text style={styles2.subBulletPoint}>
-          • Excluded listings beyond ±2 standard deviations from the mean to improve accuracy.
-        </Text>
-      </View>
-
-      <View style={styles2.footer}>
-        <Text style={styles2.footerText}>
-          This report was prepared based on real-time market data and accepted valuation methods. Sources include AutoTrader, Cars.com, CarGurus, eBay Motors, and dealer feeds.
-        </Text>
-      </View>
-    </Page>
 
     {/* Page 3 - Legal Validity */}
     <Page size="A4" style={styles3.page}>
@@ -744,33 +691,7 @@ export const PDFDocument = ({
         </Text>
       </View>
 
-      <Text style={styles3.methodologyText}>
-        Florida case law acknowledges diminished value as a legitimate component of vehicle damage and the legal framework supports current case laws' application as a method to quantify such losses. Utilizing market regression models is an effective approach to demonstrate the financial impact of diminished value in vehicle claims.
-      </Text>
-
-      <Text style={styles3.caseTitle}>Siegle v. Progressive</Text>
-      <Text style={styles3.caseText}>
-        Consumers Ins. Co., 819 So. 2d 732 (Fla. 2002).
-      </Text>
-
-      <Text style={styles3.caseTitle}>
-        <Text style={styles3.italic}>McHale v. Farm Bureau Mutual</Text>
-      </Text>
-      <Text style={styles3.caseText}>
-        Insurance Co., 409 So. 2d 238 (Fla. 3d DCA 1982).
-      </Text>
-
-      <View style={styles3.divider} />
-
-      <Text style={styles3.methodologyText}>
-        Conclusion: This valuation method is{' '}
-        <Text style={styles3.bold}>
-          transparent, repeatable, and accepted by courts and insurers
-        </Text>{' '}
-        for determining fair market value and inherent diminished value
-      </Text>
-
-      <View style={styles3.divider} />
+     
 
       <Text style={styles3.sectionTitle}>Case Law Support</Text>
 
@@ -788,9 +709,17 @@ export const PDFDocument = ({
 
       <View style={styles3.divider} />
 
-      <Text style={styles3.footer}>
-        This report was prepared based on real-time market data and accepted valuation methods. Sources include AutoTrader, Cars.com, CarGurus, eBay Motors, and dealer feeds.
+      <View style={styles3.divider} />
+
+      <Text style={styles3.methodologyText}>
+        Conclusion: This valuation method is{' '}
+        <Text style={styles3.bold}>
+          transparent, repeatable, and accepted by courts and insurers
+        </Text>{' '}
+        for determining fair market value and inherent diminished value
       </Text>
+
+      <View style={styles3.divider} />
     </Page>
 
     
