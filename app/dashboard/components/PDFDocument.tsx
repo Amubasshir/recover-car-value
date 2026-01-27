@@ -709,8 +709,6 @@ export const PDFDocument = ({
 
       <View style={styles3.divider} />
 
-      <View style={styles3.divider} />
-
       <Text style={styles3.methodologyText}>
         Conclusion: This valuation method is{' '}
         <Text style={styles3.bold}>
