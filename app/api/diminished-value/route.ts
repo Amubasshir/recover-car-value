@@ -24,6 +24,10 @@ import {
 import { NextResponse } from "next/server";
 import { 
   calculateAndPlot, 
+  filterByPriceBand,
+  pickLowestByPrice,
+  pickNearestByMileage,
+  safeRegression,
   type CarListing as RCVCarListing 
 } from "@/lib/utils/carValueCalculator";
 
@@ -138,9 +142,10 @@ export async function POST(req: Request) {
     let valuationResult: ValuationResult;
     let topCleanListings: ComparableListing[] = [];
     let topDamagedListings: ComparableListing[] = [];
+    let postPlotGenerated = false;
 
     try {
-      // Use the centralized calculation logic (matches Python car__value.py exactly)
+      // Use the centralized calculation logic (matches Python car_diminish_value.py)
       const result = await calculateAndPlot(
         Number(year),
         make.toLowerCase(),
@@ -152,6 +157,7 @@ export async function POST(req: Request) {
       // Convert listings to database format expected by PDF reports
       topCleanListings = result.pre_comps.map(car => convertListingToDBFormat(car, 0)) as ComparableListing[];
       topDamagedListings = result.post_comps.map(car => convertListingToDBFormat(car, 1)) as ComparableListing[];
+      postPlotGenerated = result.post_plot_generated;
 
       // Calculate diminished percentage and quality metrics
       const diminishedPercentage = result.pre_value > 0 
@@ -371,16 +377,8 @@ export async function POST(req: Request) {
       const minPostPrice = preValue * 0.75;
       const maxPostPrice = preValue * 0.90;
       const validPriceCars = filterByPriceBand(damagedCars, minPostPrice, maxPostPrice);
-      let finalPostComps = pickNearestByMileage(validPriceCars, Number(mileage), 10);
-
-      if (finalPostComps.length < 10) {
-        const remainingNeeded = 10 - finalPostComps.length;
-        const remainingCandidates = damagedCars.filter(c => 
-          !finalPostComps.some(pc => pc.vin === c.vin)
-        );
-        const additionalComps = pickNearestByMileage(remainingCandidates, Number(mileage), remainingNeeded);
-        finalPostComps = [...finalPostComps, ...additionalComps];
-      }
+      // Take up to 10 lowest comps by price (per requirements); no fill from outside 75–90% band
+      const finalPostComps = pickLowestByPrice(validPriceCars, 10);
 
       const postMiles = finalPostComps.map(c => c.mileage);
       const postPrices = finalPostComps.map(c => c.price);
@@ -414,6 +412,7 @@ export async function POST(req: Request) {
 
       topCleanListings = preNear;
       topDamagedListings = finalPostComps;
+      postPlotGenerated = finalPostComps.length >= 2;
     }
 
     // ========================================================================
@@ -458,6 +457,7 @@ export async function POST(req: Request) {
       clean_radius_used_miles: 0, // Not used in new logic
       damaged_radius_used_miles: 0, // Not used in new logic
       mileage_range_searched: `${Math.max(3000, Number(mileage) - 15000)}-${Number(mileage) + 15000}`,
+      post_plot_generated: postPlotGenerated,
 
       // UI/UX fields
       heading: heading || `${year} ${make} ${model}`,
@@ -484,7 +484,20 @@ export async function POST(req: Request) {
     if (queries.error) {
       console.error("Error inserting data into Supabase:", queries.error);
       return NextResponse.json(
-        { error: "Failed to save valuation result" },
+        {
+          error: "Failed to save valuation result",
+          details: queries.error.message,
+          code: queries.error.code,
+          hint: queries.error.hint ?? (queries.error.message?.includes("does not exist") ? "Ensure the diminished_car_value table exists and has column post_plot_generated. Run migrations or create the table in Supabase." : undefined),
+          valuation: {
+            preAccidentValue: valuationResult.preAccidentValue,
+            postAccidentValue: valuationResult.postAccidentValue,
+            diminishedValue: valuationResult.diminishedValue,
+            diminishedPercentage: valuationResult.diminishedPercentage,
+            qualityScore: valuationResult.qualityScore,
+            isWithinRange: valuationResult.isWithinRange,
+          },
+        },
         { status: 500 }
       );
     }

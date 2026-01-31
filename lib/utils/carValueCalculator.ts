@@ -45,6 +45,8 @@ export interface CalculationResult {
   post_comps: CarListing[];
   pre_regression: RegressionResult;
   post_regression: RegressionResult;
+  /** True when ≥2 post-accident comps and regression/plot was performed; false when fallback 90% was used. */
+  post_plot_generated: boolean;
 }
 
 // ============================================================================
@@ -97,7 +99,7 @@ export async function fetchListings(
 // ============================================================================
 
 /**
- * Pick nearest cars by mileage (matches Python pick_nearest_by_mileage)
+ * Pick nearest cars by mileage (for pre-accident; matches Python pick_nearest_by_mileage)
  */
 export function pickNearestByMileage(
   cars: CarListing[],
@@ -114,6 +116,18 @@ export function pickNearestByMileage(
   );
 
   return carsSorted.slice(0, Math.min(n, carsSorted.length));
+}
+
+/**
+ * Pick up to n lowest comps by price (for post-accident; matches Python pick_lowest_by_price)
+ */
+export function pickLowestByPrice(cars: CarListing[], n: number = 10): CarListing[] {
+  const withPrice = cars.map(car => ({
+    ...car,
+    priceNum: typeof car.price === 'string' ? parseFloat(car.price) : car.price
+  }));
+  const sorted = withPrice.sort((a, b) => a.priceNum - b.priceNum);
+  return sorted.slice(0, Math.min(n, sorted.length));
 }
 
 /**
@@ -159,8 +173,8 @@ export function safeRegression(
   const meanMiles = sumX / n;
   const meanPrices = sumY / n;
 
-  // If slope is positive, set it to 0 (per Python logic)
-  if (slope > 0) {
+  // If slope ≥ 0, set slope = 0 and intercept = mean(prices) so post value = average of comp prices
+  if (slope >= 0) {
     slope = 0;
   }
 
@@ -179,6 +193,7 @@ export function safeRegression(
  * If trim is provided and results >= min_required, return those.
  * Otherwise, fetch without trim.
  */
+/** Use trim if provided; if not enough results, ignore trim and fetch all trims. */
 async function fetchWithTrimFallback(
   make: string,
   model: string,
@@ -187,7 +202,7 @@ async function fetchWithTrimFallback(
   min_miles: number,
   max_miles: number,
   trim?: string,
-  min_required: number = 3
+  min_required: number = 2
 ): Promise<CarListing[]> {
   if (trim) {
     const cars = await fetchListings(make, model, year, is_accident, min_miles, max_miles, trim);
@@ -259,29 +274,51 @@ export async function calculateAndPlot(
     return minPostPrice <= price && price <= maxPostPrice;
   });
 
-  // Pick nearest 10 from filtered list
-  const finalPostComps = pickNearestByMileage(filteredPostComps, currentMileage, 10);
+  // Take up to 10 lowest comps by price (not nearest by mileage)
+  const finalPostComps = pickLowestByPrice(filteredPostComps, 10);
 
   let postValue: number;
   let postRegression: RegressionResult;
+  let post_plot_generated: boolean;
 
   if (finalPostComps.length < 2) {
-    // LESS THAN 2 POST COMPS IN 75–90% RANGE — USING 90% OF PRE VALUE
-    postValue = preValue * 0.90;
+    // <2 post comps: post value = 10% of pre-value; no regression, no post-accident plot
+    postValue = preValue * 0.10;
     postRegression = {
       slope: 0,
       intercept: postValue
     };
+    post_plot_generated = false;
   } else {
-    const postMiles = finalPostComps.map(c => 
+    const postMiles = finalPostComps.map(c =>
       typeof c.mileage === 'string' ? parseFloat(c.mileage) : c.mileage
     );
-    const postPrices = finalPostComps.map(c => 
+    const postPrices = finalPostComps.map(c =>
       typeof c.price === 'string' ? parseFloat(c.price) : c.price
     );
 
-    postRegression = safeRegression(postMiles, postPrices);
-    postValue = postRegression.slope * currentMileage + postRegression.intercept;
+    // Subject mileage must fall within post-accident chart range (same bounds as chart x-axis).
+    // If outside range, do not show post-accident chart; post value = 10% of pre.
+    const minPostMiles = Math.min(...postMiles);
+    const maxPostMiles = Math.max(...postMiles);
+    const mileagePadding = (maxPostMiles - minPostMiles) * 0.1 || 5000;
+    const chartMinX = Math.max(0, minPostMiles - mileagePadding) > 5000
+      ? Math.max(0, minPostMiles - mileagePadding) - 5000
+      : Math.max(0, minPostMiles - mileagePadding);
+    const chartMaxX = maxPostMiles + mileagePadding + 5000;
+    const subjectMileageInChartRange = currentMileage >= chartMinX && currentMileage <= chartMaxX;
+
+    if (!subjectMileageInChartRange) {
+      // Subject mileage does not show up in chart → 10% of pre, no graph in report
+      postValue = preValue * 0.10;
+      postRegression = { slope: 0, intercept: postValue };
+      post_plot_generated = false;
+    } else {
+      postRegression = safeRegression(postMiles, postPrices);
+      // If slope ≥ 0 (upward), safeRegression sets slope=0 and intercept=mean(prices) → flat line
+      postValue = postRegression.slope * currentMileage + postRegression.intercept;
+      post_plot_generated = true;
+    }
   }
 
   return {
@@ -291,6 +328,7 @@ export async function calculateAndPlot(
     pre_comps: preNear,
     post_comps: finalPostComps,
     pre_regression: preRegression,
-    post_regression: postRegression
+    post_regression: postRegression,
+    post_plot_generated,
   };
 }

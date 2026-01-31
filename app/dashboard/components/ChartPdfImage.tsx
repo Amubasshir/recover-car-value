@@ -63,17 +63,14 @@ function getFirstAndLastPrice(listings: { price: number }[]): [number, number] {
 }
 
 const Index = ({ item }: { item: any }) => {
-  console.log({
-    item,
-    pre: item?.top_clean_listings,
-    post: item?.bottom_damaged_listings,
-  });
   const topCleanListings = filterAndSortByPriceAndMiles(
     item?.top_clean_listings || []
   );
   const bottomDamagedListings = filterAndSortByPriceAndMiles(
     item?.bottom_damaged_listings || []
   );
+  // Only show post-accident chart when ≥2 comps and regression was performed (no fallback 90%)
+  const showPostAccidentChart = item?.post_plot_generated === true || (bottomDamagedListings?.length >= 2 && item?.post_plot_generated !== false);
 
   const sortedTop = topCleanListings?.sort(
     (a: { miles: number }, b: { miles: number }) => b.miles - a.miles
@@ -131,22 +128,16 @@ const Index = ({ item }: { item: any }) => {
           />
         </div>
 
-        <div style={{ width: "1000px", height: "600px" }}>
-          {/* <FairMarketValueChart
-          data={bottomDamagedListings}
-          title="Bottom Damaged Listings - Mileage vs. Price"
-          staticRegression={staticRegression}
-          subjectMileage={26000}
-          onImageReady={setBottomChartImage}
-          /> */}
-          <PreAccidentMarketChart
-            data={bottomDamagedListings}
-            title="Post-Accident Market Listings"
-            // subjectMileage={middleMilesBottom}
-            subjectMileage={Number(item?.accident_mileage || 0)}
-            onImageReady={setBottomChartImage}
-          />
-        </div>
+        {showPostAccidentChart && (
+          <div style={{ width: "1000px", height: "600px" }}>
+            <PreAccidentMarketChart
+              data={bottomDamagedListings}
+              title="Post-Accident Market Listings"
+              subjectMileage={Number(item?.accident_mileage || 0)}
+              onImageReady={setBottomChartImage}
+            />
+          </div>
+        )}
 
         {/* Display generated images for testing */}
         {/* {topChartImage && (
@@ -172,7 +163,7 @@ const Index = ({ item }: { item: any }) => {
           <PDFDocument
             report={item}
             topListChartImage={topChartImage ?? undefined}
-            bottomListChartImage={bottomChartImage ?? undefined}
+            bottomListChartImage={showPostAccidentChart ? (bottomChartImage ?? undefined) : undefined}
           />
         }
         fileName="diminished-value-report.pdf"

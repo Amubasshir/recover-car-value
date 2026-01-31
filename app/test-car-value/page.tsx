@@ -184,6 +184,7 @@ export default function TestCarValuePage() {
                       <Label className="text-xs text-muted-foreground">Post-Accident Regression</Label>
                       <p>Slope: {data.post_regression.slope.toFixed(6)}</p>
                       <p>Intercept: {data.post_regression.intercept.toFixed(2)}</p>
+                      <p className="mt-1 text-muted-foreground">Post plot: {(data as any).post_plot_generated !== false ? 'Yes' : 'No (fallback 90%)'}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -201,16 +202,23 @@ export default function TestCarValuePage() {
                   currentMileage={parseInt(mileage)}
                   predictedValue={data.pre_value}
                 />
-                <CarValueChart
-                  title={`${year} ${make} ${model} — Post Accident`}
-                  comps={data.post_comps.map(c => ({
-                    price: typeof c.price === 'string' ? parseFloat(c.price) : c.price,
-                    mileage: typeof c.mileage === 'string' ? parseFloat(c.mileage) : c.mileage,
-                  }))}
-                  regression={data.post_regression}
-                  currentMileage={parseInt(mileage)}
-                  predictedValue={data.post_value}
-                />
+                {(data as any).post_plot_generated !== false && (
+                  <CarValueChart
+                    title={`${year} ${make} ${model} — Post Accident`}
+                    comps={data.post_comps.map(c => ({
+                      price: typeof c.price === 'string' ? parseFloat(c.price) : c.price,
+                      mileage: typeof c.mileage === 'string' ? parseFloat(c.mileage) : c.mileage,
+                    }))}
+                    regression={data.post_regression}
+                    currentMileage={parseInt(mileage)}
+                    predictedValue={data.post_value}
+                  />
+                )}
+                {(data as any).post_plot_generated === false && (
+                  <Card className="flex items-center justify-center p-6">
+                    <p className="text-muted-foreground text-sm">Post-accident chart not generated (&lt;2 comps in 75–90% range; using 90% fallback).</p>
+                  </Card>
+                )}
               </div>
 
               {/* Raw JSON Data */}

@@ -389,14 +389,16 @@ const PreAccidentMarketChart = ({
       const denominator = n * sumXX - sumX * sumX;
       if (denominator !== 0) {
         slope = (n * sumXY - sumX * sumY) / denominator;
-        intercept = (sumY - slope * sumX) / n;
+        const meanPrice = sumY / n;
+        // Flat line only when data does not slope downward (slope >= 0)
+        if (slope >= 0) {
+          slope = 0;
+          intercept = meanPrice;
+        } else {
+          intercept = (sumY - slope * sumX) / n;
+        }
 
-        console.log([
-          [Math.floor(chartMinX), slope * Math.floor(chartMinX) + intercept],
-          [Math.floor(chartMaxX), slope * Math.floor(chartMaxX) + intercept],
-        ])
-
-        // Create regression line data points
+        // Create regression line data points (downward when slope < 0, flat when slope === 0)
         regressionLine = [
           [Math.floor(chartMinX), Math.floor(slope * chartMinX + intercept)],
           [Math.floor(chartMaxX), Math.floor(slope * chartMaxX + intercept)],
@@ -418,44 +420,22 @@ const PreAccidentMarketChart = ({
         symbolRotate: 45,
       },
     ];
-    
-    // Add regression line if we have enough data
-    // if (regressionLine.length > 0) {
-    //   console.log({ regressionLine });
-    //   series.push({
-    //     name: "Regression Trendline",
-    //     type: "line",
-    //     data: regressionLine,
-    //     lineStyle: {
-    //       color: "#E74C3C",
-    //       width: 2,
-    //       type: "solid",
-    //     },
-    //     symbol: "none",
-    //     smooth: false,
-    //   });
-    // }
 
-    // ADDED: Middle horizontal line
-    const middlePrice = (chartMinY + chartMaxY) / 2;
-    const middleLineData = [
-      [Math.floor(chartMinX), Math.floor(middlePrice)],
-      [Math.floor(chartMaxX), Math.floor(middlePrice)],
-    ];
-    
-    series.push({
-    //   name: "Middle Price Line",
-    name: `Regression Trendline`,
-      type: "line",
-      data: middleLineData,
-      lineStyle: {
-        color: "#FF0000", // Red color
-        width: 2,
-        type: "solid",
-      },
-      symbol: "none",
-      smooth: false,
-    });
+    // Add regression trendline: slopes downward when data supports it, flat otherwise
+    if (regressionLine.length > 0) {
+      series.push({
+        name: "Regression Trendline",
+        type: "line",
+        data: regressionLine,
+        lineStyle: {
+          color: "#E74C3C",
+          width: 2,
+          type: "solid",
+        },
+        symbol: "none",
+        smooth: false,
+      });
+    }
 
     // console.log({subjectMileage, chartMinX,})
     // Add subject mileage line if it's within the chart range

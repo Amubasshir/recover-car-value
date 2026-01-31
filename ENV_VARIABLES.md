@@ -60,6 +60,23 @@ This document lists all environment variables required for this project.
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
+### `DATABASE_URL` (for `npm run db:migrate`)
+
+- **Used in:** `scripts/run-migrations.js` (running Supabase migrations locally)
+- **Purpose:** Direct Postgres connection string so the migration script can run SQL
+- **How to get it:**
+  1. Go to [Supabase Dashboard](https://supabase.com/dashboard) → your project
+  2. **Settings** (gear) → **Database**
+  3. Under **Connection string**, choose **URI**
+  4. Copy the URI (e.g. `postgresql://postgres.[ref]:[YOUR-PASSWORD]@aws-0-us-east-1.pooler.supabase.com:6543/postgres`)
+  5. Replace `[YOUR-PASSWORD]` with your database password (same as in **Database password** on that page, or reset it there)
+- **Where to set:** Add to `.env.local` in the project root:
+  ```bash
+  DATABASE_URL=postgresql://postgres.uhpxzchujnxtsncgmiwn:YOUR_DB_PASSWORD@aws-0-us-east-1.pooler.supabase.com:6543/postgres
+  ```
+  (Use the exact host/ref from your Dashboard; the port is often `6543` for connection pooling.)
+- **Error if missing:** `Missing DATABASE_URL or SUPABASE_DB_URL` when running `npm run db:migrate`
+
 ## Setup Instructions
 
 1. Create a `.env.local` file in the project root (this file is gitignored)
@@ -82,6 +99,10 @@ APP_URL=http://localhost:3000
 # Supabase (recommended to move from hardcoded)
 NEXT_PUBLIC_SUPABASE_URL=https://uhpxzchujnxtsncgmiwn.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# Database URL for running migrations (npm run db:migrate)
+# Get from Supabase Dashboard → Settings → Database → Connection string (URI)
+DATABASE_URL=postgresql://postgres.[ref]:[YOUR-PASSWORD]@[host].pooler.supabase.com:6543/postgres
 ```
 
 3. Restart your Next.js development server after adding environment variables
