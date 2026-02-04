@@ -723,14 +723,6 @@ export const PDFDocument = ({
     
       <Page size="A4" style={styles.page}>
         <Text style={styles.subtitle}>Pre-Accident Comparable Listings</Text>
-        {/* Data & methodology applied (for verification) */}
-        <View style={{ marginBottom: 12, padding: 8, backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
-          <Text style={{ fontSize: 9, marginBottom: 4, fontWeight: 'bold' }}>Parameters applied (verification)</Text>
-          <Text style={{ fontSize: 9 }}>• Mileage range: ±15,000 miles — searched: {report?.mileage_range_searched ?? '—'}</Text>
-          <Text style={{ fontSize: 9 }}>• Pre-accident comps: {report?.pre_accident_comps ?? '—'} used (min 2; up to 10 nearest by mileage); linear regression for pre-accident value.</Text>
-          <Text style={{ fontSize: 9 }}>• Post-accident comps: {report?.post_accident_comps ?? '—'} used (75–90% of pre-value; up to 10 lowest by price).</Text>
-          <Text style={{ fontSize: 9 }}>• Post-accident regression/chart: {report?.post_plot_generated ? 'Yes' : 'No (90% fallback; under 2 comps)'}.</Text>
-        </View>
         <View style={styles.table}>
           <View style={styles.tableHeader}>
             <Text style={styles.cell}>Date Listed</Text>
@@ -853,7 +845,7 @@ export const PDFDocument = ({
                 ${listing?.price?.toLocaleString()}
               </Text>
               {/* <Text style={styles.cell}>{listing.status}</Text> */}
-              <Text style={styles.cell}>Damaged</Text>
+              <Text style={styles.cell}>Accident</Text>
             </View>
           ))}
 
