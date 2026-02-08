@@ -282,8 +282,8 @@ export async function calculateAndPlot(
   let post_plot_generated: boolean;
 
   if (finalPostComps.length < 2) {
-    // <2 post comps: post value = 10% of pre-value; no regression, no post-accident plot
-    postValue = preValue * 0.10;
+    // <2 post comps: post value = 90% of pre-value; no regression, no post-accident plot
+    postValue = preValue * 0.90;
     postRegression = {
       slope: 0,
       intercept: postValue
@@ -298,7 +298,7 @@ export async function calculateAndPlot(
     );
 
     // Subject mileage must fall within post-accident chart range (same bounds as chart x-axis).
-    // If outside range, do not show post-accident chart; post value = 10% of pre.
+    // If outside range, do not show post-accident chart; post value = 90% of pre.
     const minPostMiles = Math.min(...postMiles);
     const maxPostMiles = Math.max(...postMiles);
     const mileagePadding = (maxPostMiles - minPostMiles) * 0.1 || 5000;
@@ -309,8 +309,8 @@ export async function calculateAndPlot(
     const subjectMileageInChartRange = currentMileage >= chartMinX && currentMileage <= chartMaxX;
 
     if (!subjectMileageInChartRange) {
-      // Subject mileage does not show up in chart → 10% of pre, no graph in report
-      postValue = preValue * 0.10;
+      // Subject mileage does not show up in chart → 90% of pre, no graph in report
+      postValue = preValue * 0.90;
       postRegression = { slope: 0, intercept: postValue };
       post_plot_generated = false;
     } else {
